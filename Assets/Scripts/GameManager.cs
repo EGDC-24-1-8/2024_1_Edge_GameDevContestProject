@@ -28,13 +28,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // AudioManager
-        //
+        //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST//けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
+        //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
+        //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
     }
 
 
