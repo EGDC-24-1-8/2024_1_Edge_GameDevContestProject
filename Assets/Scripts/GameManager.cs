@@ -1,0 +1,45 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance = null;
+
+    //디자인패턴중 싱글톤 패턴
+
+    public Player player;
+    public GameObject Player;
+
+    private void Awake()
+    {
+        if (null == Instance)
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+          
+            Destroy(this.gameObject);
+        }
+    }
+
+    void Start()
+    {
+        // AudioManager
+        //
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+
+    public void GameOver()
+    {
+        Debug.Log("게임 끝!");
+    }
+}
