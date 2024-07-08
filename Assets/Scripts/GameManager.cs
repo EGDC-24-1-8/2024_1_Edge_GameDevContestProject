@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,14 @@ public class GameManager : MonoBehaviour
 
     //巨切昔鳶渡掻 縮越宕 鳶渡
 
-    public Player player;
-    public GameObject Player;
+    public GameObject[] Player;
+    public string[] playerName;
+    public int[] playerCardNum;
+
+
+    public int dealOrder = 1;
+    public List<int> CardDeck = null;
+
 
     private void Awake()
     {
@@ -27,8 +34,25 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // AudioManager
-        //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
+        for(int i = 1; i< 11; i++)
+        {
+            CardDeck.Add(i);
+        }
+
+        int random1, random2;
+        int temp;
+
+        for (int i = 0; i < CardDeck.Count; ++i)
+        {
+            random1 = Random.Range(0, CardDeck.Count);
+            random2 = Random.Range(0, CardDeck.Count);
+
+            temp = CardDeck[random1];
+            CardDeck[random1] = CardDeck[random2];
+            CardDeck[random2] = temp;
+        }
+
+
     }
 
     // Update is called once per frame
@@ -39,6 +63,13 @@ public class GameManager : MonoBehaviour
         //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
     }
 
+
+    public void DealFrontCard(int playerNum)
+    {
+        playerCardNum[playerNum] = CardDeck[0];
+        CardDeck.Remove(0);
+        dealOrder++;
+    }
 
     public void GameOver()
     {
