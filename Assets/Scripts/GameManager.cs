@@ -11,12 +11,11 @@ public class GameManager : MonoBehaviour
 
     public GameObject[] Player;
     public string[] playerName;
-    public int[] playerCardNum;
+    public int[] playerCardNum = new int[5];
 
 
     public int dealOrder = 1;
     public List<int> CardDeck = null;
-
 
     private void Awake()
     {
@@ -27,7 +26,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-          
+         
             Destroy(this.gameObject);
         }
     }
@@ -51,23 +50,28 @@ public class GameManager : MonoBehaviour
             CardDeck[random1] = CardDeck[random2];
             CardDeck[random2] = temp;
         }
-
-
+        playerCardNum[0] = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST//けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
-        //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
-        //けいしいいけしけいしけいしいけしけいけいしけいしけい TEST
+
     }
 
 
-    public void DealFrontCard(int playerNum)
+    public void NormalDeal()
     {
-        playerCardNum[playerNum] = CardDeck[0];
-        CardDeck.Remove(0);
+        playerCardNum[dealOrder] = CardDeck[0]; //IndexOutOfRangeException: Index was outside the bounds of the array.
+        //Error Occurs, so BottomDeal func does, I don't know why shival
+        CardDeck.Remove(CardDeck[0]);
+        dealOrder++;
+    }
+
+    public void BottomDeal()
+    {
+        playerCardNum[dealOrder] = CardDeck[CardDeck.Count-1];
+        CardDeck.Remove(CardDeck[CardDeck.Count-1]);
         dealOrder++;
     }
 
