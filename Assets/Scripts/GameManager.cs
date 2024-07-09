@@ -11,14 +11,15 @@ public class GameManager : MonoBehaviour
     //디자인패턴중 싱글톤 패턴
 
     public GameObject[] Player;
-    public string[] playerName;
+    //public string[] playerName;
     public int[] playerCardNum;
+    public int[] playerCardSum;
     public Text[] playerCardText;
+    public Text[] playerSumText;
     public Text TopCard;
     public Text BottomCard;
 
-
-
+    
     public int dealOrder = 0;
     public List<int> CardDeck = null;
 
@@ -38,13 +39,17 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        for(int i = 1; i< 11; i++)
-        {
-            CardDeck.Add(i);
-        }
+
 
         int random1, random2;
         int temp;
+        
+        for (int i = 0; i < 52; i++)
+        {
+            temp = i % 13 + 1;
+            temp = temp > 10 ? 10 : temp;
+            CardDeck.Add(temp);
+        }
 
         for (int i = 0; i < CardDeck.Count; ++i)
         {
@@ -62,6 +67,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if((dealOrder % 4) == 0)
+            BottomCard.text = CardDeck[CardDeck.Count - 1].ToString();
 
     }
 
@@ -73,6 +80,14 @@ public class GameManager : MonoBehaviour
         CardDeck.Remove(CardDeck[0]);
         dealOrder++;
         TopCard.text = CardDeck[0].ToString();
+        if (dealOrder > 11)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                playerCardSum[i % 4] += playerCardNum[i];
+                playerSumText[i % 4].text = playerCardSum[i % 4].ToString();
+            }
+        }
     }
 
     public void BottomDeal()
@@ -82,6 +97,14 @@ public class GameManager : MonoBehaviour
         CardDeck.Remove(CardDeck[CardDeck.Count-1]);
         dealOrder++;
         BottomCard.text = "Undefined";
+        if (dealOrder > 11)
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                playerCardSum[i % 4] += playerCardNum[i];
+                playerSumText[i % 4].text = playerCardSum[i % 4].ToString();
+            }
+        }
     }
 
     public void GameOver()
