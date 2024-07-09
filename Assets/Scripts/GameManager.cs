@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,10 +12,14 @@ public class GameManager : MonoBehaviour
 
     public GameObject[] Player;
     public string[] playerName;
-    public int[] playerCardNum = new int[5];
+    public int[] playerCardNum;
+    public Text[] playerCardText;
+    public Text TopCard;
+    public Text BottomCard;
 
 
-    public int dealOrder = 1;
+
+    public int dealOrder = 0;
     public List<int> CardDeck = null;
 
     private void Awake()
@@ -50,7 +55,8 @@ public class GameManager : MonoBehaviour
             CardDeck[random1] = CardDeck[random2];
             CardDeck[random2] = temp;
         }
-        playerCardNum[0] = 1;
+        TopCard.text = CardDeck[0].ToString();
+        BottomCard.text = CardDeck[CardDeck.Count - 1].ToString();
     }
 
     // Update is called once per frame
@@ -62,17 +68,20 @@ public class GameManager : MonoBehaviour
 
     public void NormalDeal()
     {
-        playerCardNum[dealOrder] = CardDeck[0]; //IndexOutOfRangeException: Index was outside the bounds of the array.
-        //Error Occurs, so BottomDeal func does, I don't know why shival
+        playerCardNum[dealOrder] = CardDeck[0];
+        playerCardText[dealOrder].text = CardDeck[0].ToString();
         CardDeck.Remove(CardDeck[0]);
         dealOrder++;
+        TopCard.text = CardDeck[0].ToString();
     }
 
     public void BottomDeal()
     {
         playerCardNum[dealOrder] = CardDeck[CardDeck.Count-1];
+        playerCardText[dealOrder].text = CardDeck[CardDeck.Count - 1].ToString();
         CardDeck.Remove(CardDeck[CardDeck.Count-1]);
         dealOrder++;
+        BottomCard.text = "Undefined";
     }
 
     public void GameOver()
