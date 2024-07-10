@@ -16,9 +16,10 @@ public class GameManager : MonoBehaviour
     public int[] playerCardSum;
     public Text[] playerCardText;
     public Text[] playerSumText;
-    public Text TopCard;
-    public Text BottomCard;
-
+    public Text TopCardText;
+    public Text BottomCardText;
+    public Text PalmCardText;
+    public int palmCardNum;
     
     public int dealOrder = 0;
     public List<int> CardDeck = null;
@@ -60,15 +61,17 @@ public class GameManager : MonoBehaviour
             CardDeck[random1] = CardDeck[random2];
             CardDeck[random2] = temp;
         }
-        TopCard.text = CardDeck[0].ToString();
-        BottomCard.text = CardDeck[CardDeck.Count - 1].ToString();
+        TopCardText.text = CardDeck[0].ToString();
+        BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
+        palmCardNum = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         if((dealOrder % 4) == 0)
-            BottomCard.text = CardDeck[CardDeck.Count - 1].ToString();
+            BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
+        TopCardText.text = CardDeck[0].ToString();
 
     }
 
@@ -76,10 +79,10 @@ public class GameManager : MonoBehaviour
     public void NormalDeal()
     {
         playerCardNum[dealOrder] = CardDeck[0];
-        playerCardText[dealOrder].text = CardDeck[0].ToString();
+        playerCardText[dealOrder].text = playerCardNum[dealOrder].ToString();
         CardDeck.Remove(CardDeck[0]);
         dealOrder++;
-        TopCard.text = CardDeck[0].ToString();
+        TopCardText.text = CardDeck[0].ToString();
         if (dealOrder > 11)
         {
             for (int i = 0; i < 12; i++)
@@ -93,10 +96,10 @@ public class GameManager : MonoBehaviour
     public void BottomDeal()
     {
         playerCardNum[dealOrder] = CardDeck[CardDeck.Count-1];
-        playerCardText[dealOrder].text = CardDeck[CardDeck.Count - 1].ToString();
-        CardDeck.Remove(CardDeck[CardDeck.Count-1]);
+        playerCardText[dealOrder].text = playerCardNum[dealOrder].ToString();
+        CardDeck.RemoveAt(CardDeck.Count-1);
         dealOrder++;
-        BottomCard.text = "Undefined";
+        BottomCardText.text = "Undefined";
         if (dealOrder > 11)
         {
             for (int i = 0; i < 12; i++)
@@ -105,6 +108,23 @@ public class GameManager : MonoBehaviour
                 playerSumText[i % 4].text = playerCardSum[i % 4].ToString();
             }
         }
+    }
+
+    public void Palm()
+    {
+        int temp;
+        if(palmCardNum == 0)
+        {
+            palmCardNum = CardDeck[0];
+            CardDeck.Remove(CardDeck[0]);
+        }
+        else
+        {
+            temp = palmCardNum;
+            palmCardNum = CardDeck[0];
+            CardDeck[0] = temp;
+        }
+        PalmCardText.text = palmCardNum.ToString();
     }
 
     public void GameOver()
