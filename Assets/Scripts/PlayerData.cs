@@ -32,8 +32,8 @@ public class PlayerData : ScriptableObject
     public int LowPreference { get { return lowPreference; } }
 
     [SerializeField]
-    private int cheatFrequnce;
-    public int CheatFrequnce { get { return cheatFrequnce; } }
+    private int cheatFrequency;
+    public int CheatFrequency { get { return cheatFrequency; } }
 
 
 

@@ -6,13 +6,12 @@ public class Player : MonoBehaviour
 {
     public PlayerData playerData;
 
-
     public int playerMoney;
     public int playerBettingMoney;
     public string playerName;
     public int highPreference;
     public int lowPreference;
-    public float cheatFrequnce;
+    public float cheatFrequency;
 
     public bool isCheat = false;
 
@@ -23,7 +22,7 @@ public class Player : MonoBehaviour
         playerName = playerData.PlayerName;
         highPreference = playerData.HighPreference;
         lowPreference = playerData.LowPreference;
-        cheatFrequnce = playerData.CheatFrequnce;
+        cheatFrequency = playerData.CheatFrequency;
     }
     public void Start_DoCheat()
     {
