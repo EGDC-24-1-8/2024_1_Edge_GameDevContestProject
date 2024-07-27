@@ -5,37 +5,35 @@ using UnityEngine.UI;
 
 public class BettingManager : MonoBehaviour
 {
-    [SerializeField] private Player[] playerArray;
+    [SerializeField] private Player[] playerArray = null;
     [SerializeField] private int ante = 10; //참여금
     [SerializeField] private const int defaultBet = 10; //기본 베팅 단위
-    [SerializeField] private int roundBet; //기본 베팅 단위
-    [SerializeField] private int maxBet; //최대 베팅 금액
-    [SerializeField] private int pot; //판돈
-    [SerializeField] private int prize; //라운드 상금
-    [SerializeField] private int eliminationCriteria;
-    [SerializeField] private List<int> winner;
-    [SerializeField] private int[] playerCardSum;
-    [SerializeField] private int nowGameTurn;
-    [SerializeField] private int dealOrder;
-    [SerializeField] private int endOrder;
+    [SerializeField] private int roundBet = 0; //기본 베팅 단위
+    [SerializeField] private int pot = 0; //판돈
+    [SerializeField] private int prize = 0; //라운드 상금
+    [SerializeField] private int eliminationCriteria = 0;
+    [SerializeField] private List<int> winner = null;
+    [SerializeField] private int[] playerCardSum = null;
+    [SerializeField] private int dealtCardCount = 0;
+    [SerializeField] private int dealOrder = 0;
+    [SerializeField] private int endOrder = 0;
 
+    [SerializeField] private int maxBet = 0;
 
-    [SerializeField] private Text[] playerBetText;
-    [SerializeField] private Text potText;
-    [SerializeField] private Text[] winnerText;
-    [SerializeField] private Text[] playerFoldText;
-    [SerializeField] private Text[] playerSeedText;
+    [SerializeField] private Text[] playerBetText = null;
+    [SerializeField] private Text potText = null;
+    [SerializeField] private Text[] winnerText = null;
+    [SerializeField] private Text[] playerFoldText = null;
+    [SerializeField] private Text[] playerSeedText = null;
 
-    [SerializeField] public bool[] isFold;
+    [SerializeField] public bool[] isFold = null;
     [SerializeField] public bool isBetOver = false;
-    [SerializeField] public bool isRaised = false;
 
     void Start()
     {
         playerArray = GameManager.Instance.playerArray;
         playerCardSum = GameManager.Instance.playerCardSum;
         roundBet = defaultBet;
-        maxBet = ante;
     }
 
     void Update()
@@ -58,15 +56,18 @@ public class BettingManager : MonoBehaviour
     public IEnumerator Betting()
     {
         endOrder = playerArray.Length;
+        GameManager.Instance.SetIsAbleToDeal(false);
         for (int i = 0; i != endOrder && !isBetOver; i = (i+1)%4) //한 턴이 돌 때마다 베팅 진행
         {
+
             yield return new WaitForSeconds(1);
             bet(i);
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
         }
         yield return new WaitForSeconds(1);
-        if (GameManager.Instance.GetNowGameTurn() > 2)
+        if (GameManager.Instance.GetDealtCardCount() > 2)
             isBetOver = true;
+        GameManager.Instance.SetIsAbleToDeal(true);
     }
 
     #region betting options
@@ -79,7 +80,7 @@ public class BettingManager : MonoBehaviour
 
     public void bet(int playerIdx)
     {
-        nowGameTurn = GameManager.Instance.GetNowGameTurn();
+        dealtCardCount = GameManager.Instance.GetDealtCardCount();
         dealOrder = GameManager.Instance.GetDealOrder();
 
         if (isBetOver)
@@ -88,20 +89,21 @@ public class BettingManager : MonoBehaviour
         if (isFold[playerIdx] == true)
             return;
 
-        if (nowGameTurn == 2 && (playerCardSum[playerIdx] > 17 || playerCardSum[playerIdx] < 7))
+        if (dealtCardCount == 2 
+            && (playerCardSum[playerIdx] < 7 || 17 < playerCardSum[playerIdx]))
         {
             fold(playerIdx);
             return;
         }
 
-        if (nowGameTurn == 3)
+        if (dealtCardCount == 3)
         {
-            if (playerCardSum[playerIdx] > 21 || playerCardSum[playerIdx] < 17)
+            if (playerCardSum[playerIdx] < 17 || 21 < playerCardSum[playerIdx])
             {
                 fold(playerIdx);
                 return;
             }
-            if (playerCardSum[playerIdx] == 21 && defaultBet == roundBet)
+            if ((playerCardSum[playerIdx] == 21) && (defaultBet == roundBet))
             {
                 raise(playerIdx);
                 return;
@@ -112,15 +114,15 @@ public class BettingManager : MonoBehaviour
 
     public void call(int playerIdx)
     {
-        if (playerArray[playerIdx].playerBettingMoney == maxBet)
+        if (playerIdx == 1) //1번 플레이어용
         {
             playerArray[playerIdx].playerBettingMoney += roundBet;
             playerArray[playerIdx].playerMoney -= roundBet;
             pot += roundBet;
-            maxBet += roundBet;
+            
             endOrder = playerIdx;
         }
-        else
+        else // 2 , 3 ,4 번 플레이어으 ㅣ콜잊낳아
         {
             playerArray[playerIdx].playerMoney += playerArray[playerIdx].playerBettingMoney;
             pot -= playerArray[playerIdx].playerBettingMoney;
@@ -135,8 +137,7 @@ public class BettingManager : MonoBehaviour
     public void raise(int playerIdx)
     {
         roundBet += defaultBet;
-        maxBet = playerArray[playerIdx].playerBettingMoney + roundBet;
-        isRaised = true;
+        
         endOrder = playerIdx;
         call(playerIdx);
     }
@@ -179,8 +180,9 @@ public class BettingManager : MonoBehaviour
     public void calculateResult(List<int> playerIdx)
     {
         isBetOver = true;
-        prize = pot / winner.Count;
-        for( ; winner.Count > 0; winner.RemoveAt(0))
+        if(winner.Count != 0 )
+            prize = pot / winner.Count;
+        for ( ; winner.Count > 0; winner.RemoveAt(0))
             playerArray[winner[0]].playerMoney += prize;
         pot = 0;
         roundBet = defaultBet;
@@ -194,5 +196,8 @@ public class BettingManager : MonoBehaviour
                 GameManager.Instance.EliminatePlayer(i, GameManager.NO_MONEY_ELIMINATED);
             }
         }
+
+        GameManager.Instance.TriggerNextTurn();
+
     }
 }

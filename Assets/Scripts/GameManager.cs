@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,7 +31,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int[] playerCardSum;
     [SerializeField] private int palmCardNum;
 
-    [SerializeField] private int nowGameTurn = 0; // 카드 나눠주는 턴
+    [SerializeField] public int foldPlayerCnt = 0;
+    [SerializeField] public int IngamePlayerCnt = 0;
+
+    [SerializeField] private int gameTurn = 0;
+    [SerializeField] private int dealtCardCount = 0; // 카드 나눠주는 턴
     [SerializeField] private int dealOrder = 0; // 현재 카드 나눠줄 플레이어 순서
     [SerializeField] private List<int> CardDeck = null;
 
@@ -38,6 +43,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Player[] playerArray = null;
     [SerializeField] public BettingManager betMan;
 
+
+    [SerializeField] public bool isAbleToDeal = false;
+    [SerializeField] public bool isCheat = false;
 
     private enum GameState
     {
@@ -56,6 +64,10 @@ public class GameManager : MonoBehaviour
     //게임 플로우 담당
 
 
+    public void SetIsAbleToDeal(bool isValue)
+    {
+        isAbleToDeal = isValue;
+    }
     private void Awake()
     {
         if (null == Instance) //디자인패턴중 싱글톤 패턴
@@ -84,60 +96,107 @@ public class GameManager : MonoBehaviour
         BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
     }
 
-    void Update()
+    public void Update()
     {
-        if(dealOrder == 4)
+        if (dealtCardCount > 2 && betMan.isBetOver) //딜링 끝
+        {
+            ShowCardSum();
+            betMan.calculateResult(betMan.decideWinner(playerCardSum));
+            dealtCardCount = 0;
+        }
+    }
+    public void CheckWinnerByFold()
+    {
+        foldPlayerCnt++;
+        if (foldPlayerCnt == IngamePlayerCnt-1)
+        {
+            for (int j = 0; j < betMan.isFold.Length; j++)
+            {
+                if (betMan.isFold[j] == false)
+                {
+                    betMan.calculateResult(betMan.decideWinnerByFold(j));
+                }
+            }
+        }
+    }
+
+    private IEnumerator nextTurn()
+    {
+        yield return new WaitForSeconds(2f);
+        gameTurn++;
+        ResetDealedCard();
+        for (int i = 0; i < playerArray.Length; i++) //입장 베팅
+        {
+            betMan.entranceBet(i);
+        }
+        palmCardNum = 0;
+
+        TopCardText.text = CardDeck[0].ToString();
+        BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
+    }
+    public void TriggerNextTurn()
+    {
+        StartCoroutine(nextTurn());
+    }
+
+    public void CheckDealOrder()
+    {
+        if (betMan.isFold.Length > dealOrder)
+        {
+            if (betMan.isFold[dealOrder])
+            {
+                dealOrder++;
+            }
+        }
+        
+
+        if (dealOrder >= 4)
         {
             dealOrder = 0;
-            ++nowGameTurn;
+            ++dealtCardCount;
             StartCoroutine(betMan.Betting());
         }
-        #region Win by Fold
-        if (!betMan.isFold[0] && betMan.isFold[1] && betMan.isFold[2] && betMan.isFold[3])
-        {
-            betMan.calculateResult(betMan.decideWinnerByFold(0));
-        }
 
-        if (betMan.isFold[0] && !betMan.isFold[1] && betMan.isFold[2] && betMan.isFold[3])
-        {
-            betMan.calculateResult(betMan.decideWinnerByFold(1));
-        }
+        
 
-        if (betMan.isFold[0] && betMan.isFold[1] && !betMan.isFold[2] && betMan.isFold[3])
-        {
-            betMan.calculateResult(betMan.decideWinnerByFold(2));
-        }
-
-        if (betMan.isFold[0] && betMan.isFold[1] && betMan.isFold[2] && !betMan.isFold[3])
-        {
-            betMan.calculateResult(betMan.decideWinnerByFold(3));
-        }
-        #endregion
-        if (dealOrder == 0) //한 턴이 돌때마다 Bottom 카드가 보이게 수정
+        if (dealOrder == 0) // 모든 플레이어게 카드 배분할 때 마다 Bottom 카드가 보이게 수정
         {
             BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
         }
 
-        if (betMan.isFold[dealOrder])
-            dealOrder++;
 
-        TopCardText.text = CardDeck[0].ToString();
+        if (dealtCardCount == 2) // 애들이 카드를 1장 받고 치트를 쓸수없으니까
+        {
+            if(!isCheat)
+            {
+                isCheat = true;
+                StartCoroutine(CheatCycle());
+            }
+        }
+
         
-
-        if(nowGameTurn == 2)
-        {
-            int cheatOrder = dealOrder == 0 ? 3 : (dealOrder - 1);
-            StartCoroutine(CheatCycle(cheatOrder));
-        }
-
-        if (nowGameTurn > 2 && betMan.isBetOver) //딜링 끝
-        {
-            ShowCardSum();
-            betMan.calculateResult(betMan.decideWinner(playerCardSum));
-            nowGameTurn = 0;
-        }
+        CheckWinnerByFold();
     }
 
+    private void ResetDealedCard()
+    {
+        Array.Clear(playerCard0Num, 0, playerCard0Num.Length);
+        Array.Clear(playerCard1Num, 0, playerCard1Num.Length);
+        Array.Clear(playerCard2Num, 0, playerCard2Num.Length);
+        Array.Clear(playerCardSum, 0, playerCardSum.Length);
+        foldPlayerCnt = 0;
+        dealOrder = 0;
+        dealtCardCount = 0;
+        for (int i =0; i < 4; i++)
+        {
+            playerCard0Text[i].text = "";
+            playerCard1Text[i].text = "";
+            playerCard2Text[i].text = "";
+            playerSumText[i].text   = "";
+            betMan.isFold[i] = false;
+        }
+
+    }
 
 
     #region Card
@@ -156,7 +215,7 @@ public class GameManager : MonoBehaviour
         return initDeck;
     }
 
-    private IEnumerator CheatCycle(int value) //코루틴
+    private IEnumerator CheatCycle() //코루틴
     {
         while (true)
         {
@@ -164,7 +223,7 @@ public class GameManager : MonoBehaviour
             {
                 DecideToSwitch(i);
             }
-            yield return new WaitForSeconds(Random.Range(10, 30));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(10, 30));
         }
     }
 
@@ -173,7 +232,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            int temp = Random.Range(0, playerDataSet.Count);
+            int temp = UnityEngine.Random.Range(0, playerDataSet.Count);
             playerArray[i].playerData = playerDataSet[temp];
             playerArray[i].initData();
             playerDataSet.RemoveAt(temp);
@@ -187,8 +246,8 @@ public class GameManager : MonoBehaviour
         int temp;
         for (int i = 0; i < deck.Count; ++i)
         {
-            random1 = Random.Range(0, deck.Count);
-            random2 = Random.Range(0, deck.Count);
+            random1 = UnityEngine.Random.Range(0, deck.Count);
+            random2 = UnityEngine.Random.Range(0, deck.Count);
 
             temp = deck[random1];
             deck[random1] = deck[random2];
@@ -205,7 +264,7 @@ public class GameManager : MonoBehaviour
 
     public void NormalDeal()
     {
-        switch(nowGameTurn)
+        switch(dealtCardCount)
         {
             case 0:
                 playerCard0Num[dealOrder] = CardDeck[0];
@@ -228,11 +287,12 @@ public class GameManager : MonoBehaviour
         CardDeck.Remove(CardDeck[0]);
         dealOrder++;
         TopCardText.text = CardDeck[0].ToString();
+        CheckDealOrder();
     }
 
     public void BottomDeal()
     {
-        switch(nowGameTurn)
+        switch(dealtCardCount)
         {
             case 0:
                 playerCard0Num[dealOrder] = CardDeck[CardDeck.Count - 1];
@@ -254,6 +314,7 @@ public class GameManager : MonoBehaviour
         CardDeck.RemoveAt(CardDeck.Count-1);
         dealOrder++;
         BottomCardText.text = "Undefined";
+        CheckDealOrder();
     }
 
     public void Palm()
@@ -280,7 +341,7 @@ public class GameManager : MonoBehaviour
         if (playerCardSum[idx] > 21)
         {
 
-            if(20f + playerArray[idx].cheatFrequency < Random.Range(0,101))
+            if(20f + playerArray[idx].cheatFrequency < UnityEngine.Random.Range(0,101))
             {
                 SwitchCard(idx);
             }
@@ -298,9 +359,9 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public int GetNowGameTurn()
+    public int GetDealtCardCount()
     {
-        return nowGameTurn;
+        return dealtCardCount;
     }
 
     public int GetDealOrder()
@@ -326,8 +387,9 @@ public class GameManager : MonoBehaviour
                 Debug.Log("-");
                 break;
         }
-        
-        
+        IngamePlayerCnt--;
+
+
         //idx 플레이어 제거처리
     }
 }

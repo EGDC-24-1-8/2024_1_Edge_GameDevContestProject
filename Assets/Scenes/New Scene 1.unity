@@ -3206,15 +3206,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerArray: []
   ante: 10
-  roundBet: 0
-  maxBet: 0
+  roundBet: 10
   pot: 0
   prize: 0
   eliminationCriteria: 0
   winner: 
   playerCardSum: 
-  nowGameTurn: 0
+  dealtCardCount: 0
   dealOrder: 0
+  endOrder: 0
+  maxBet: 0
   playerBetText:
   - {fileID: 754109253}
   - {fileID: 768020739}
@@ -3238,7 +3239,6 @@ MonoBehaviour:
   - {fileID: 1832597473}
   isFold: 00000000
   isBetOver: 0
-  isRaised: 0
 --- !u!224 &1446309613
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4937,7 +4937,10 @@ MonoBehaviour:
   playerCard2Num: 00000000000000000000000000000000
   playerCardSum: 00000000000000000000000000000000
   palmCardNum: 0
-  nowGameTurn: 0
+  foldPlayerCnt: 0
+  IngamePlayerCnt: 0
+  gameTurn: 0
+  dealtCardCount: 0
   dealOrder: 0
   CardDeck: 
   playerDataSet:
@@ -4956,6 +4959,8 @@ MonoBehaviour:
   - {fileID: 1877538353}
   - {fileID: 1871316239}
   betMan: {fileID: 1446309612}
+  isAbleToDeal: 0
+  isCheat: 0
 --- !u!1 &1899208664
 GameObject:
   m_ObjectHideFlags: 0
