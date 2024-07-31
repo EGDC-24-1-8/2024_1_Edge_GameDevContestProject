@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
 
     public void initData()
     {
-        playerBettingMoney = playerData.PlayerBettingMoney;
+        playerMoney = playerData.PlayerMoney;
         playerBettingMoney = playerData.PlayerBettingMoney;
         playerName = playerData.PlayerName;
         highPreference = playerData.HighPreference;

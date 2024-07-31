@@ -18,7 +18,7 @@ public class BettingManager : MonoBehaviour
     [SerializeField] private int dealOrder = 0;
     [SerializeField] private int endOrder = 0;
 
-    [SerializeField] private int maxBet = 0;
+    [SerializeField] private int maxBet = 10;
 
     [SerializeField] private Text[] playerBetText = null;
     [SerializeField] private Text potText = null;
@@ -41,15 +41,28 @@ public class BettingManager : MonoBehaviour
         if (isBetOver)
         {
             StopCoroutine("Betting");
-            InitSeed();
+            UpdateUIText();
         }
     }
 
-    private void InitSeed()
+    public void resetBet()
+    {
+        for (int i = 0; i < playerArray.Length; i++)
+        {
+            playerArray[i].playerBettingMoney = 0;
+            
+        }
+        pot = 0;
+    }
+
+    public void UpdateUIText()
     {
         for (int i = 0; i < playerArray.Length; i++)
         {
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
+            playerBetText[i].text = playerArray[i].playerBettingMoney.ToString();
+            playerFoldText[i].text = isFold[i] ? "FOLD" : "IN";
+            potText.text = pot.ToString();
         }
     }
 
@@ -73,6 +86,7 @@ public class BettingManager : MonoBehaviour
     #region betting options
     public void entranceBet(int playerIdx)
     {
+        maxBet = ante;
         playerArray[playerIdx].playerBettingMoney += ante;
         playerArray[playerIdx].playerMoney -= ante;
         pot += ante;
@@ -114,15 +128,15 @@ public class BettingManager : MonoBehaviour
 
     public void call(int playerIdx)
     {
-        if (playerIdx == 1) //1번 플레이어용
+        if (playerArray[playerIdx].playerBettingMoney == maxBet)
         {
             playerArray[playerIdx].playerBettingMoney += roundBet;
             playerArray[playerIdx].playerMoney -= roundBet;
             pot += roundBet;
-            
+            maxBet += roundBet;
             endOrder = playerIdx;
         }
-        else // 2 , 3 ,4 번 플레이어으 ㅣ콜잊낳아
+        else
         {
             playerArray[playerIdx].playerMoney += playerArray[playerIdx].playerBettingMoney;
             pot -= playerArray[playerIdx].playerBettingMoney;
@@ -130,8 +144,7 @@ public class BettingManager : MonoBehaviour
             playerArray[playerIdx].playerMoney -= maxBet;
             pot += maxBet;
         }
-        playerBetText[playerIdx].text = playerArray[playerIdx].playerBettingMoney.ToString();
-        potText.text = pot.ToString();
+        UpdateUIText();
     }
 
     public void raise(int playerIdx)
@@ -145,7 +158,7 @@ public class BettingManager : MonoBehaviour
     public void fold(int playerIdx)
     {
         isFold[playerIdx] = true;
-        playerFoldText[playerIdx].text = "Fold";
+        UpdateUIText();
     }
     #endregion
 

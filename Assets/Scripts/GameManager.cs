@@ -98,11 +98,12 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if (dealtCardCount > 2 && betMan.isBetOver) //µô¸µ ³¡
+        if (betMan.isBetOver) //µô¸µ ³¡
         {
             ShowCardSum();
             betMan.calculateResult(betMan.decideWinner(playerCardSum));
             dealtCardCount = 0;
+            betMan.isBetOver = false;
         }
     }
     public void CheckWinnerByFold()
@@ -122,7 +123,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator nextTurn()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
         gameTurn++;
         ResetDealedCard();
         for (int i = 0; i < playerArray.Length; i++) //ÀÔÀå º£ÆÃ
@@ -194,8 +195,9 @@ public class GameManager : MonoBehaviour
             playerCard2Text[i].text = "";
             playerSumText[i].text   = "";
             betMan.isFold[i] = false;
+            betMan.resetBet();
         }
-
+        betMan.UpdateUIText();
     }
 
 
@@ -229,7 +231,6 @@ public class GameManager : MonoBehaviour
 
     private void InitPlayer()
     {
-
         for (int i = 0; i < 4; i++)
         {
             int temp = UnityEngine.Random.Range(0, playerDataSet.Count);
