@@ -78,6 +78,7 @@ public class BettingManager : MonoBehaviour
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
         }
         yield return new WaitForSeconds(1);
+        GameManager.Instance.CheckDealOrder(); //베팅 이후에 fold 플레이어 순번을 제외해야하기때문에 실행
         if (GameManager.Instance.GetDealtCardCount() > 2)
             isBetOver = true;
         GameManager.Instance.SetIsAbleToDeal(true);
@@ -158,6 +159,7 @@ public class BettingManager : MonoBehaviour
     public void fold(int playerIdx)
     {
         isFold[playerIdx] = true;
+        GameManager.Instance.foldPlayerCnt++;
         GameManager.Instance.CheckWinnerByFold();
         UpdateUIText();
     }

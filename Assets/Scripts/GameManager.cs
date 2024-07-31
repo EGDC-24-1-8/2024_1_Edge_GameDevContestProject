@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,7 +33,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int palmCardNum;
 
     [SerializeField] public int foldPlayerCnt = 0;
-    [SerializeField] public int IngamePlayerCnt = 0;
+    [SerializeField] public int IngamePlayerCnt = 4;
 
     [SerializeField] private int gameTurn = 0;
     [SerializeField] private int dealtCardCount = 0; // 카드 나눠주는 턴
@@ -93,6 +94,9 @@ public class GameManager : MonoBehaviour
         palmCardNum = 0;
         isAbleToDeal = true;
         TopCardText.text = CardDeck[0].ToString();
+
+        IngamePlayerCnt = 4;
+
         BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
     }
 
@@ -108,7 +112,6 @@ public class GameManager : MonoBehaviour
     }
     public void CheckWinnerByFold()
     {
-        foldPlayerCnt++;
         if (foldPlayerCnt == IngamePlayerCnt-1)
         {
             for (int j = 0; j < betMan.isFold.Length; j++)
@@ -142,23 +145,32 @@ public class GameManager : MonoBehaviour
 
     public void CheckDealOrder()
     {
-        if (betMan.isFold.Length > dealOrder)
-        {
-            if (betMan.isFold[dealOrder])
-            {
-                dealOrder++;
-            }
-        }
-        
 
-        if (dealOrder >= 4)
+        if(dealOrder >= IngamePlayerCnt) //카드를 다 나눠줌 이미 나눠주고 더했음 즉 지금 마지막 플레이어한테 카드를 주고, 이 함수로 넘어온 상황
         {
-            dealOrder = 0;
             ++dealtCardCount;
             StartCoroutine(betMan.Betting());
+            dealOrder = 0;
         }
 
-        
+
+        if (betMan.isFold.Length > dealOrder) //지금 dealOrder번의 플레이어가 fold면 한칸 뒤로 옮기기
+        {
+            if (betMan.isFold[dealOrder] == true)
+            {
+                dealOrder++;
+                CheckDealOrder();
+                return;
+            }
+        }
+
+        // 1. deal Order이 fold 플레이어를 넘겨야합니다. (전처리)
+
+
+        // 2. deal Order이 IngamePlayerCnt 이상이 되면 플레이어에게 카드를 다 나눠준것이므로... 베팅을 시작합니다. 그리고 카드 턴을 더합니다.
+
+        //동시에 처리를 해야
+
 
         if (dealOrder == 0) // 모든 플레이어게 카드 배분할 때 마다 Bottom 카드가 보이게 수정
         {
@@ -174,9 +186,6 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(CheatCycle());
             }
         }
-
-        
-        CheckWinnerByFold();
     }
 
     private void ResetDealedCard()
@@ -270,8 +279,8 @@ public class GameManager : MonoBehaviour
             return; 
         }
 
-
-        switch(dealtCardCount)
+        
+        switch (dealtCardCount)
         {
             case 0:
                 playerCard0Num[dealOrder] = CardDeck[0];
@@ -303,7 +312,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
+        
         switch (dealtCardCount)
         {
             case 0:
