@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public BettingManager betMan;
 
 
-    [SerializeField] public bool isAbleToDeal = false;
+    [SerializeField] public bool isAbleToDeal = true;
     [SerializeField] public bool isCheat = false;
 
     private enum GameState
@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
             betMan.entranceBet(i);
         }
         palmCardNum = 0;
-
+        isAbleToDeal = true;
         TopCardText.text = CardDeck[0].ToString();
         BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
     }
@@ -265,6 +265,12 @@ public class GameManager : MonoBehaviour
 
     public void NormalDeal()
     {
+        if(!isAbleToDeal)
+        {
+            return; 
+        }
+
+
         switch(dealtCardCount)
         {
             case 0:
@@ -293,7 +299,12 @@ public class GameManager : MonoBehaviour
 
     public void BottomDeal()
     {
-        switch(dealtCardCount)
+        if (!isAbleToDeal)
+        {
+            return;
+        }
+
+        switch (dealtCardCount)
         {
             case 0:
                 playerCard0Num[dealOrder] = CardDeck[CardDeck.Count - 1];

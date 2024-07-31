@@ -158,6 +158,7 @@ public class BettingManager : MonoBehaviour
     public void fold(int playerIdx)
     {
         isFold[playerIdx] = true;
+        GameManager.Instance.CheckWinnerByFold();
         UpdateUIText();
     }
     #endregion
