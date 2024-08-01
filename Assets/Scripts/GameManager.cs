@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
     {
         isAbleToDeal = isValue;
     }
+
     private void Awake()
     {
         if (null == Instance) //디자인패턴중 싱글톤 패턴
