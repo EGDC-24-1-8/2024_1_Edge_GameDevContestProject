@@ -40,6 +40,8 @@ public class TestGameManager : MonoBehaviour
     [SerializeField] private int[] playerCard1Num;
     [SerializeField] private int[] playerCard2Num;
     [SerializeField] public int[] playerCardSum;
+
+    [SerializeField] public bool[] playerIsCheat = new bool[4] { false, false, false, false };
     [SerializeField] private List<int> CardDeck = null;
 
     [Header("In Game Counts")]
@@ -57,7 +59,7 @@ public class TestGameManager : MonoBehaviour
     [SerializeField] public Player[] playerArray = null;
     
     [SerializeField] public TestBettingManager betMan;
-
+    [SerializeField] private IEnumerator[] cheatCoroutine = new IEnumerator[4];
 
     private void Awake()
     {
@@ -68,7 +70,7 @@ public class TestGameManager : MonoBehaviour
         }
         else
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         }
     }
 
@@ -236,6 +238,8 @@ public class TestGameManager : MonoBehaviour
         }
     }
 
+    
+
     public void NormalDeal()
     {
         CheckDealOrder();
@@ -261,6 +265,10 @@ public class TestGameManager : MonoBehaviour
                 playerCard2Num[dealOrder] = CardDeck[0];
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
+                
+                cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
+                StartCoroutine(cheatCoroutine[dealOrder]);
+
                 break;
             default:
                 break;
@@ -269,6 +277,8 @@ public class TestGameManager : MonoBehaviour
         TopCardText.text = CardDeck[0].ToString();
         dealOrder++;
         IsDealOver();
+
+
     }
 
     public void BottomDeal()
@@ -296,6 +306,8 @@ public class TestGameManager : MonoBehaviour
                 playerCard2Num[dealOrder] = CardDeck[CardDeck.Count - 1];
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
+                cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
+                StartCoroutine(cheatCoroutine[dealOrder]);
                 break;
 
         }
@@ -398,4 +410,73 @@ public class TestGameManager : MonoBehaviour
     }
 
     #endregion
+
+
+    private IEnumerator CheatCycle(int playerIdx) //코루틴
+    {
+
+        while (true)
+        {
+            DecideToSwitch(playerIdx);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(10, 30));
+        }
+    }
+    // 1번 플레이어 받았을때 실행(1번으로)
+    // 2번 플레이어 받았을때 실행(2번으로)
+    // ,...
+    // 4번 플레이ㅓ~~
+
+    
+
+
+    #region Cheat
+    public void DecideToSwitch(int idx)
+    {
+        if (playerIsCheat[idx] == true)
+        {
+            SwitchCard(idx);
+        }
+
+
+        if (playerCardSum[idx] > 21)
+        {
+
+            if (20f + playerArray[idx].cheatFrequency < UnityEngine.Random.Range(0, 101))
+            
+            {
+                SwitchCard(idx);
+                StopCoroutine(cheatCoroutine[idx]);
+
+            }
+
+
+        }
+    }
+    public void SwitchCard(int idx)
+    {
+        //사기치는 애니메이션 재생
+        Debug.Log("CHEAT! " + idx);
+        playerArray[idx].Start_DoCheat();
+        playerCard0Num[idx] = 5;
+        playerCard1Num[idx] = 6;
+        playerCard2Num[idx] = 10; //숨긴 카드 3장을 가지고 특정 몇 장만 바꾸는 식으로 조작하도록 수정
+        playerCardSum[idx] = 21;
+
+
+        playerCard0Text[idx].text = playerCard0Num[idx].ToString();
+        playerCard1Text[idx].text = playerCard1Num[idx].ToString();
+        playerCard2Text[idx].text = playerCard2Num[idx].ToString();
+
+    }
+    #endregion
+
+    public void DoCheatCycle()
+    {
+        cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
+        StartCoroutine(cheatCoroutine[dealOrder]);
+    }
+
+    //- > 내가 받은 직후부터 자기가 내가 베팅하기 직전(개발 편의를 위해..) 까지 치팅 가능성 있음
+ 
+
 }

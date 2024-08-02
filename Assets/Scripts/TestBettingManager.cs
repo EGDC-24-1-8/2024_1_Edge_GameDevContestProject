@@ -125,6 +125,8 @@ public class TestBettingManager : MonoBehaviour
             && (playerCardSum[playerIdx] < 8 || 16 < playerCardSum[playerIdx]))
         {
             fold(playerIdx);
+
+
             return;
         }
         else if (dealtCardCount == 3)
@@ -179,8 +181,26 @@ public class TestBettingManager : MonoBehaviour
 
     public void fold(int playerIdx)
     {
+        /*
+        ~~
+        TODO : 확률은 pot에 따라 변동되도록 변경
+        ~~
+        */
+
+
+        if (20f + TestGameManager.Instance.playerArray[playerIdx].cheatFrequency < UnityEngine.Random.Range(0, 101))
+        {
+            TestGameManager.Instance.playerIsCheat[playerIdx] = true;
+            call(playerIdx);
+            return;
+        }
+
+
         isFold[playerIdx] = true;
         TestGameManager.Instance.foldPlayerCnt++;
+
+        
+
         CheckWinnerByFold();
         UpdateUIText();
     }

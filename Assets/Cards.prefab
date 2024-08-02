@@ -746,7 +746,6 @@ GameObject:
   - component: {fileID: 1413593902476360028}
   - component: {fileID: 2709138987983257803}
   - component: {fileID: 3664625616477047435}
-  - component: {fileID: 7768204284096991241}
   m_Layer: 0
   m_Name: BottomCard
   m_TagString: Untagged
@@ -866,25 +865,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &7768204284096991241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6393454572150985842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03c9d2ff977891a46905b11b876e7d57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  object1: {fileID: 1413593902476360028}
-  object2: {fileID: 3944684292654326186}
-  gaugeGreen: {fileID: 4396142869749829334}
-  gaugeYellow: {fileID: 6422117868460134232}
-  gaugeRed: {fileID: 2796498005780572116}
-  suspicionThreshold: 2
-  suspicionIncreaseRate: 20
 --- !u!1 &6422117868460134232
 GameObject:
   m_ObjectHideFlags: 0
