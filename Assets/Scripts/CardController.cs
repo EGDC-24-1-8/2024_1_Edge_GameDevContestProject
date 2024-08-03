@@ -76,6 +76,7 @@ public class CardController : MonoBehaviour
             {
                 if (objectY >= GreenBottomY && objectY <= GreenTopY)
                 {
+                    //GameManager.Instance.Add~
                     Debug.Log("Green");
                     return;
                 }
