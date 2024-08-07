@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             //if (betMan.isFold.Length > dealOrder)
-            if (betMan.isFold[dealOrder])
+            if (betMan.isFold[dealOrder] || betMan.isEliminated[dealOrder])
             {
                 ++dealOrder;
                 IsDealOver();
@@ -480,13 +480,13 @@ public class GameManager : MonoBehaviour
     #region Cheat
     public void DecideToSwitch(int idx)
     {
-        if (playerIsCheat[idx] == true)
+        if (playerIsCheat[idx] == true) //2번째장 받고 결심했을 때
         {
             SwitchCard(idx);
         }
 
 
-        if (playerCardSum[idx] > 21)
+        if (playerCardSum[idx] > 21) //3번째장 받고 21이 넘을 때
         {
 
             if ((20f + playerArray[idx].cheatFrequency) > UnityEngine.Random.Range(0, 101))
@@ -505,7 +505,7 @@ public class GameManager : MonoBehaviour
     {
         //사기치는 애니메이션 재생
 
-
+        playerIsCheat[idx] = true;
         Debug.Log("CHEAT! " + idx);
         playerArray[idx].Start_DoCheat();
         playerCard0Num[idx] = 5;
@@ -521,7 +521,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    public void DoCheatCycle()
+    public void DoCheatCycle() //안쓰는중
     {
         cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
         StartCoroutine(cheatCoroutine[dealOrder]);
@@ -546,13 +546,12 @@ public class GameManager : MonoBehaviour
 
     public void OnMouseClickPlayer(int playerIdx) //플레이어 버튼에 할당
     {
-        if (!playerArray[playerIdx].isAlly)
-        {
-            return;
-        }
-
         if(mousePointState == MousePointState.code)
         {
+            if (!playerArray[playerIdx].isAlly)
+            {
+                return;
+            }
             if (codeType == 0)
             {
                 CodingAllyToFold();
@@ -565,9 +564,18 @@ public class GameManager : MonoBehaviour
        
         if(mousePointState == MousePointState.detect)
         {
+            if (playerArray[playerIdx].isAlly)
+            {
+                return;
+            }
             if (playerIsCheat[playerIdx] == true)
             {
                 EliminatePlayer(playerIdx , 1);
+                Debug.Log("GOTCHA!");
+                playerCard0Num[playerIdx] = 0;
+                playerCard1Num[playerIdx] = 0;
+                playerCard2Num[playerIdx] = 0; //숨긴 카드 3장을 가지고 특정 몇 장만 바꾸는 식으로 조작하도록 수정
+                playerCardSum[playerIdx] = 0;
             }
             else
             {

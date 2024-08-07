@@ -109,6 +109,8 @@ public class BettingManager : MonoBehaviour
         endOrder = playerArray.Length;
         for (int i = 0; i != endOrder && !isBetOver; i = (i+1)%4) //한 턴이 돌 때마다 베팅 진행
         {
+            if (isEliminated[i])
+                continue;
             yield return new WaitForSeconds(1);
             bet(i);
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
@@ -229,7 +231,10 @@ public class BettingManager : MonoBehaviour
             {
                 GameManager.Instance.playerIsCheat[playerIdx] = true;
                 call(playerIdx);
+                if (dealtCardCount == 3)
+                    GameManager.Instance.SwitchCard(playerIdx);
                 return;
+     
             }
         }
         
@@ -277,7 +282,7 @@ public class BettingManager : MonoBehaviour
         for (int i = 0; i < playerArray.Length; i++)
         {
             playerArray[i].playerBettingMoney = 0;
-            isFold[i] = false;
+            isFold[i] = isEliminated[i]? true : false;
         }
         roundBet = defaultBet;
         pot = 0;
