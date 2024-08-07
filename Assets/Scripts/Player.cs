@@ -1,17 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public PlayerData playerData;
-
+    public Image playerImage;
     public int playerMoney;
     public int playerBettingMoney;
     public string playerName;
     public int highPreference;
     public int lowPreference;
     public float cheatFrequency;
+
+
+    public bool isAlly = false; 
 
     public bool isCheat = false;
 
@@ -32,7 +36,10 @@ public class Player : MonoBehaviour
     private IEnumerator DoCheat()
     {
         isCheat = true;
+        playerImage.color = Color.red;
         yield return new WaitForSeconds(3f);
+        playerImage.color = Color.white;
         isCheat = false;
+
     }
 }

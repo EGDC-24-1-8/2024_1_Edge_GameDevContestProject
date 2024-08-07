@@ -9,67 +9,66 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public const int NO_MONEY_ELIMINATED = 0;
+    public const int DETECTED_CHEAT_ELIMINATED = 1;
     public static GameManager Instance = null;//싱글톤 패턴
 
+    public enum GameState
+    {
+        start,
+        deal,
+        afterDeal,
+        bet,
+        afterBet,
+        end
+    };
+    public enum MousePointState
+    {
+        normal,
+        code,
+        detect
+    };
+    [Header("Game State")]
+    [SerializeField] public GameState gameState;
+    [SerializeField] public MousePointState mousePointState = MousePointState.normal;
     //Card UI
-    [Header("UI")]
+    [Header("Card UI")]
     [SerializeField] private Text[] playerCard0Text;
     [SerializeField] private Text[] playerCard1Text;
     [SerializeField] private Text[] playerCard2Text;
     [SerializeField] private Text[] playerSumText;
     [SerializeField] private Text TopCardText;
     [SerializeField] private Text BottomCardText;
-    [SerializeField] private Text PalmCardText;
-    [SerializeField] private GameObject[] Player;
 
     //Card Value
-    [Header("card Value")]
+    [Header("Card Value")]
     //public string[] playerName;
     //[SerializeField] private int[] playerCardNum;
     [SerializeField] private int[] playerCard0Num;
     [SerializeField] private int[] playerCard1Num;
     [SerializeField] private int[] playerCard2Num;
     [SerializeField] public int[] playerCardSum;
-    [SerializeField] private int palmCardNum;
+    [SerializeField] public int codeType = 0; //신호 타입 0 : fold , 1 : raise   
+    
 
+    [SerializeField] public bool[] playerIsCheat = new bool[4] { false, false, false, false };
+    [SerializeField] private List<int> CardDeck = null;
+
+    [Header("In Game Counts")]
     [SerializeField] public int foldPlayerCnt = 0;
     [SerializeField] public int IngamePlayerCnt = 4;
 
+    [Header("Turn Info")]
     [SerializeField] private int gameTurn = 0;
-    [SerializeField] private int dealtCardCount = 0; // 카드 나눠주는 턴
+    //[SerializeField] private int dealtCardCount = 0; // 카드 나눠주는 턴
     [SerializeField] private int dealOrder = 0; // 현재 카드 나눠줄 플레이어 순서
-    [SerializeField] private List<int> CardDeck = null;
 
+    [Header("etc")]
+    [SerializeField] private GameObject[] Player;
     [SerializeField] private List<PlayerData> playerDataSet = null;
     [SerializeField] public Player[] playerArray = null;
+    
     [SerializeField] public BettingManager betMan;
-
-
-    [SerializeField] public bool isAbleToDeal = true;
-    [SerializeField] public bool isCheat = false;
-
-    private enum GameState
-    {
-        start,
-        betting,
-        deal,
-        check, 
-        end
-    };
-
-    //현재 턴 데이터
-    //누구 차례인지
-    //플레이어 애들한테 데이터 주는거(카드 데이터)
-    //카드 뽑기 등등 다 담당
-
-    //게임 플로우 담당
-
-
-    public void SetIsAbleToDeal(bool isValue)
-    {
-        isAbleToDeal = isValue;
-    }
-
+    [SerializeField] private IEnumerator[] cheatCoroutine = new IEnumerator[4];
     private void Awake()
     {
         if (null == Instance) //디자인패턴중 싱글톤 패턴
@@ -79,139 +78,125 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         }
     }
 
     void Start()
     {
-        CardDeck = InitDeck();
-        CardDeck = shuffleDeck(CardDeck);
         InitPlayer();
-        for (int i = 0; i < playerArray.Length; i++) //입장 베팅
-        {
-            betMan.entranceBet(i);
-        }
-        palmCardNum = 0;
-        isAbleToDeal = true;
-        TopCardText.text = CardDeck[0].ToString();
-
         IngamePlayerCnt = 4;
-
-        BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
+        SetStateStart();
     }
 
     public void Update()
     {
-        if (betMan.isBetOver) //딜링 끝
+        if(Input.GetKeyDown(KeyCode.Q))
         {
-            ShowCardSum();
-            betMan.calculateResult(betMan.decideWinner(playerCardSum));
-            dealtCardCount = 0;
-            betMan.isBetOver = false;
+            mousePointState = MousePointState.normal;
         }
-    }
-    public void CheckWinnerByFold()
-    {
-        if (foldPlayerCnt == IngamePlayerCnt-1)
+        else if(Input.GetKeyDown(KeyCode.W))
         {
-            for (int j = 0; j < betMan.isFold.Length; j++)
+            if(mousePointState == MousePointState.code)
             {
-                if (betMan.isFold[j] == false)
+                if(codeType == 0)
                 {
-                    betMan.calculateResult(betMan.decideWinnerByFold(j));
+                    codeType = 1;
                 }
+                else
+                {
+                    codeType = 0;
+                }
+                mousePointState = MousePointState.code;
             }
+            else
+            {
+                mousePointState = MousePointState.code;
+                codeType = 0;
+            }
+        }
+        else if(Input.GetKeyDown(KeyCode.E))
+        {
+            mousePointState = MousePointState.detect;
         }
     }
 
-    private IEnumerator nextTurn()
+    #region set state
+
+    public void SetStateStart()
     {
-        yield return new WaitForSeconds(5f);
-        gameTurn++;
-        ResetDealedCard();
+        gameState = GameState.start;
+        CardDeck = InitDeck();
+        CardDeck = shuffleDeck(CardDeck);
+        TopCardText.text = CardDeck[0].ToString();
+        BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
         {
             betMan.entranceBet(i);
-        }
-        palmCardNum = 0;
-
-        TopCardText.text = CardDeck[0].ToString();
-        BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
-    }
-    public void TriggerNextTurn()
-    {
-        StartCoroutine(nextTurn());
-    }
-
-    public void CheckDealOrder()
-    {
-
-        if(dealOrder >= IngamePlayerCnt) //카드를 다 나눠줌 이미 나눠주고 더했음 즉 지금 마지막 플레이어한테 카드를 주고, 이 함수로 넘어온 상황
-        {
-            ++dealtCardCount;
-            StartCoroutine(betMan.Betting());
-            dealOrder = 0;
-        }
-
-
-        if (betMan.isFold.Length > dealOrder) //지금 dealOrder번의 플레이어가 fold면 한칸 뒤로 옮기기
-        {
-            if (betMan.isFold[dealOrder] == true)
+            playerIsCheat[i] = false;
+            if (cheatCoroutine[i] != null)
             {
-                dealOrder++;
-                CheckDealOrder();
-                return;
+                StopCoroutine(cheatCoroutine[i]);
             }
-        }
-
-        // 1. deal Order이 fold 플레이어를 넘겨야합니다. (전처리)
-
-
-        // 2. deal Order이 IngamePlayerCnt 이상이 되면 플레이어에게 카드를 다 나눠준것이므로... 베팅을 시작합니다. 그리고 카드 턴을 더합니다.
-
-        //동시에 처리를 해야
-
-
-        if (dealOrder == 0) // 모든 플레이어게 카드 배분할 때 마다 Bottom 카드가 보이게 수정
-        {
-            BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
-        }
-
-
-        if (dealtCardCount == 2) // 애들이 카드를 1장 받고 치트를 쓸수없으니까
-        {
-            if(!isCheat)
-            {
-                isCheat = true;
-                StartCoroutine(CheatCycle());
-            }
-        }
-    }
-
-    private void ResetDealedCard()
-    {
-        Array.Clear(playerCard0Num, 0, playerCard0Num.Length);
-        Array.Clear(playerCard1Num, 0, playerCard1Num.Length);
-        Array.Clear(playerCard2Num, 0, playerCard2Num.Length);
-        Array.Clear(playerCardSum, 0, playerCardSum.Length);
-        foldPlayerCnt = 0;
-        dealOrder = 0;
-        dealtCardCount = 0;
-        for (int i =0; i < 4; i++)
-        {
-            playerCard0Text[i].text = "";
-            playerCard1Text[i].text = "";
-            playerCard2Text[i].text = "";
-            playerSumText[i].text   = "";
-            betMan.isFold[i] = false;
-            betMan.resetBet();
         }
         betMan.UpdateUIText();
+        SetStateDeal();
+
     }
 
+    public void SetStateDeal()
+    {
+        gameState = GameState.deal;
+        dealOrder = 0;
+        BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
+    }
 
-    #region Card
+    public void SetStateAfterDeal()
+    {
+        gameState = GameState.afterDeal;
+        SetStateBet();
+    }
+
+    public void SetStateBet()
+    {
+        gameState = GameState.bet;
+        betMan.TriggerBetting();
+    }
+
+    public void SetStateAfterBet()
+    {
+        gameState = GameState.afterBet;
+        IsBetOver();
+    }
+
+    public void SetStateEnd()
+    {
+        gameState = GameState.end;
+        ShowCardSum();
+        if (foldPlayerCnt == IngamePlayerCnt - 1)
+        {
+            for (int i = 0; i < betMan.isFold.Length; i++)
+            {
+                if (betMan.isFold[i] == false)
+                {
+                    betMan.CalculateResult(betMan.DecideWinnerByFold(i));
+                    return;
+                }
+            }
+        }
+        else
+        {
+            betMan.CalculateResult(betMan.DecideWinner(playerCardSum));
+        }
+        betMan.isBetOver = false;
+        //SetStateStart();
+    }
+
+    #endregion
+
+
+    #region start
+
     private List<int> InitDeck()
     {
         int temp;
@@ -227,18 +212,6 @@ public class GameManager : MonoBehaviour
         return initDeck;
     }
 
-    private IEnumerator CheatCycle() //코루틴
-    {
-        while (true)
-        {
-            for(int i = 0; i < 4; i++)
-            {
-                DecideToSwitch(i);
-            }
-            yield return new WaitForSeconds(UnityEngine.Random.Range(10, 30));
-        }
-    }
-
     private void InitPlayer()
     {
         for (int i = 0; i < 4; i++)
@@ -249,7 +222,6 @@ public class GameManager : MonoBehaviour
             playerDataSet.RemoveAt(temp);
         }
     }
-
 
     private List<int> shuffleDeck(List<int> deck)
     {
@@ -267,21 +239,58 @@ public class GameManager : MonoBehaviour
         return deck;
     }
 
-    private void ShowCardSum()
+    #endregion
+
+
+    #region deal
+
+    public void CheckDealOrder()
     {
-        for (int i = 0; i < 4; i++)
-            playerSumText[i].text = playerCardSum[i].ToString();
+        if (gameState != GameState.deal)
+        {
+            return;
+        }
+        while (true)
+        {
+            //if (betMan.isFold.Length > dealOrder)
+            if (betMan.isFold[dealOrder])
+            {
+                ++dealOrder;
+                IsDealOver();
+            }
+            else
+            {
+                return;
+            }
+        }
     }
+
+    public void IsDealOver()
+    {
+        if (dealOrder >= betMan.isFold.Length)
+        {
+            SetStateAfterDeal();
+            return;
+        }
+        if (betMan.isFold[dealOrder] == true)
+        {
+            ++dealOrder;
+            IsDealOver();
+        }
+    }
+
+    
 
     public void NormalDeal()
     {
-        if(!isAbleToDeal)
+        CheckDealOrder();
+
+        if (gameState != GameState.deal)
         {
-            return; 
+            return;
         }
 
-        
-        switch (dealtCardCount)
+        switch (betMan.dealtCardCount)
         {
             case 0:
                 playerCard0Num[dealOrder] = CardDeck[0];
@@ -297,24 +306,32 @@ public class GameManager : MonoBehaviour
                 playerCard2Num[dealOrder] = CardDeck[0];
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
+                
+                cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
+                StartCoroutine(cheatCoroutine[dealOrder]);
+
                 break;
             default:
                 break;
         }
         CardDeck.Remove(CardDeck[0]);
-        dealOrder++;
         TopCardText.text = CardDeck[0].ToString();
-        CheckDealOrder();
+        dealOrder++;
+        IsDealOver();
+
+
     }
 
     public void BottomDeal()
     {
-        if (!isAbleToDeal)
+        CheckDealOrder();
+
+        if (gameState != GameState.deal)
         {
             return;
         }
-        
-        switch (dealtCardCount)
+
+        switch (betMan.dealtCardCount)
         {
             case 0:
                 playerCard0Num[dealOrder] = CardDeck[CardDeck.Count - 1];
@@ -330,81 +347,83 @@ public class GameManager : MonoBehaviour
                 playerCard2Num[dealOrder] = CardDeck[CardDeck.Count - 1];
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
+                cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
+                StartCoroutine(cheatCoroutine[dealOrder]);
                 break;
 
         }
-        CardDeck.RemoveAt(CardDeck.Count-1);
+        CardDeck.RemoveAt(CardDeck.Count - 1);
+        BottomCardText.text = "Unknown";
         dealOrder++;
-        BottomCardText.text = "Undefined";
-        CheckDealOrder();
+        IsDealOver();
     }
 
-    public void Palm()
+    #endregion
+
+
+    #region afterDeal
+
+    private void GlimpseBottomCard() 
     {
-        int temp;
-        if(palmCardNum == 0)
+        //추후 개발
+    }
+
+    #endregion
+
+
+    #region afterBet
+
+    private void IsBetOver()
+    {
+        if (betMan.dealtCardCount == 3 || foldPlayerCnt == IngamePlayerCnt - 1)
         {
-            palmCardNum = CardDeck[0];
-            CardDeck.Remove(CardDeck[0]);
+            SetStateEnd();
         }
         else
         {
-            temp = palmCardNum;
-            palmCardNum = CardDeck[0];
-            CardDeck[0] = temp;
+            SetStateDeal();
         }
-        PalmCardText.text = palmCardNum.ToString();
     }
+
     #endregion
 
-    #region Cheat
-    public void DecideToSwitch(int idx)
+
+    #region end
+
+    private void ShowCardSum()
     {
-        if (playerCardSum[idx] > 21)
+        for (int i = 0; i < 4; i++)
+            playerSumText[i].text = playerCardSum[i].ToString();
+    }
+
+    private void ResetDealtCard()
+    {
+        Array.Clear(playerCard0Num, 0, playerCard0Num.Length);
+        Array.Clear(playerCard1Num, 0, playerCard1Num.Length);
+        Array.Clear(playerCard2Num, 0, playerCard2Num.Length);
+        Array.Clear(playerCardSum, 0, playerCardSum.Length);
+        dealOrder = 0;
+        foldPlayerCnt = 0;
+        for (int i = 0; i < 4; i++)
         {
-
-            if(20f + playerArray[idx].cheatFrequency < UnityEngine.Random.Range(0,101))
-            {
-                SwitchCard(idx);
-            }
-
-
+            playerCard0Text[i].text = " - ";
+            playerCard1Text[i].text = " - ";
+            playerCard2Text[i].text = " - ";
+            playerSumText[i].text = "Sum";
         }
     }
-    public void SwitchCard(int idx)
-    {
-        //사기치는 애니메이션 재생
-        playerArray[idx].Start_DoCheat();
-        playerCard0Num[idx] = 5;
-        playerCard1Num[idx] = 6;
-        playerCard2Num[idx] = 10; //숨긴 카드 3장을 가지고 특정 몇 장만 바꾸는 식으로 조작하도록 수정
-    }
-    #endregion
 
-    public int GetDealtCardCount()
-    {
-        return dealtCardCount;
-    }
-
-    public int GetDealOrder()
-    {
-        return dealOrder;
-    }
-
-    public void GameOver()
-    {
-        Debug.Log("게임 끝!");
-    }
-
-
-    public void EliminatePlayer(int idx , int type) //0이면 베팅금 부족, 1이면 고발
+    public void EliminatePlayer(int idx, int type) //0이면 베팅금 부족, 1이면 고발
     {
         switch (type)
         {
             case NO_MONEY_ELIMINATED:
+                betMan.EliminatePlayer(idx, type);
+                break;
+            case DETECTED_CHEAT_ELIMINATED:
+                betMan.EliminatePlayer(idx, type);
 
                 break;
-
             default:
                 Debug.Log("-");
                 break;
@@ -413,5 +432,150 @@ public class GameManager : MonoBehaviour
 
 
         //idx 플레이어 제거처리
+    }
+
+    private IEnumerator NextTurn()
+    {
+        yield return new WaitForSeconds(5f);
+        gameTurn++;
+        ResetDealtCard();
+        betMan.ResetBet();
+        SetStateStart();
+    }
+
+    public void TriggerNextTurn()
+    {
+        StartCoroutine(NextTurn());
+    }
+
+    public void GameOver()
+    {
+        Debug.Log("게임 끝!");
+    }
+
+    #endregion
+
+
+    private IEnumerator CheatCycle(int playerIdx) //코루틴
+    {
+
+        while (true)
+        {
+            if (playerArray[playerIdx].isAlly)
+            {
+                break;
+            }
+            DecideToSwitch(playerIdx);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(10, 30));
+        }
+    }
+    // 1번 플레이어 받았을때 실행(1번으로)
+    // 2번 플레이어 받았을때 실행(2번으로)
+    // ,...
+    // 4번 플레이ㅓ~~
+
+    
+
+
+    #region Cheat
+    public void DecideToSwitch(int idx)
+    {
+        if (playerIsCheat[idx] == true)
+        {
+            SwitchCard(idx);
+        }
+
+
+        if (playerCardSum[idx] > 21)
+        {
+
+            if ((20f + playerArray[idx].cheatFrequency) > UnityEngine.Random.Range(0, 101))
+            {
+                SwitchCard(idx);
+                StopCoroutine(cheatCoroutine[idx]);
+
+            }
+
+
+        }
+    }
+
+
+    public void SwitchCard(int idx)
+    {
+        //사기치는 애니메이션 재생
+
+
+        Debug.Log("CHEAT! " + idx);
+        playerArray[idx].Start_DoCheat();
+        playerCard0Num[idx] = 5;
+        playerCard1Num[idx] = 6;
+        playerCard2Num[idx] = 10; //숨긴 카드 3장을 가지고 특정 몇 장만 바꾸는 식으로 조작하도록 수정
+        playerCardSum[idx] = 21;
+
+
+        playerCard0Text[idx].text = playerCard0Num[idx].ToString();
+        playerCard1Text[idx].text = playerCard1Num[idx].ToString();
+        playerCard2Text[idx].text = playerCard2Num[idx].ToString();
+
+    }
+    #endregion
+
+    public void DoCheatCycle()
+    {
+        cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
+        StartCoroutine(cheatCoroutine[dealOrder]);
+    }
+
+    //- > 내가 받은 직후부터 자기가 내가 베팅하기 직전(개발 편의를 위해..) 까지 치팅 가능성 있음
+
+
+
+
+    public void CodingAllyToFold()
+    {
+        betMan.isAllyFold = true;
+        betMan.isAllyRaise = false;
+    }
+    public void CodingAllyToRaise()
+    {
+        betMan.isAllyFold = false;
+        betMan.isAllyRaise = true;
+
+    }
+
+    public void OnMouseClickPlayer(int playerIdx) //플레이어 버튼에 할당
+    {
+        if (!playerArray[playerIdx].isAlly)
+        {
+            return;
+        }
+
+        if(mousePointState == MousePointState.code)
+        {
+            if (codeType == 0)
+            {
+                CodingAllyToFold();
+            }
+            else //1
+            {
+                CodingAllyToRaise();
+            }
+        }
+       
+        if(mousePointState == MousePointState.detect)
+        {
+            if (playerIsCheat[playerIdx] == true)
+            {
+                EliminatePlayer(playerIdx , 1);
+            }
+            else
+            {
+                GameOver();
+            }
+        }
+        
+
+
     }
 }
