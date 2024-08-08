@@ -15,6 +15,7 @@ public class BettingManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Text[] playerBetText = null;
     [SerializeField] private Text potText = null;
+    [SerializeField] private Text casinoMoneyText = null;
     [SerializeField] private Text[] winnerText = null;
     [SerializeField] private Text[] playerFoldText = null;
     [SerializeField] private Text[] playerSeedText = null;
@@ -91,6 +92,7 @@ public class BettingManager : MonoBehaviour
             playerBetText[i].text = playerArray[i].playerBettingMoney.ToString();
             playerFoldText[i].text = isFold[i] ? "FOLD" : "IN";
             potText.text = pot.ToString();
+            casinoMoneyText.text = casinoMoney.ToString();
         }
     }
 
@@ -107,9 +109,16 @@ public class BettingManager : MonoBehaviour
         }
         ++dealtCardCount;
         endOrder = playerArray.Length;
+        int ctr = 0;
         for (int i = 0; i != endOrder && !isBetOver; i = (i+1)%4) //한 턴이 돌 때마다 베팅 진행
         {
-            if (isEliminated[i])
+            ctr++;
+            if (ctr >= 1000)
+            {
+                Debug.Log("dkdkdkdk");
+                break;
+            }
+            if (isFold[i])
                 continue;
             yield return new WaitForSeconds(1);
             bet(i);
@@ -122,6 +131,8 @@ public class BettingManager : MonoBehaviour
     #region betting options
     public void entranceBet(int playerIdx)
     {
+        if (isEliminated[playerIdx])
+            return;
         maxBet = ante;
         playerArray[playerIdx].playerBettingMoney += ante;
         playerArray[playerIdx].playerMoney -= ante;
@@ -152,15 +163,11 @@ public class BettingManager : MonoBehaviour
                 return;
             }
         }
-            
-
 
         if (dealtCardCount == 2
             && (playerCardSum[playerIdx] < 8 || 16 < playerCardSum[playerIdx]))
         {
             fold(playerIdx);
-
-
             return;
         }
         else if (dealtCardCount == 3)
@@ -227,14 +234,10 @@ public class BettingManager : MonoBehaviour
         }
         else
         {
-            if (20f + GameManager.Instance.playerArray[playerIdx].cheatFrequency < UnityEngine.Random.Range(0, 101))
+            if (GameManager.Instance.playerIsCheat[playerIdx])
             {
-                GameManager.Instance.playerIsCheat[playerIdx] = true;
                 call(playerIdx);
-                if (dealtCardCount == 3)
-                    GameManager.Instance.SwitchCard(playerIdx);
                 return;
-     
             }
         }
         
@@ -248,7 +251,21 @@ public class BettingManager : MonoBehaviour
     }
     #endregion
 
-
+    public void SetIsPlayerCheat(int playerIdx)
+    {
+        if ((playerArray[playerIdx].dealtCardCount == 2
+            && (playerCardSum[playerIdx] < 8 || 16 < playerCardSum[playerIdx]))
+            || 
+            (playerArray[playerIdx].dealtCardCount == 3
+            && (playerCardSum[playerIdx] < 17 || 21 < playerCardSum[playerIdx])))
+        {
+            if (20f + GameManager.Instance.playerArray[playerIdx].cheatFrequency < UnityEngine.Random.Range(0, 101))
+            {
+                GameManager.Instance.playerIsCheat[playerIdx] = true;
+                return;
+            }
+        }
+    }
 
 
     #region win by fold
@@ -318,7 +335,7 @@ public class BettingManager : MonoBehaviour
         UpdateUIText();
         for (int i = 0; i < playerArray.Length; i++)
         {
-            if (eliminationCriteria > playerArray[i].playerMoney)
+            if (eliminationCriteria > playerArray[i].playerMoney && !isEliminated[i])
             {
                 GameManager.Instance.EliminatePlayer(i, GameManager.NO_MONEY_ELIMINATED);
             }
@@ -335,9 +352,11 @@ public class BettingManager : MonoBehaviour
         {
             case NO_MONEY_ELIMINATED:
                 isEliminated[idx] = true;
+                isFold[idx] = true;
                 break;
             case DETECTED_CHEAT_ELIMINATED:
                 isEliminated[idx] = true;
+                isFold[idx] = true;
                 casinoMoney += playerArray[idx].playerMoney;
                 playerArray[idx].playerMoney = 0;
                 break;
@@ -345,7 +364,8 @@ public class BettingManager : MonoBehaviour
                 Debug.Log("-");
                 break;
         }
-
+        CheckWinnerByFold();
+        UpdateUIText();
         //idx 플레이어 제거처리
     }
 }

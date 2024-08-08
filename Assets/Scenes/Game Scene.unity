@@ -1450,6 +1450,7 @@ RectTransform:
   - {fileID: 1986744425}
   - {fileID: 1042825778}
   - {fileID: 164931522}
+  - {fileID: 916055697}
   - {fileID: 1603964605}
   - {fileID: 1091746444}
   m_Father: {fileID: 1315464802}
@@ -2125,6 +2126,85 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Bet
+--- !u!1 &916055696
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 916055697}
+  - component: {fileID: 916055698}
+  - component: {fileID: 916055699}
+  m_Layer: 5
+  m_Name: Casino Money
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &916055697
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916055696}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 582765406}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 362.58368, y: -254.91}
+  m_SizeDelta: {x: 99.1673, y: 18.7243}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &916055698
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916055696}
+  m_CullTransparentMesh: 1
+--- !u!114 &916055699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916055696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 25
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 300
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: Casino Money
 --- !u!1 &943121497
 GameObject:
   m_ObjectHideFlags: 0
@@ -3546,6 +3626,7 @@ MonoBehaviour:
   - {fileID: 1286840382}
   - {fileID: 484048787}
   potText: {fileID: 138306786}
+  casinoMoneyText: {fileID: 916055699}
   winnerText:
   - {fileID: 1521412168}
   - {fileID: 1986744427}
@@ -3568,10 +3649,12 @@ MonoBehaviour:
   pot: 0
   prize: 0
   eliminationCriteria: 0
+  casinoMoney: 0
   winner: 
   dealtCardCount: 0
   endOrder: 0
   isFold: 00000000
+  isEliminated: 00000000
   isBetOver: 0
   isAllyFold: 0
   isAllyRaise: 0

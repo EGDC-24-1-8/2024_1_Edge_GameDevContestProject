@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public int highPreference;
     public int lowPreference;
     public float cheatFrequency;
+    public int dealtCardCount;
 
 
     public bool isAlly = false; 
@@ -27,6 +28,7 @@ public class Player : MonoBehaviour
         highPreference = playerData.HighPreference;
         lowPreference = playerData.LowPreference;
         cheatFrequency = playerData.CheatFrequency;
+        dealtCardCount = 0;
     }
     public void Start_DoCheat()
     {
@@ -37,7 +39,7 @@ public class Player : MonoBehaviour
     {
         isCheat = true;
         playerImage.color = Color.red;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         playerImage.color = Color.white;
         isCheat = false;
 
