@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     public int lowPreference;
     public float cheatFrequency;
     public int dealtCardCount;
+    public string[] textData;
 
 
     public bool isAlly = false; 
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour
         highPreference = playerData.HighPreference;
         lowPreference = playerData.LowPreference;
         cheatFrequency = playerData.CheatFrequency;
+        textData = playerData.TextData;
         dealtCardCount = 0;
     }
     public void Start_DoCheat(int idx)

@@ -8,36 +8,28 @@ public class DialogSystem : MonoBehaviour
     private static DialogSystem instance;
     public static DialogSystem Instance { get { return instance; } }
 
-
     [TextArea]
-    public string[] BossTextData;
-    [TextArea]
-    public string[] EndBossTextData;
-    public int BossTextIndex;
+    public string[] TextData;
+    public string[] EndTextData;
+    public int TextIndex;
 
     public int TextLen;
-    public string ShowText;
-    public Text BossText;
-    public float delay = 0.2f;
+    public string DialogString;
+    public Text DialogText;
+    public float delay = 0.1f;
 
     public int now_Sentence = 0;
     public bool isStart = false;
-
     public bool isEnd = false;
 
     private bool isDialog = false;
     public GameObject TextPanel;
+    public Player[] playerArray = null;
 
 
-    public GameObject CountPanel;
-    public Text CountText;
-    public Slider CountSlider;
-    public bool isSliderMove = false;
 
-    public GameObject spaceBar;
-    void Awake()
+    private void Awake()
     {
-
         if (instance == null)
         {
             instance = this;
@@ -47,161 +39,48 @@ public class DialogSystem : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
     void Start()
     {
-
-        spaceBar.SetActive(false);
-        BossTextIndex = BossTextData.Length;
-        NextSentence();
+        playerArray = GameManager.Instance.playerArray;
+        TextData = playerArray[0].textData;
+        TextIndex = TextData.Length;
+        //NextSentence();
     }
 
-    
     void Update()
     {
-        if(isSliderMove == true)
-        {
-            CountSlider.value = Mathf.Lerp(CountSlider.value, 1, 10 * Time.deltaTime);
-        }
-        else
-        {
-            CountSlider.value = Mathf.Lerp(CountSlider.value, 0, 10 * Time.deltaTime);
-        }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-
-            if(isStart == false)
+            if (isDialog)
+                return;
+            if (now_Sentence < TextIndex)
             {
-                TextPanel.SetActive(true);
-            }
-            
-            if (now_Sentence < BossTextIndex)
-            {
-                if(isDialog == false)
-                {
-                    //SoundManager.Instance.Play_DialogTapSound();
-                    NextSentence();
-                    
-                }
-            }
-            
-            else
-            {
-                spaceBar.SetActive(false);
-                if(isEnd == false)
-                {
-                }
-                else
-                {
-                    
-                }
-                
-                if (isStart == false)
-                {
-                    
-                    //StartCoroutine(WaitAttack());
-                    StartCoroutine(CountDown());
-                    isStart = true;
-                    ShowText = "";
-                }   
+                NextSentence();
             }
         }
-    }
-
-    public void BossClear()
-    {
-        isEnd = true;
-        ShowText = "[space]를 눌러 진행";
-        BossText.text = "[space]를 눌러 진행";
-        BossTextIndex = EndBossTextData.Length;
-        now_Sentence = 0;
-        TextPanel.SetActive(true);
-    }
-    IEnumerator WaitGameFlow()
-    {
-        yield return new WaitForSeconds(3f);
-        //playerAttack.isStart = true;
-    }
-    IEnumerator CountDown()
-    {
-        int temp_count = 1;
-
-        
-        TextPanel.SetActive(false);
-        CountPanel.SetActive(true);
-
-        CountText.text = temp_count.ToString();
-        isSliderMove = true;
-        //CountSlider.value = Mathf.Lerp(0, 1, 1);
-        
-        
-        yield return new WaitForSeconds(0.7f);
-        temp_count++;
-        CountText.text = temp_count.ToString();
-        isSliderMove = false;
-        //CountSlider.value = Mathf.Lerp(0, 1, 1);
-
-
-        yield return new WaitForSeconds(0.9f);
-        temp_count++;
-        CountText.text = temp_count.ToString();
-        isSliderMove = true;
-
-        yield return new WaitForSeconds(1f);
-        CountPanel.SetActive(false);
-       
     }
 
     void NextSentence()
     {
-        TextPanel.transform.GetChild(0).GetComponent<Animator>().SetTrigger("isPang");
-        spaceBar.SetActive(false);
-        if (isEnd == false)
-        {
-            ShowText = "";
-            TextLen = BossTextData[now_Sentence].Length;
-            StartCoroutine(NextSentence_Play());
-        }
-        else
-        {
-            ShowText = "";
-            TextLen = EndBossTextData[now_Sentence].Length;
-            StartCoroutine(NextSentence_Play());
-        }
-        
-        
+        DialogString = "";
+        TextLen = TextData[now_Sentence].Length;
+        StartCoroutine(NextSentence_Play());
     }
-
 
     IEnumerator NextSentence_Play()
     {
         isDialog = true;
         int temp = 0;
-        
+
         while (temp < TextLen)
         {
-            
-            if(isEnd == false)
-            {
-                ShowText += BossTextData[now_Sentence][temp];
-                temp++;
+            DialogString += TextData[now_Sentence][temp];
+            temp++;
 
-                BossText.text = ShowText;
-                yield return new WaitForSeconds(delay);
-            }
-            else
-            {
-                ShowText += EndBossTextData[now_Sentence][temp];
-                temp++;
-
-                BossText.text = ShowText;
-                yield return new WaitForSeconds(delay);
-            }
+            DialogText.text = DialogString;
+            yield return new WaitForSeconds(delay);
         }
         now_Sentence++;
         isDialog = false;
-        spaceBar.SetActive(true);
     }
-
 }

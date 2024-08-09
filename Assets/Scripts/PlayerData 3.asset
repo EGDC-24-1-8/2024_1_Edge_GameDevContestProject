@@ -18,3 +18,7 @@ MonoBehaviour:
   highPreference: 15
   lowPreference: 10
   cheatFrequency: 0
+  textData:
+  - sentence 4/1
+  - sentence 4/2
+  - sentence 4/3

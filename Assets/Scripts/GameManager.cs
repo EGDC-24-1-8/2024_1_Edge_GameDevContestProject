@@ -83,11 +83,12 @@ public class GameManager : MonoBehaviour
         {
             //Destroy(this.gameObject);
         }
+        InitPlayer();
     }
 
     void Start()
     {
-        InitPlayer();
+        
         IngamePlayerCnt = 4;
         SetStateStart();
     }

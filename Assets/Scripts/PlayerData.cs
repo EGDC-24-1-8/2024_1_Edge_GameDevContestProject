@@ -35,7 +35,9 @@ public class PlayerData : ScriptableObject
     private int cheatFrequency;
     public int CheatFrequency { get { return cheatFrequency; } }
 
-
+    [SerializeField]
+    private string[] textData;
+    public string[] TextData { get { return textData; } }
 
 
 

@@ -780,8 +780,9 @@ MonoBehaviour:
   highPreference: 0
   lowPreference: 0
   cheatFrequency: 0
+  dealtCardCount: 0
+  textData: []
   isAlly: 1
-  isCheat: 0
 --- !u!61 &243031679
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -883,6 +884,110 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!1 &285226327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 285226328}
+  - component: {fileID: 285226330}
+  - component: {fileID: 285226329}
+  - component: {fileID: 285226331}
+  m_Layer: 5
+  m_Name: Dialog Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &285226328
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285226327}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1621140045}
+  m_Father: {fileID: 582765406}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000026703, y: 55}
+  m_SizeDelta: {x: 166.43, y: 72.3631}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &285226329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285226327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &285226330
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285226327}
+  m_CullTransparentMesh: 1
+--- !u!114 &285226331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285226327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89d2ac6f32708c746a83334ad208d385, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextData:
+  - "\uC18C\uAC00 \uC8FD\uC73C\uBA74?"
+  - "\uBB58\uAE4C\uC694?"
+  - "\uC815\uB2F5\uC740 \uB2E4\uC774\uC18C"
+  EndTextData: []
+  TextIndex: 0
+  TextLen: 0
+  DialogString: 
+  DialogText: {fileID: 1621140046}
+  delay: 0.1
+  now_Sentence: 0
+  isStart: 0
+  isEnd: 0
+  TextPanel: {fileID: 285226327}
+  playerArray: []
 --- !u!1001 &285826685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1444,7 +1549,7 @@ RectTransform:
   - {fileID: 1585330785}
   - {fileID: 2117240902}
   - {fileID: 1345386084}
-  - {fileID: 1166390600}
+  - {fileID: 285226328}
   - {fileID: 138306785}
   - {fileID: 1521412166}
   - {fileID: 1986744425}
@@ -2470,85 +2575,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1166390599
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1166390600}
-  - component: {fileID: 1166390602}
-  - component: {fileID: 1166390601}
-  m_Layer: 5
-  m_Name: PlayerDialog
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1166390600
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1166390599}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 582765406}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 45.299988}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1166390601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1166390599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 41
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 0
-    m_MaxSize: 300
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 1
-    m_VerticalOverflow: 1
-    m_LineSpacing: 1
-  m_Text: Dialog
---- !u!222 &1166390602
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1166390599}
-  m_CullTransparentMesh: 1
 --- !u!1 &1210617270
 GameObject:
   m_ObjectHideFlags: 0
@@ -4365,6 +4391,85 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1621140044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1621140045}
+  - component: {fileID: 1621140047}
+  - component: {fileID: 1621140046}
+  m_Layer: 5
+  m_Name: Dialog Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1621140045
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621140044}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 285226328}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1621140046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621140044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 35
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: Dialog
+--- !u!222 &1621140047
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621140044}
+  m_CullTransparentMesh: 1
 --- !u!1 &1635847119
 GameObject:
   m_ObjectHideFlags: 0
@@ -5157,8 +5262,9 @@ MonoBehaviour:
   highPreference: 0
   lowPreference: 0
   cheatFrequency: 0
+  dealtCardCount: 0
+  textData: []
   isAlly: 0
-  isCheat: 0
 --- !u!61 &1871316240
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5305,7 +5411,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 160, y: 141}
+  m_AnchoredPosition: {x: 202, y: 139}
   m_SizeDelta: {x: 150, y: 139.6872}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1877538351
@@ -5366,8 +5472,9 @@ MonoBehaviour:
   highPreference: 0
   lowPreference: 0
   cheatFrequency: 0
+  dealtCardCount: 0
+  textData: []
   isAlly: 0
-  isCheat: 0
 --- !u!61 &1877538354
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5515,6 +5622,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameState: 0
+  isPause: 0
   mousePointState: 0
   playerCard0Text:
   - {fileID: 646813704}
@@ -5544,6 +5652,7 @@ MonoBehaviour:
   playerCardSum: 00000000000000000000000000000000
   codeType: 0
   playerIsCheat: 00000000
+  playerIsDetectable: 00000000
   CardDeck: 
   foldPlayerCnt: 0
   IngamePlayerCnt: 4
@@ -5559,11 +5668,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3f0b4e1cc7d46a44ba517c741c867549, type: 2}
   - {fileID: 11400000, guid: 67b389a924f55ab428a1706875a2bb31, type: 2}
   - {fileID: 11400000, guid: e76d411b43a1ce74c84dc28f628b1b55, type: 2}
-  - {fileID: 11400000, guid: b408022bfb466334ea0b3540e620f24e, type: 2}
-  - {fileID: 11400000, guid: 1d34a42891c74d34b9475445ce1db31b, type: 2}
-  - {fileID: 11400000, guid: efd2904d49cd9f64c9f023b6fa7ac39e, type: 2}
-  - {fileID: 11400000, guid: 141b10ed47dad3f4baca8431dd93314c, type: 2}
-  - {fileID: 11400000, guid: 0c89b6e0b162e6c4480894dfa0616441, type: 2}
   playerArray:
   - {fileID: 1899208668}
   - {fileID: 243031678}
@@ -5676,8 +5780,9 @@ MonoBehaviour:
   highPreference: 0
   lowPreference: 0
   cheatFrequency: 0
+  dealtCardCount: 0
+  textData: []
   isAlly: 0
-  isCheat: 0
 --- !u!61 &1899208669
 BoxCollider2D:
   m_ObjectHideFlags: 0
