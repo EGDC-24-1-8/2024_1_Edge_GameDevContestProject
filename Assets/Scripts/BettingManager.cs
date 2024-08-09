@@ -120,7 +120,7 @@ public class BettingManager : MonoBehaviour
             }
             if (isFold[i])
                 continue;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.5f);
             bet(i);
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
         }
@@ -257,7 +257,7 @@ public class BettingManager : MonoBehaviour
             && (playerCardSum[playerIdx] < 8 || 16 < playerCardSum[playerIdx]))
             || 
             (playerArray[playerIdx].dealtCardCount == 3
-            && (playerCardSum[playerIdx] < 17 || 21 < playerCardSum[playerIdx])))
+            && (playerCardSum[playerIdx] < 17 || 21 < playerCardSum[playerIdx]))) // fold Á¶°Ç
         {
             if (20f + GameManager.Instance.playerArray[playerIdx].cheatFrequency < UnityEngine.Random.Range(0, 101))
             {
@@ -355,6 +355,19 @@ public class BettingManager : MonoBehaviour
                 isFold[idx] = true;
                 break;
             case DETECTED_CHEAT_ELIMINATED:
+                playerArray[idx].playerMoney += playerArray[idx].playerBettingMoney;
+                pot -= playerArray[idx].playerBettingMoney;
+                playerArray[idx].playerBettingMoney = 0;
+                if (GameManager.Instance.foldPlayerCnt == GameManager.Instance.IngamePlayerCnt)
+                {
+                    Debug.Log("DETECTED 4 FOLD");
+                    for (int i = 0; i < 4; i++)
+                    {
+                        playerArray[i].playerMoney += playerArray[i].playerBettingMoney;
+                        pot -= playerArray[i].playerBettingMoney;
+                        playerArray[i].playerBettingMoney = 0;
+                    }
+                }
                 isEliminated[idx] = true;
                 isFold[idx] = true;
                 casinoMoney += playerArray[idx].playerMoney;

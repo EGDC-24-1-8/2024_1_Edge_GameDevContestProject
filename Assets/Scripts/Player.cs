@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 
     public bool isAlly = false; 
 
-    public bool isCheat = false;
+    //public bool isCheat = false;
 
     public void initData()
     {
@@ -30,18 +30,17 @@ public class Player : MonoBehaviour
         cheatFrequency = playerData.CheatFrequency;
         dealtCardCount = 0;
     }
-    public void Start_DoCheat()
+    public void Start_DoCheat(int idx)
     {
-        StartCoroutine(DoCheat());
+        StartCoroutine(DoCheat(idx));
     }
 
-    private IEnumerator DoCheat()
+    private IEnumerator DoCheat(int idx)
     {
-        isCheat = true;
+        GameManager.Instance.playerIsDetectable[idx] = true;
         playerImage.color = Color.red;
         yield return new WaitForSeconds(2f);
         playerImage.color = Color.white;
-        isCheat = false;
-
+        GameManager.Instance.playerIsDetectable[idx] = false;
     }
 }

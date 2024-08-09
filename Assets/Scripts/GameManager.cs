@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     };
     [Header("Game State")]
     [SerializeField] public GameState gameState;
+    [SerializeField] public bool isPause = false;
     [SerializeField] public MousePointState mousePointState = MousePointState.normal;
     //Card UI
     [Header("Card UI")]
@@ -67,7 +68,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] Player;
     [SerializeField] private List<PlayerData> playerDataSet = null;
     [SerializeField] public Player[] playerArray = null;
-    
+
     [SerializeField] public BettingManager betMan;
     [SerializeField] private IEnumerator[] cheatCoroutine = new IEnumerator[4];
 
@@ -93,15 +94,15 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             mousePointState = MousePointState.normal;
         }
-        else if(Input.GetKeyDown(KeyCode.W))
+        else if (Input.GetKeyDown(KeyCode.W))
         {
-            if(mousePointState == MousePointState.code)
+            if (mousePointState == MousePointState.code)
             {
-                if(codeType == 0)
+                if (codeType == 0)
                 {
                     codeType = 1;
                 }
@@ -117,9 +118,24 @@ public class GameManager : MonoBehaviour
                 codeType = 0;
             }
         }
-        else if(Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.E))
         {
             mousePointState = MousePointState.detect;
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            //Time.timeScale = 0;
+            if(isPause)
+            {
+                isPause = false;
+                Time.timeScale = 1;
+            }
+            else
+            {
+                isPause = true;
+                Time.timeScale = 0;
+            }
         }
     }
 
@@ -136,6 +152,7 @@ public class GameManager : MonoBehaviour
         {
             betMan.entranceBet(i);
             playerIsCheat[i] = false;
+            playerIsDetectable[i] = false;
             playerArray[i].dealtCardCount = 0;
             if (cheatCoroutine[i] != null)
             {
@@ -144,7 +161,6 @@ public class GameManager : MonoBehaviour
         }
         betMan.UpdateUIText();
         SetStateDeal();
-
     }
 
     public void SetStateDeal()
@@ -175,9 +191,9 @@ public class GameManager : MonoBehaviour
     public void SetStateEnd()
     {
         gameState = GameState.end;
-        for(int i = 0; i < playerArray.Length; i++)
+        for (int i = 0; i < playerArray.Length; i++)
         {
-            if(!betMan.isFold[i] && playerIsCheat[i] && playerCardSum[i] != 21)
+            if (!betMan.isFold[i] && playerIsCheat[i] && playerCardSum[i] != 21)
             {
                 SwitchCard(i);
             }
@@ -271,7 +287,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+
 
     public void NormalDeal()
     {
@@ -299,7 +315,7 @@ public class GameManager : MonoBehaviour
                 playerCard2Num[dealOrder] = CardDeck[0];
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
-                
+
                 cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
                 StartCoroutine(cheatCoroutine[dealOrder]);
 
@@ -354,7 +370,7 @@ public class GameManager : MonoBehaviour
 
     #region afterDeal
 
-    private void GlimpseBottomCard() 
+    private void GlimpseBottomCard()
     {
         //추후 개발
     }
@@ -449,6 +465,7 @@ public class GameManager : MonoBehaviour
 
     public void EliminatePlayer(int idx, int type) //0이면 베팅금 부족, 1이면 고발
     {
+        IngamePlayerCnt--;
         switch (type)
         {
             case NO_MONEY_ELIMINATED:
@@ -461,7 +478,6 @@ public class GameManager : MonoBehaviour
                 Debug.Log("-");
                 break;
         }
-        IngamePlayerCnt--;
         //idx 플레이어 제거처리
     }
 
@@ -470,35 +486,27 @@ public class GameManager : MonoBehaviour
         Debug.Log("게임 끝!");
     }
 
+
+
+    #region Cheat
+
     private IEnumerator CheatCycle(int playerIdx) //코루틴
     {
-        while (true)
+        if (playerArray[playerIdx].isAlly)
         {
-            Debug.Log("cc");
-            if (playerArray[playerIdx].isAlly)
-            {
-                break;
-            }
-            DecideToSwitch(playerIdx);
-            yield return new WaitForSeconds(2);
-            if(playerIsCheat[playerIdx])
-            {
-                playerIsDetectable[playerIdx] = false;
-                playerIsCheat[playerIdx] = false;
-                yield break;
-            }
-            betMan.SetIsPlayerCheat(playerIdx);
-            yield return new WaitForSeconds(UnityEngine.Random.Range(4,5));
+            yield break;
         }
+        DecideToSwitch(playerIdx); //2번째 장 받고 결심한 경우, 3번째장 받자마자 스위치
+        betMan.SetIsPlayerCheat(playerIdx); //3번째 장 받고 결심 여부 결정
+        yield return new WaitForSeconds(UnityEngine.Random.Range(2, 4));
+        DecideToSwitch(playerIdx); //랜덤 2~4초 뒤 스위치
+        yield break;
     }
     // 1번 플레이어 받았을때 실행(1번으로)
     // 2번 플레이어 받았을때 실행(2번으로)
     // ,...
     // 4번 플레이ㅓ~~
 
-
-
-    #region Cheat
     public void DecideToSwitch(int idx)
     {
         if (playerIsCheat[idx] == true)
@@ -511,10 +519,9 @@ public class GameManager : MonoBehaviour
     public void SwitchCard(int idx)
     {
         //사기치는 애니메이션 재생
-
-        playerIsDetectable[idx] = true;
+        playerIsCheat[idx] = false;
         Debug.Log("CHEAT! " + idx);
-        playerArray[idx].Start_DoCheat();
+        playerArray[idx].Start_DoCheat(idx);
         playerCard0Num[idx] = 5;
         playerCard1Num[idx] = 6;
         playerCard2Num[idx] = 10; //숨긴 카드 3장을 가지고 특정 몇 장만 바꾸는 식으로 조작하도록 수정
