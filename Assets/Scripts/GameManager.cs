@@ -72,6 +72,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public BettingManager betMan;
     [SerializeField] private IEnumerator[] cheatCoroutine = new IEnumerator[4];
 
+    [SerializeField] private AudioClip hoverSound = null;
+    
     private void Awake()
     {
         if (null == Instance) //디자인패턴중 싱글톤 패턴
@@ -97,6 +99,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            //AudioManager.GetOrCreate().PlayEffectSound(hoverSound);
             mousePointState = MousePointState.normal;
         }
         else if (Input.GetKeyDown(KeyCode.W))
