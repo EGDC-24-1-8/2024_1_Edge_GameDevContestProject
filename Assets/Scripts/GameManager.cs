@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text[] playerSumText;
     [SerializeField] private Text TopCardText;
     [SerializeField] private Text BottomCardText;
+    [SerializeField] private Text GameDayText;
+    [SerializeField] private Text GameTurnText;
 
     //Card Value
     [Header("Card Value")]
@@ -60,6 +62,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public int IngamePlayerCnt = 4;
 
     [Header("Turn Info")]
+    [SerializeField] private int gameDay = 1;
     [SerializeField] private int gameTurn = 0;
     //[SerializeField] private int dealtCardCount = 0; // 카드 나눠주는 턴
     [SerializeField] private int dealOrder = 0; // 현재 카드 나눠줄 플레이어 순서
@@ -72,7 +75,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public BettingManager betMan;
     [SerializeField] private IEnumerator[] cheatCoroutine = new IEnumerator[4];
 
-    [SerializeField] private AudioClip hoverSound = null;
+    //[SerializeField] private AudioClip hoverSound = null;
     
     private void Awake()
     {
@@ -90,7 +93,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        
         IngamePlayerCnt = 4;
         SetStateStart();
     }
@@ -147,6 +149,16 @@ public class GameManager : MonoBehaviour
 
     public void SetStateStart()
     {
+        if(gameTurn > 2 || IngamePlayerCnt < 2)
+        {
+            betMan.ResetPlayer();
+            InitPlayer();
+            gameTurn = 0;
+            gameDay++;
+            IngamePlayerCnt = 4;
+        }
+        GameDayText.text = "Day " + gameDay;
+        GameTurnText.text = "Turn " + (gameTurn + 1);
         gameState = GameState.start;
         CardDeck = InitDeck();
         CardDeck = shuffleDeck(CardDeck);

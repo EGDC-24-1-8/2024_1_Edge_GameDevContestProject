@@ -16,9 +16,9 @@ public class BettingManager : MonoBehaviour
     [SerializeField] private Text[] playerBetText = null;
     [SerializeField] private Text potText = null;
     [SerializeField] private Text casinoMoneyText = null;
-    [SerializeField] private Text[] winnerText = null;
     [SerializeField] private Text[] playerFoldText = null;
     [SerializeField] private Text[] playerSeedText = null;
+    [SerializeField] private Text winCriteriaText = null;
 
     [Header("Betting Amount")]
     [SerializeField] private int ante = 10; //참여금
@@ -31,6 +31,7 @@ public class BettingManager : MonoBehaviour
     [SerializeField] private int eliminationCriteria = 0; //소유금이 여기까지 줄어들면 해당 플레이어가 테이블을 떠남
 
     [SerializeField] public int casinoMoney = 0; //판돈
+    [SerializeField] private int winCriteria = 0;
 
 
 
@@ -93,6 +94,7 @@ public class BettingManager : MonoBehaviour
             playerFoldText[i].text = isFold[i] ? "FOLD" : "IN";
             potText.text = pot.ToString();
             casinoMoneyText.text = casinoMoney.ToString();
+            winCriteriaText.text = (casinoMoney + playerArray[1].playerMoney) + " / " + winCriteria;
         }
     }
 
@@ -283,7 +285,6 @@ public class BettingManager : MonoBehaviour
         isBetOver = true;
         winner.Clear();
         winner.Add(playerIdx);
-        winnerText[0].text = playerIdx.ToString();
         return winner;
     }
 
@@ -320,8 +321,6 @@ public class BettingManager : MonoBehaviour
             }
             winner.Add(i);
         }
-        for (int i = 0; i < winner.Count; i++)
-            winnerText[i].text = winner[i].ToString();
         return winner;
     }
 
@@ -371,6 +370,7 @@ public class BettingManager : MonoBehaviour
                 isEliminated[idx] = true;
                 isFold[idx] = true;
                 casinoMoney += playerArray[idx].playerMoney;
+                
                 playerArray[idx].playerMoney = 0;
                 break;
             default:
@@ -380,5 +380,15 @@ public class BettingManager : MonoBehaviour
         CheckWinnerByFold();
         UpdateUIText();
         //idx 플레이어 제거처리
+    }
+
+    public void ResetPlayer()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            isEliminated[i] = false;
+            isFold[i] = false;
+            UpdateUIText();
+        }
     }
 }

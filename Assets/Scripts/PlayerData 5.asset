@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6a619d544120064dabd920521311774, type: 3}
-  m_Name: PlayerData 3
+  m_Name: PlayerData 5
   m_EditorClassIdentifier: 
   playerMoney: 200
   playerBettingMoney: 0
-  playerName: 3
+  playerName: 5
   highPreference: 15
   lowPreference: 10
   cheatFrequency: 0
   textData:
-  - sentence 3/1
-  - sentence 3/2
-  - sentence 3/3
+  - sentence 5/1
+  - sentence 5/2
+  - sentence 5/3
