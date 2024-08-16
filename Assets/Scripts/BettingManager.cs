@@ -13,6 +13,7 @@ public class BettingManager : MonoBehaviour
     [SerializeField] private int[] playerCardSum = null;
 
     [Header("UI")]
+    [SerializeField] private Text[] playerNameText = null;
     [SerializeField] private Text[] playerBetText = null;
     [SerializeField] private Text potText = null;
     [SerializeField] private Text casinoMoneyText = null;
@@ -89,6 +90,7 @@ public class BettingManager : MonoBehaviour
     {
         for (int i = 0; i < playerArray.Length; i++)
         {
+            playerNameText[i].text = playerArray[i].playerName;
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
             playerBetText[i].text = playerArray[i].playerBettingMoney.ToString();
             playerFoldText[i].text = isFold[i] ? "FOLD" : "IN";
@@ -382,7 +384,7 @@ public class BettingManager : MonoBehaviour
         //idx 플레이어 제거처리
     }
 
-    public void ResetPlayer()
+    public void ResetPlayer() //하루 끝나고 새로운 사람들로 넘어갈 때 쓰는 함수
     {
         for(int i = 0; i < 4; i++)
         {

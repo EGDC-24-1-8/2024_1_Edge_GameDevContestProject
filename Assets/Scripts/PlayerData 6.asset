@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMoney: 200
   playerBettingMoney: 0
-  playerName: 6
+  playerName: Player 6
   highPreference: 15
   lowPreference: 10
   cheatFrequency: 0

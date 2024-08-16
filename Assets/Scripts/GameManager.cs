@@ -69,7 +69,10 @@ public class GameManager : MonoBehaviour
 
     [Header("etc")]
     [SerializeField] private GameObject[] Player;
-    [SerializeField] private List<PlayerData> playerDataSet = null;
+    [SerializeField] private List<PlayerData> enemyPlayerDataSet = null;
+    [SerializeField] private List<PlayerData> allyPlayerDataSet = null;
+    [SerializeField] private List<PlayerData> tempEnemyPlayerDataSet = null;
+    [SerializeField] private List<PlayerData> tempAllyPlayerDataSet = null;
     [SerializeField] public Player[] playerArray = null;
 
     [SerializeField] public BettingManager betMan;
@@ -185,7 +188,7 @@ public class GameManager : MonoBehaviour
         dealOrder = 0;
         BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
     }
-
+    
     public void SetStateAfterDeal()
     {
         gameState = GameState.afterDeal;
@@ -238,12 +241,31 @@ public class GameManager : MonoBehaviour
 
     private void InitPlayer()
     {
+        tempEnemyPlayerDataSet.Clear();
+        for (int i = 0; i < allyPlayerDataSet.Count; i++)
+        {
+            tempAllyPlayerDataSet.Add(allyPlayerDataSet[i]);
+        }
+        for (int i = 0; i < enemyPlayerDataSet.Count; i++)
+        {
+            tempEnemyPlayerDataSet.Add(enemyPlayerDataSet[i]);
+        }
         for (int i = 0; i < 4; i++)
         {
-            int temp = UnityEngine.Random.Range(0, playerDataSet.Count);
-            playerArray[i].playerData = playerDataSet[temp];
-            playerArray[i].initData();
-            playerDataSet.RemoveAt(temp);
+            if(playerArray[i].isAlly)
+            {
+                int temp = UnityEngine.Random.Range(0, tempAllyPlayerDataSet.Count);
+                playerArray[i].playerData = tempAllyPlayerDataSet[temp];
+                playerArray[i].initData();
+                tempEnemyPlayerDataSet.RemoveAt(temp);
+            }
+            else
+            {
+                int temp = UnityEngine.Random.Range(0, tempEnemyPlayerDataSet.Count);
+                playerArray[i].playerData = tempEnemyPlayerDataSet[temp];
+                playerArray[i].initData();
+                tempEnemyPlayerDataSet.RemoveAt(temp);
+            }
         }
     }
 
@@ -444,7 +466,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator CardOpen()
     {
         ShowCardSum();
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(2.5f);
         if (foldPlayerCnt == IngamePlayerCnt - 1)
         {
             for (int i = 0; i < betMan.isFold.Length; i++)
@@ -471,7 +493,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator NextTurn()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(4f);
         gameTurn++;
         ResetDealtCard();
         betMan.ResetBet();
