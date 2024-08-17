@@ -50,6 +50,9 @@ TagManager:
   - name: Table
     uniqueID: 3791988429
     locked: 0
+  - name: Player Arm
+    uniqueID: 581675143
+    locked: 0
   - name: UI
     uniqueID: 3284384277
     locked: 0
