@@ -26,6 +26,9 @@ public class CardController : MonoBehaviour
     private float ArrowTopY;
     private float ArrowBottomY;
 
+    private Vector3 origin_Position;
+    private Vector3 origin_ArrowPosition;
+
     public event Action<bool> cardMoved;
     
 
@@ -62,7 +65,8 @@ public class CardController : MonoBehaviour
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
         Collider2D collider = GetComponent<Collider2D>();
-        
+        origin_Position = transform.position;
+        origin_ArrowPosition = bottomArrow.position;
         if (mousePos.y >= ArrowBottomY && mousePos.y <= ArrowTopY)
         {
             isDragging = true;
@@ -110,10 +114,18 @@ public class CardController : MonoBehaviour
             suspicionLevel += suspicionIncreaseRate;
             Debug.Log("dragDuration > suspicionThreshold");
         }
-
-        CompareWithGauge(bottomArrow.position.y);
-        gameObject.SetActive(false);
-        bottomArrow.gameObject.SetActive(false);
+        if (transform.position.y - origin_Position.y > 2)
+        {
+            CompareWithGauge(bottomArrow.position.y);
+            gameObject.SetActive(false);
+            bottomArrow.gameObject.SetActive(false);
+        }
+        else
+        {
+            transform.position = origin_Position;
+            bottomArrow.position = origin_ArrowPosition;
+        }
+        //Destroy(gameObject.transform.parent.gameObject);
     }
 
     void CompareWithGauge(float objectY)

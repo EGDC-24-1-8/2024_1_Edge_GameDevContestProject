@@ -14,6 +14,8 @@ public class FrontCardController : MonoBehaviour
     private float frontCardTopY;
     private float frontCardBottomY;
 
+    private Vector3 origin_Position;
+    //클릭하는순간 그 카드의 기본위치를 잡은다음, 내가 이제 그 위치에서 특정 값만큼 이동해야만 실행되게끔
     private void Start()
     {
         SetPosition();
@@ -30,7 +32,7 @@ public class FrontCardController : MonoBehaviour
     void OnMouseDown()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        
+        origin_Position = frontCard.position;
         Collider2D collider = frontCard.GetComponent<Collider2D>();
 
         if (mousePos.y >= frontCardBottomY && mousePos.y <= frontCardTopY)
@@ -70,9 +72,19 @@ public class FrontCardController : MonoBehaviour
     {
         if (isDragging)
         {
-            isDragging = false;
-            frontCard.gameObject.SetActive(false); // frontCard를 비활성화
-            FrontCardMoved?.Invoke(true); // 이벤트 호출
+            if(Math.Abs(frontCard.position.y - origin_Position.y) > 2)
+            {
+                isDragging = false;
+                frontCard.gameObject.SetActive(false); // frontCard를 비활성화
+                FrontCardMoved?.Invoke(true); // 이벤트 호출
+                Destroy(gameObject);
+            }
+            else
+            {
+
+                frontCard.gameObject.transform.position = origin_Position;
+            }
+          
         }
     }
 }
