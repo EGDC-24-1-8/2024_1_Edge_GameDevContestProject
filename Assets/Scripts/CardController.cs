@@ -3,19 +3,50 @@ using UnityEngine;
 
 public class CardController : MonoBehaviour
 {
-    [SerializeField] private Transform object1; // 첫 번째 오브젝트
-    [SerializeField] private Transform object2; // 두 번째 오브젝트
+    [SerializeField] private Transform bottomCard; 
+    [SerializeField] private Transform bottomArrow;
     [SerializeField] private GameObject gaugeGreen;
     [SerializeField] private GameObject gaugeYellow;
     [SerializeField] private GameObject gaugeRed;
     [SerializeField] private float suspicionThreshold = 2.0f; // 의심 증가 임계값
     [SerializeField] private float suspicionIncreaseRate = 20f; // 의심 수치 증가율
+
     private float dragStartTime;
     private bool isDragging = false;
     private float suspicionLevel = 0;
     private Vector3 initialOffset;
-    private float delayTime;
+    private Vector3 mouseOffset;
+    private float delayTime = 0.5f; // 의심 수치 증가 시작 시간
+    private float GreenTopY;
+    private float GreenBottomY;
+    private float YellowTopY;
+    private float YellowBottomY;
+    private float RedTopY;
+    private float RedBottomY;
+    private float ArrowTopY;
+    private float ArrowBottomY;
 
+    public event Action<bool> cardMoved;
+    
+
+    private void Start()
+    {
+        SetPosition();
+    }
+    
+    private void SetPosition()
+    {
+        GreenTopY = gaugeGreen.GetComponent<BoxCollider2D>().bounds.max.y;
+        GreenBottomY = gaugeGreen.GetComponent<BoxCollider2D>().bounds.min.y;
+        YellowTopY = gaugeYellow.GetComponent<BoxCollider2D>().bounds.max.y;
+        YellowBottomY = gaugeYellow.GetComponent<BoxCollider2D>().bounds.min.y;
+        RedTopY = gaugeRed.GetComponent<BoxCollider2D>().bounds.max.y;
+        RedBottomY = gaugeRed.GetComponent<BoxCollider2D>().bounds.min.y;
+        ArrowTopY = bottomArrow.GetComponent<BoxCollider2D>().bounds.max.y;
+        ArrowBottomY = bottomArrow.GetComponent<BoxCollider2D>().bounds.min.y;
+    }
+
+    
     private void Update()
     {
         if (isDragging)
@@ -26,12 +57,29 @@ public class CardController : MonoBehaviour
             }
         }
     }
-
     void OnMouseDown()
     {
-        isDragging = true;
-        dragStartTime = Time.time; 
-        initialOffset = object2.position - object1.position;
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        
+        Collider2D collider = GetComponent<Collider2D>();
+        
+        if (mousePos.y >= ArrowBottomY && mousePos.y <= ArrowTopY)
+        {
+            isDragging = true;
+            dragStartTime = Time.time;
+
+            // 오브젝트와 마우스 위치 간의 오프셋 계산
+            Vector3 mousePosition = Input.mousePosition;
+            mousePosition.z = Camera.main.WorldToScreenPoint(bottomCard.position).z;
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+            mouseOffset = bottomCard.position - worldPosition;
+
+            initialOffset = bottomArrow.position - bottomCard.position;
+        }
+        else
+        {
+            isDragging = false;
+        }
     }
 
     void OnMouseDrag()
@@ -39,18 +87,22 @@ public class CardController : MonoBehaviour
         if (isDragging)
         {
             Vector3 mousePosition = Input.mousePosition;
-            mousePosition.z = Camera.main.WorldToScreenPoint(object1.position).z;
+            mousePosition.z = Camera.main.WorldToScreenPoint(bottomCard.position).z;
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-            
-            object1.position = new Vector3(object1.position.x, worldPosition.y, object1.position.z);
-            object2.position = object1.position + initialOffset;
+
+            // 새로운 y 위치 계산 및 제한 적용
+            float newY = worldPosition.y + mouseOffset.y;
+
+            // x, z 위치 고정
+            bottomCard.position = new Vector3(bottomCard.position.x, newY, bottomCard.position.z);
+            bottomArrow.position = bottomCard.position + initialOffset;
         }
     }
 
     void OnMouseUp()
     {
-        isDragging = false;
-        float dragDuration = Time.time - dragStartTime; 
+        if (!isDragging) return;
+        float dragDuration = Time.time - dragStartTime;
 
         // 드래그 시간이 일정 시간을 초과하면 의심 수치 증가
         if (dragDuration > suspicionThreshold)
@@ -58,31 +110,29 @@ public class CardController : MonoBehaviour
             suspicionLevel += suspicionIncreaseRate;
             Debug.Log("dragDuration > suspicionThreshold");
         }
-        CompareWithGauge(object2.position.y);
+
+        CompareWithGauge(bottomArrow.position.y);
+        gameObject.SetActive(false);
+        bottomArrow.gameObject.SetActive(false);
     }
 
     void CompareWithGauge(float objectY)
     {
-        float GreenTopY = gaugeGreen.GetComponent<BoxCollider2D>().bounds.max.y;
-        float GreenBottomY = gaugeGreen.GetComponent<BoxCollider2D>().bounds.min.y;
-        float YellowTopY = gaugeYellow.GetComponent<BoxCollider2D>().bounds.max.y;
-        float YellowBottomY = gaugeYellow.GetComponent<BoxCollider2D>().bounds.min.y;
-        float RedTopY = gaugeRed.GetComponent<BoxCollider2D>().bounds.max.y;
-        float RedBottomY = gaugeRed.GetComponent<BoxCollider2D>().bounds.min.y;
-
-        if (objectY >= RedBottomY && objectY <= RedTopY)
+        if (objectY >= RedBottomY)
         {
             if (objectY >= YellowBottomY && objectY <= YellowTopY)
             {
                 if (objectY >= GreenBottomY && objectY <= GreenTopY)
                 {
-                    //GameManager.Instance.Add~
+                    cardMoved?.Invoke(true);
                     Debug.Log("Green");
                     return;
                 }
+                cardMoved?.Invoke(true);
                 Debug.Log("Yellow");
                 return;
             }
+            cardMoved?.Invoke(true);
             Debug.Log("Red");
             return;
         }
