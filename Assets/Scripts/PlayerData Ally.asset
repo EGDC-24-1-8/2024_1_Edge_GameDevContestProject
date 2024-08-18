@@ -18,7 +18,23 @@ MonoBehaviour:
   highPreference: 15
   lowPreference: 10
   cheatFrequency: 0
-  textData:
-  - ally sentence 1
-  - ally sentence 2
-  - ally sentence 3
+  textDataStart:
+  - Start Ally 0
+  - Start Ally 1
+  - Start Ally 2
+  textDataRecieveCard: []
+  textDataCall:
+  - Call Ally 0
+  - Call Ally 1
+  - Call Ally 2
+  textDataRaise:
+  - Raise Ally 0
+  - Raise Ally 1
+  - Raise Ally 2
+  textDataFold:
+  - Fold Ally 0
+  - Fold Ally 1
+  - Fold Ally 2
+  textDataWin: []
+  textDataDetected: []
+  textDataDoubt: []

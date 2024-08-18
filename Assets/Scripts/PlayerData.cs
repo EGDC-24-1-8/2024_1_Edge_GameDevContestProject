@@ -36,9 +36,36 @@ public class PlayerData : ScriptableObject
     public int CheatFrequency { get { return cheatFrequency; } }
 
     [SerializeField]
-    private string[] textData;
-    public string[] TextData { get { return textData; } }
+    private string[] textDataStart;
+    public string[] TextDataStart { get { return textDataStart; } }
 
 
+    [SerializeField]
+    private string[] textDataRecieveCard;
+    public string[] TextDataRecieveCard { get { return textDataRecieveCard; } }
+
+    [SerializeField]
+    private string[] textDataCall;
+    public string[] TextDataCall { get { return textDataCall; } }
+
+    [SerializeField]
+    private string[] textDataRaise;
+    public string[] TextDataRaise { get { return textDataRaise; } }
+
+    [SerializeField]
+    private string[] textDataFold;
+    public string[] TextDataFold { get { return textDataFold; } }
+
+    [SerializeField]
+    private string[] textDataWin;
+    public string[] TextDataWin { get { return textDataWin; } }
+
+    [SerializeField]
+    private string[] textDataDetected;
+    public string[] TextDataDetected { get { return textDataDetected; } }
+
+    [SerializeField]
+    private string[] textDataDoubt;
+    public string[] TextDataDoubt { get { return textDataDoubt; } }
 
 }

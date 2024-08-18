@@ -8,6 +8,18 @@ public class DialogSystem : MonoBehaviour
     private static DialogSystem instance;
     public static DialogSystem Instance { get { return instance; } }
 
+    public enum TextType
+    {
+        start,
+        recieveCard,
+        call,
+        raise,
+        fold,
+        win,
+        detected,
+        doubt
+    };
+
     [TextArea]
     public string[] TextData;
     public string[] EndTextData;
@@ -22,7 +34,7 @@ public class DialogSystem : MonoBehaviour
     public bool isStart = false;
     public bool isEnd = false;
 
-    private bool isDialog = false;
+    public bool isDialog = false;
     public GameObject TextPanel;
     public Player[] playerArray = null;
 
@@ -42,7 +54,7 @@ public class DialogSystem : MonoBehaviour
     void Start()
     {
         playerArray = GameManager.Instance.playerArray;
-        TextData = playerArray[0].textData;
+        //TextData = playerArray[1].textData;
         TextIndex = TextData.Length;
         //NextSentence();
     }
@@ -55,21 +67,50 @@ public class DialogSystem : MonoBehaviour
                 return;
             if (now_Sentence < TextIndex)
             {
-                NextSentence();
+                //NextSentence();
             }
         }
     }
 
-    void NextSentence()
+    public void TriggerNextSentence(int playerIdx, TextType type)
     {
-        DialogString = "";
-        TextLen = TextData[now_Sentence].Length;
-        StartCoroutine(NextSentence_Play());
+        StartCoroutine(NextSentence(playerIdx, type));
     }
 
-    IEnumerator NextSentence_Play()
+    public IEnumerator NextSentence(int playerIdx, TextType type)
     {
         isDialog = true;
+        DialogString = "";
+        switch(type)
+        {
+            case TextType.start:
+                TextData = playerArray[playerIdx].textDataStart;
+                break;
+            case TextType.recieveCard:
+                TextData = playerArray[playerIdx].textDataRecieveCard;
+                break;
+            case TextType.call:
+                TextData = playerArray[playerIdx].textDataCall;
+                break;
+            case TextType.raise:
+                TextData = playerArray[playerIdx].textDataRaise;
+                break;
+            case TextType.fold:
+                TextData = playerArray[playerIdx].textDataFold;
+                break;
+            case TextType.win:
+                TextData = playerArray[playerIdx].textDataWin;
+                break;
+            case TextType.detected:
+                TextData = playerArray[playerIdx].textDataDetected;
+                break;
+            case TextType.doubt:
+                TextData = playerArray[playerIdx].textDataDoubt;
+                break;
+        }
+
+        now_Sentence = Random.Range(0, TextData.Length);
+        TextLen = TextData[now_Sentence].Length;
         int temp = 0;
 
         while (temp < TextLen)
@@ -80,7 +121,6 @@ public class DialogSystem : MonoBehaviour
             DialogText.text = DialogString;
             yield return new WaitForSeconds(delay);
         }
-        now_Sentence++;
         isDialog = false;
     }
 }

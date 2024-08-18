@@ -131,10 +131,8 @@ public class GameManager : MonoBehaviour
         {
             mousePointState = MousePointState.detect;
         }
-
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //Time.timeScale = 0;
             if(isPause)
             {
                 isPause = false;
@@ -167,6 +165,8 @@ public class GameManager : MonoBehaviour
         CardDeck = shuffleDeck(CardDeck);
         TopCardText.text = CardDeck[0].ToString();
         BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
+
+        DialogSystem.Instance.TriggerNextSentence(1, DialogSystem.TextType.start);
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
         {
             betMan.entranceBet(i);
@@ -335,6 +335,10 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
+        if(DialogSystem.Instance.isDialog)
+        {
+            return;
+        }
         playerArray[dealOrder].dealtCardCount++;
         switch (betMan.dealtCardCount)
         {
@@ -372,6 +376,10 @@ public class GameManager : MonoBehaviour
         CheckDealOrder();
 
         if (gameState != GameState.deal)
+        {
+            return;
+        }
+        if (DialogSystem.Instance.isDialog)
         {
             return;
         }
@@ -584,13 +592,13 @@ public class GameManager : MonoBehaviour
 
     public void CodingAllyToFold()
     {
-        betMan.isAllyFold = true;
-        betMan.isAllyRaise = false;
+        betMan.isAllyCodedFold = true;
+        betMan.isAllyCodedRaise = false;
     }
     public void CodingAllyToRaise()
     {
-        betMan.isAllyFold = false;
-        betMan.isAllyRaise = true;
+        betMan.isAllyCodedFold = false;
+        betMan.isAllyCodedRaise = true;
 
     }
 

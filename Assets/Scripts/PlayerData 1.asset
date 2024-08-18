@@ -18,7 +18,23 @@ MonoBehaviour:
   highPreference: 15
   lowPreference: 10
   cheatFrequency: 0
-  textData:
-  - sentence 1/1
-  - sentence 1/2
-  - sentence 1/3
+  textDataStart:
+  - Start 1 0
+  - Start 1 1
+  - Start 1 2
+  textDataRecieveCard: []
+  textDataCall:
+  - Call 1 0
+  - Call 1 1
+  - Call 1 2
+  textDataRaise:
+  - Raise 1 0
+  - Raise 1 1
+  - Raise 1 2
+  textDataFold:
+  - Fold 1 0
+  - Fold 1 1
+  - Fold 1 2
+  textDataWin: []
+  textDataDetected: []
+  textDataDoubt: []

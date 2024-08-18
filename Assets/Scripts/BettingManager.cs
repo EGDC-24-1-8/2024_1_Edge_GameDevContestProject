@@ -9,6 +9,13 @@ public class BettingManager : MonoBehaviour
     public const int NO_MONEY_ELIMINATED = 0;
     public const int DETECTED_CHEAT_ELIMINATED = 1;
 
+    public enum BetState
+    {
+        call,
+        raise,
+        fold
+    };
+
     [SerializeField] private Player[] playerArray = null;
     [SerializeField] private int[] playerCardSum = null;
 
@@ -44,9 +51,9 @@ public class BettingManager : MonoBehaviour
     [SerializeField] public bool[] isEliminated = { false, false, false, false };
 
     [SerializeField] public bool isBetOver = false;
-    [SerializeField] public bool isAllyFold = false;
-    [SerializeField] public bool isAllyRaise = false;
-
+    [SerializeField] public bool isAllyCodedFold = false;
+    [SerializeField] public bool isAllyCodedRaise = false;
+    [SerializeField] public BetState betState;
 
     void Start()
     {
@@ -113,19 +120,24 @@ public class BettingManager : MonoBehaviour
         }
         ++dealtCardCount;
         endOrder = playerArray.Length;
-        int ctr = 0;
         for (int i = 0; i != endOrder && !isBetOver; i = (i+1)%4) //한 턴이 돌 때마다 베팅 진행
         {
-            ctr++;
-            if (ctr >= 1000)
-            {
-                Debug.Log("dkdkdkdk");
-                break;
-            }
             if (isFold[i])
                 continue;
             yield return new WaitForSeconds(0.5f);
-            bet(i);
+            yield return StartCoroutine(bet(i));
+            switch(betState)
+            {
+                case BetState.call:
+                    yield return StartCoroutine(DialogSystem.Instance.NextSentence(i, DialogSystem.TextType.call));
+                    break;
+                case BetState.raise:
+                    yield return StartCoroutine(DialogSystem.Instance.NextSentence(i, DialogSystem.TextType.raise));
+                    break;
+                case BetState.fold:
+                    yield return StartCoroutine(DialogSystem.Instance.NextSentence(i, DialogSystem.TextType.fold));
+                    break;
+            }
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
         }
         yield return new WaitForSeconds(1);
@@ -144,27 +156,27 @@ public class BettingManager : MonoBehaviour
         UpdateUIText();
     }
 
-    public void bet(int playerIdx)
+    public IEnumerator bet(int playerIdx)
     {
         if (isBetOver)
-            return;
+            yield break;
 
         if (isFold[playerIdx] == true)
-            return;
+            yield break;
 
         if (playerArray[playerIdx].isAlly == true)
         {
-            if (isAllyFold == true)
+            if (isAllyCodedFold == true)
             {
                 fold(playerIdx);
-                isAllyFold = false;
-                return;
+                isAllyCodedFold = false;
+                yield break;
             }
-            if(isAllyRaise == true)
+            if(isAllyCodedRaise == true)
             {
                 raise(playerIdx);
-                isAllyRaise = false;
-                return;
+                isAllyCodedRaise = false;
+                yield break;
             }
         }
 
@@ -172,26 +184,28 @@ public class BettingManager : MonoBehaviour
             && (playerCardSum[playerIdx] < 8 || 16 < playerCardSum[playerIdx]))
         {
             fold(playerIdx);
-            return;
+            yield break;
         }
         else if (dealtCardCount == 3)
         {
             if (playerCardSum[playerIdx] < 17 || 21 < playerCardSum[playerIdx])
             {
                 fold(playerIdx);
-                return;
+                yield break;
             }
             if ((playerCardSum[playerIdx] == 21) && (defaultBet == roundBet))
             {
                 raise(playerIdx);
-                return;
+                yield break;
             }
         }
         call(playerIdx);
+        yield break;
     }
 
     public void call(int playerIdx)
     {
+        betState = BetState.call;
         if (playerArray[playerIdx].playerBettingMoney == maxBet)
         {
             playerArray[playerIdx].playerBettingMoney += roundBet;
@@ -213,6 +227,7 @@ public class BettingManager : MonoBehaviour
 
     public void raise(int playerIdx)
     {
+        betState = BetState.raise;
         roundBet += defaultBet;
         endOrder = playerIdx;
 
@@ -231,7 +246,7 @@ public class BettingManager : MonoBehaviour
         TODO : 확률은 pot에 따라 변동되도록 변경
         ~~
         */
-
+        betState = BetState.fold;
         if (playerArray[playerIdx].isAlly)
         {
 

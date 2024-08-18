@@ -291,7 +291,14 @@ MonoBehaviour:
   lowPreference: 0
   cheatFrequency: 0
   dealtCardCount: 0
-  textData: []
+  textDataStart: []
+  textDataRecieveCard: []
+  textDataCall: []
+  textDataRaise: []
+  textDataFold: []
+  textDataWin: []
+  textDataDetected: []
+  textDataDoubt: []
   isAlly: 0
 --- !u!114 &24211292
 MonoBehaviour:
@@ -1028,7 +1035,14 @@ MonoBehaviour:
   lowPreference: 0
   cheatFrequency: 0
   dealtCardCount: 0
-  textData: []
+  textDataStart: []
+  textDataRecieveCard: []
+  textDataCall: []
+  textDataRaise: []
+  textDataFold: []
+  textDataWin: []
+  textDataDetected: []
+  textDataDoubt: []
   isAlly: 0
 --- !u!114 &266768849
 MonoBehaviour:
@@ -1170,6 +1184,7 @@ MonoBehaviour:
   now_Sentence: 0
   isStart: 0
   isEnd: 0
+  isDialog: 0
   TextPanel: {fileID: 285226327}
   playerArray: []
 --- !u!1001 &285826685
@@ -1259,16 +1274,6 @@ GameObject:
 --- !u!1 &285826688 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4396142869749829334, guid: 95ce45fa72d9a5b4ca9d098d209de709, type: 3}
-  m_PrefabInstance: {fileID: 285826685}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &285826689 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8053094059886476921, guid: 95ce45fa72d9a5b4ca9d098d209de709, type: 3}
-  m_PrefabInstance: {fileID: 285826685}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &285826690 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 354409223466850173, guid: 95ce45fa72d9a5b4ca9d098d209de709, type: 3}
   m_PrefabInstance: {fileID: 285826685}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &300172769
@@ -1542,8 +1547,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12d949b28e6651d4e9a527d005ad37c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  object1: {fileID: 285826690}
-  object2: {fileID: 285826689}
+  bottomCard: {fileID: 0}
+  bottomArrow: {fileID: 0}
   gaugeGreen: {fileID: 285826688}
   gaugeYellow: {fileID: 285826687}
   gaugeRed: {fileID: 285826686}
@@ -2878,7 +2883,14 @@ MonoBehaviour:
   lowPreference: 0
   cheatFrequency: 0
   dealtCardCount: 0
-  textData: []
+  textDataStart: []
+  textDataRecieveCard: []
+  textDataCall: []
+  textDataRaise: []
+  textDataFold: []
+  textDataWin: []
+  textDataDetected: []
+  textDataDoubt: []
   isAlly: 1
 --- !u!114 &854045265
 MonoBehaviour:
@@ -4284,8 +4296,9 @@ MonoBehaviour:
   isFold: 00000000
   isEliminated: 00000000
   isBetOver: 0
-  isAllyFold: 0
-  isAllyRaise: 0
+  isAllyCodedFold: 0
+  isAllyCodedRaise: 0
+  betState: 0
 --- !u!1 &1457156385
 GameObject:
   m_ObjectHideFlags: 0
@@ -5737,10 +5750,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3f0b4e1cc7d46a44ba517c741c867549, type: 2}
   - {fileID: 11400000, guid: 67b389a924f55ab428a1706875a2bb31, type: 2}
   - {fileID: 11400000, guid: e76d411b43a1ce74c84dc28f628b1b55, type: 2}
-  - {fileID: 11400000, guid: 6b996ce738acda9489142f6c5dce51ff, type: 2}
-  - {fileID: 11400000, guid: b0b7a850bcde70741b91d9966e367fd8, type: 2}
-  - {fileID: 11400000, guid: 0acea1bfb1930284297d2f4c90d6cb0b, type: 2}
-  - {fileID: 11400000, guid: 663a3987efe91aa4abfde81a7a1bb67e, type: 2}
   allyPlayerDataSet:
   - {fileID: 11400000, guid: 5165a2794f7d9d44a8756a8a89b24e73, type: 2}
   tempEnemyPlayerDataSet: []
@@ -6174,7 +6183,14 @@ MonoBehaviour:
   lowPreference: 0
   cheatFrequency: 0
   dealtCardCount: 0
-  textData: []
+  textDataStart: []
+  textDataRecieveCard: []
+  textDataCall: []
+  textDataRaise: []
+  textDataFold: []
+  textDataWin: []
+  textDataDetected: []
+  textDataDoubt: []
   isAlly: 0
 --- !u!114 &1912300054
 MonoBehaviour:
