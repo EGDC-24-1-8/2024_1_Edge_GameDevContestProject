@@ -62,6 +62,8 @@ public class CardController : MonoBehaviour
     }
     void OnMouseDown()
     {
+        if (DialogSystem.Instance.isDialog)
+            return;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
         Collider2D collider = GetComponent<Collider2D>();
@@ -114,7 +116,7 @@ public class CardController : MonoBehaviour
             suspicionLevel += suspicionIncreaseRate;
             Debug.Log("dragDuration > suspicionThreshold");
         }
-        if (transform.position.y - origin_Position.y > 2)
+        if (transform.position.y - origin_Position.y > 0.7f)
         {
             CompareWithGauge(bottomArrow.position.y);
             gameObject.SetActive(false);
@@ -130,6 +132,7 @@ public class CardController : MonoBehaviour
 
     void CompareWithGauge(float objectY)
     {
+        GameManager.Instance.BottomDeal();
         if (objectY >= RedBottomY)
         {
             if (objectY >= YellowBottomY && objectY <= YellowTopY)

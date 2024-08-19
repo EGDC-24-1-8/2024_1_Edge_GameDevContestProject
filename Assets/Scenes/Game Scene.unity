@@ -2191,6 +2191,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 524611265427569807, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9398e1674f52ec6469a27f6190712643, type: 3}
+    - target: {fileID: 524611265427569807, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayer
       value: 5
       objectReference: {fileID: 0}
@@ -2198,6 +2202,10 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1010583019
       objectReference: {fileID: 0}
+    - target: {fileID: 1848306341443203445, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9398e1674f52ec6469a27f6190712643, type: 3}
     - target: {fileID: 1848306341443203445, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayer
       value: 5
@@ -2225,6 +2233,10 @@ PrefabInstance:
     - target: {fileID: 2461296472173412452, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2871455037730072745, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 1.44
       objectReference: {fileID: 0}
     - target: {fileID: 3371749568205312976, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayer
@@ -2335,6 +2347,10 @@ PrefabInstance:
       value: -1010583019
       objectReference: {fileID: 0}
     - target: {fileID: 8907521838039456858, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9398e1674f52ec6469a27f6190712643, type: 3}
+    - target: {fileID: 8907521838039456858, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayer
       value: 5
       objectReference: {fileID: 0}
@@ -2356,7 +2372,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9046428529390393705, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.18
+      value: -3.75
       objectReference: {fileID: 0}
     - target: {fileID: 9046428529390393705, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4917,7 +4933,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 100.00001, y: -371}
+  m_AnchoredPosition: {x: 188, y: -393}
   m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1603964606
