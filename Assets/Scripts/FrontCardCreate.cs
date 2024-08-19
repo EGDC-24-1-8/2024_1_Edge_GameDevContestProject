@@ -12,7 +12,7 @@ public class FrontCardCreate : MonoBehaviour
     
     void NewCardCreate(bool state)
     {
-        GameObject newCard = Instantiate(cardPrefab, cardSpawnPosition.transform.position, Quaternion.identity, cardPrefab.transform);
+        GameObject newCard = Instantiate(cardPrefab, cardSpawnPosition.transform.position, Quaternion.identity, cardSpawnPosition.transform);
         Debug.Log("newFrontCard생성");
         newCard.SetActive(true);
         newCard.GetComponent<FrontCardController>().FrontCardMoved += NewCardCreate;
