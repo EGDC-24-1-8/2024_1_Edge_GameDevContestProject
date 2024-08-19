@@ -15,7 +15,8 @@ public class BottomCardCreate : MonoBehaviour
     
     void NewCardCreate(bool state)
     {
-        GameObject newCard = Instantiate(cardPrefab, cardSpawnPosition.transform.position, Quaternion.identity);
+        GameObject newCard = Instantiate(cardPrefab, cardSpawnPosition.transform.position, Quaternion.identity, cardPrefab.transform);
+        //newCard.transform.parent = cardPrefab.transform;
         Debug.Log("newCard생성");
         
         newCard.SetActive(true);
