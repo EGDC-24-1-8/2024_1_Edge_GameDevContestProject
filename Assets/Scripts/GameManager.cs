@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] public bool[] playerIsCheat = new bool[4] { false, false, false, false };
     [SerializeField] public bool[] playerIsDetectable = new bool[4] { false, false, false, false };
-    [SerializeField] private List<int> CardDeck = null;
+    [SerializeField] public List<int> CardDeck = null;
 
     [Header("In Game Counts")]
     [SerializeField] public int foldPlayerCnt = 0;
@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
             //Destroy(this.gameObject);
         }
         InitPlayer();
+        CardDeck = InitDeck();
     }
 
     void Start()

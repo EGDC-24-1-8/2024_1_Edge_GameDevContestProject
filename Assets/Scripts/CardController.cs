@@ -8,6 +8,7 @@ public class CardController : MonoBehaviour
     [SerializeField] private GameObject gaugeGreen;
     [SerializeField] private GameObject gaugeYellow;
     [SerializeField] private GameObject gaugeRed;
+    [SerializeField] private Sprite[] cardImage = null;
     [SerializeField] private float suspicionThreshold = 2.0f; // 의심 증가 임계값
     [SerializeField] private float suspicionIncreaseRate = 20f; // 의심 수치 증가율
 
@@ -35,6 +36,7 @@ public class CardController : MonoBehaviour
     private void Start()
     {
         SetPosition();
+        SetImage();
     }
     
     private void SetPosition()
@@ -48,8 +50,11 @@ public class CardController : MonoBehaviour
         ArrowTopY = bottomArrow.GetComponent<BoxCollider2D>().bounds.max.y;
         ArrowBottomY = bottomArrow.GetComponent<BoxCollider2D>().bounds.min.y;
     }
-
-    
+    private void SetImage()
+    {
+        bottomCard.gameObject.GetComponent<SpriteRenderer>().sprite
+            = cardImage[GameManager.Instance.CardDeck[GameManager.Instance.CardDeck.Count - 1] - 1];
+    }
     private void Update()
     {
         if (isDragging)
@@ -135,6 +140,7 @@ public class CardController : MonoBehaviour
         if (GameManager.Instance.gameState != GameManager.GameState.deal)
             return;
         GameManager.Instance.BottomDeal();
+        SetImage();
         if (objectY >= RedBottomY)
         {
             if (objectY >= YellowBottomY && objectY <= YellowTopY)

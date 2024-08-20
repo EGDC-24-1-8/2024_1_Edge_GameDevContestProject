@@ -1512,6 +1512,7 @@ MonoBehaviour:
   gaugeGreen: {fileID: 0}
   gaugeYellow: {fileID: 0}
   gaugeRed: {fileID: 0}
+  cardImage: []
   suspicionThreshold: 2
   suspicionIncreaseRate: 20
 --- !u!4 &378520631
@@ -2249,6 +2250,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2871455037730072745, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 1.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 2871455037730072745, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 1.44
       objectReference: {fileID: 0}
@@ -2259,6 +2264,10 @@ PrefabInstance:
     - target: {fileID: 3371749568205312976, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayerID
       value: -1010583019
+      objectReference: {fileID: 0}
+    - target: {fileID: 4053983417769063344, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4065243732448874154, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayer
@@ -2280,21 +2289,89 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -1010583019
       objectReference: {fileID: 0}
+    - target: {fileID: 4410902746146647550, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 1.44
+      objectReference: {fileID: 0}
     - target: {fileID: 4542814370895573145, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 1ef8b542fd8f81d499c7624512ac7f99, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 55c1f84c2dc9ffd41bbdf48ff7f39eae, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: d293b0775f7fb684ead6279887834620, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[3]
+      value: 
+      objectReference: {fileID: 21300000, guid: 1bfebd22e0fe7494286c921f1080d88a, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[4]
+      value: 
+      objectReference: {fileID: 21300000, guid: a3081466fbe636042afd174d1146101c, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[5]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5c95bd8bb5e25664b9257f006a5588d0, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[6]
+      value: 
+      objectReference: {fileID: 21300000, guid: b812e6413748b414d85d5c5128198493, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[7]
+      value: 
+      objectReference: {fileID: 21300000, guid: 07c24a87c4965cd4398120f98daeada8, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[8]
+      value: 
+      objectReference: {fileID: 21300000, guid: bd37a2c9e37e6b44ba52737058303f45, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[9]
+      value: 
+      objectReference: {fileID: 21300000, guid: f729b66dccb4ff7469af3491291104fb, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[10]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5f7f06bc515dcd14aa1fd29c371e0b7d, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[11]
+      value: 
+      objectReference: {fileID: 21300000, guid: 3dac0a7544b7a5b478452aa08b0acaaf, type: 3}
+    - target: {fileID: 4898270511717365216, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[12]
+      value: 
+      objectReference: {fileID: 21300000, guid: 09a26fd240aa20e4da9bd22cd4e2839f, type: 3}
     - target: {fileID: 5009686486500545542, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 1ef8b542fd8f81d499c7624512ac7f99, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 5009686486500545542, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayer
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5009686486500545542, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_SortingOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5009686486500545542, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayerID
       value: -1010583019
+      objectReference: {fileID: 0}
+    - target: {fileID: 5009686486500545542, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5050572713383312139, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_LocalScale.x
@@ -2308,6 +2385,126 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: secondCard
+      value: 
+      objectReference: {fileID: 2100872841}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 1ef8b542fd8f81d499c7624512ac7f99, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 55c1f84c2dc9ffd41bbdf48ff7f39eae, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: d293b0775f7fb684ead6279887834620, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[3]
+      value: 
+      objectReference: {fileID: 21300000, guid: 1bfebd22e0fe7494286c921f1080d88a, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[4]
+      value: 
+      objectReference: {fileID: 21300000, guid: a3081466fbe636042afd174d1146101c, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[5]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5c95bd8bb5e25664b9257f006a5588d0, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[6]
+      value: 
+      objectReference: {fileID: 21300000, guid: b812e6413748b414d85d5c5128198493, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[7]
+      value: 
+      objectReference: {fileID: 21300000, guid: 07c24a87c4965cd4398120f98daeada8, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[8]
+      value: 
+      objectReference: {fileID: 21300000, guid: bd37a2c9e37e6b44ba52737058303f45, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[9]
+      value: 
+      objectReference: {fileID: 21300000, guid: f729b66dccb4ff7469af3491291104fb, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[10]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5f7f06bc515dcd14aa1fd29c371e0b7d, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[11]
+      value: 
+      objectReference: {fileID: 21300000, guid: 3dac0a7544b7a5b478452aa08b0acaaf, type: 3}
+    - target: {fileID: 5243137775020141823, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[12]
+      value: 
+      objectReference: {fileID: 21300000, guid: 09a26fd240aa20e4da9bd22cd4e2839f, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: secondCard
+      value: 
+      objectReference: {fileID: 2100872841}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 1ef8b542fd8f81d499c7624512ac7f99, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 55c1f84c2dc9ffd41bbdf48ff7f39eae, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[2]
+      value: 
+      objectReference: {fileID: 21300000, guid: d293b0775f7fb684ead6279887834620, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[3]
+      value: 
+      objectReference: {fileID: 21300000, guid: 1bfebd22e0fe7494286c921f1080d88a, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[4]
+      value: 
+      objectReference: {fileID: 21300000, guid: a3081466fbe636042afd174d1146101c, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[5]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5c95bd8bb5e25664b9257f006a5588d0, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[6]
+      value: 
+      objectReference: {fileID: 21300000, guid: b812e6413748b414d85d5c5128198493, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[7]
+      value: 
+      objectReference: {fileID: 21300000, guid: 07c24a87c4965cd4398120f98daeada8, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[8]
+      value: 
+      objectReference: {fileID: 21300000, guid: bd37a2c9e37e6b44ba52737058303f45, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[9]
+      value: 
+      objectReference: {fileID: 21300000, guid: f729b66dccb4ff7469af3491291104fb, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[10]
+      value: 
+      objectReference: {fileID: 21300000, guid: 5f7f06bc515dcd14aa1fd29c371e0b7d, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[11]
+      value: 
+      objectReference: {fileID: 21300000, guid: 3dac0a7544b7a5b478452aa08b0acaaf, type: 3}
+    - target: {fileID: 5879422669181109664, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: cardImage.Array.data[12]
+      value: 
+      objectReference: {fileID: 21300000, guid: 09a26fd240aa20e4da9bd22cd4e2839f, type: 3}
     - target: {fileID: 5955915533819784072, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayer
       value: 5
@@ -2397,16 +2594,28 @@ PrefabInstance:
       value: -1010583019
       objectReference: {fileID: 0}
     - target: {fileID: 8907521838039456858, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_Size.y
+      value: 1.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 8907521838039456858, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: f729b66dccb4ff7469af3491291104fb, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8907521838039456858, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayer
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8907521838039456858, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_SortingOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8907521838039456858, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_SortingLayerID
       value: -1010583019
+      objectReference: {fileID: 0}
+    - target: {fileID: 8907521838039456858, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9046428529390393705, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
       propertyPath: m_LocalScale.x
@@ -7012,6 +7221,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2095186555}
   m_CullTransparentMesh: 1
+--- !u!1 &2100872841 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5093381684537313431, guid: eec7e7efb47fbd94987d99e6213c4ad9, type: 3}
+  m_PrefabInstance: {fileID: 795210353}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2117240901
 GameObject:
   m_ObjectHideFlags: 0

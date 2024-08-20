@@ -6,6 +6,8 @@ using System;
 public class FrontCardController : MonoBehaviour
 {
     [SerializeField] private Transform frontCard;
+    [SerializeField] private Sprite[] cardImage = null;
+    [SerializeField] private GameObject secondCard;
     private bool isDragging = false;
     private Vector3 mouseOffset;
 
@@ -19,6 +21,8 @@ public class FrontCardController : MonoBehaviour
     private void Start()
     {
         SetPosition();
+        SetImage();
+        secondCard.GetComponent<FrontCardCreate>().SetSecondCardImage();
     }
 
     private void SetPosition()
@@ -27,6 +31,12 @@ public class FrontCardController : MonoBehaviour
         BoxCollider2D collider = frontCard.GetComponent<BoxCollider2D>();
         frontCardTopY = collider.bounds.max.y;
         frontCardBottomY = collider.bounds.min.y;
+    }
+
+    private void SetImage()
+    {
+        frontCard.gameObject.GetComponent<SpriteRenderer>().sprite
+            = cardImage[GameManager.Instance.CardDeck[0] - 1];
     }
 
     void OnMouseDown()
@@ -82,6 +92,8 @@ public class FrontCardController : MonoBehaviour
                 frontCard.gameObject.SetActive(false); // frontCard를 비활성화
                 FrontCardMoved?.Invoke(true); // 이벤트 호출
                 GameManager.Instance.NormalDeal();
+                SetImage();
+                secondCard.GetComponent<FrontCardCreate>().SetSecondCardImage();
                 Destroy(gameObject);
             }
             else
