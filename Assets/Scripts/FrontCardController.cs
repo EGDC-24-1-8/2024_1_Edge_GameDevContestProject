@@ -31,6 +31,10 @@ public class FrontCardController : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (DialogSystem.Instance.isDialog)
+            return;
+        if (GameManager.Instance.gameState != GameManager.GameState.deal)
+            return;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         origin_Position = frontCard.position;
         Collider2D collider = frontCard.GetComponent<Collider2D>();
@@ -72,11 +76,12 @@ public class FrontCardController : MonoBehaviour
     {
         if (isDragging)
         {
-            if(Math.Abs(frontCard.position.y - origin_Position.y) > 2)
+            if(Math.Abs(frontCard.position.y - origin_Position.y) > 0.7f)
             {
                 isDragging = false;
                 frontCard.gameObject.SetActive(false); // frontCard를 비활성화
                 FrontCardMoved?.Invoke(true); // 이벤트 호출
+                GameManager.Instance.NormalDeal();
                 Destroy(gameObject);
             }
             else
