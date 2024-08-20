@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
     private IEnumerator DoCheat(int idx)
     {
         GameManager.Instance.playerIsDetectable[idx] = true;
+        this.GetComponentInChildren<Animator>().SetTrigger("doCheat");
         //playerImage.color = Color.red;
         yield return new WaitForSeconds(2f);
         //playerImage.color = Color.white;

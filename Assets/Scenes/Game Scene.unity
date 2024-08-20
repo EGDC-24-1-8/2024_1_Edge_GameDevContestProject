@@ -1168,7 +1168,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 358.18}
-  m_SizeDelta: {x: 1202.4695, y: 72.3631}
+  m_SizeDelta: {x: 298.93, y: 72.36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &285226329
 MonoBehaviour:
@@ -2185,6 +2185,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750045677}
   m_CullTransparentMesh: 1
+--- !u!1 &766678776 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: 0ce7f939dc69b7249b9b6a79865e2b9c, type: 3}
+  m_PrefabInstance: {fileID: 1511729774}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &795210353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3802,13 +3807,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 2da89dbeffc9337479369decb3eef0c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1077849112}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 2da89dbeffc9337479369decb3eef0c6, type: 3}
 --- !u!4 &1077849110 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 2da89dbeffc9337479369decb3eef0c6, type: 3}
   m_PrefabInstance: {fileID: 1077849109}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1077849111 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: 2da89dbeffc9337479369decb3eef0c6, type: 3}
+  m_PrefabInstance: {fileID: 1077849109}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1077849112
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1077849111}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1091746443
 GameObject:
   m_ObjectHideFlags: 0
@@ -4856,13 +4890,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 0ce7f939dc69b7249b9b6a79865e2b9c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1511729776}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 0ce7f939dc69b7249b9b6a79865e2b9c, type: 3}
 --- !u!4 &1511729775 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7552582706839291426, guid: 0ce7f939dc69b7249b9b6a79865e2b9c, type: 3}
   m_PrefabInstance: {fileID: 1511729774}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1511729776
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766678776}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 42ad01b0b1e8b2c40b12cb5995b6bce5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1533110107
 GameObject:
   m_ObjectHideFlags: 0
@@ -6290,6 +6348,9 @@ MonoBehaviour:
   BottomCardText: {fileID: 2095186557}
   GameDayText: {fileID: 1777955528}
   GameTurnText: {fileID: 858518156}
+  playerCard0: 00000000000000000000000000000000
+  playerCard1: 00000000000000000000000000000000
+  playerCard2: 00000000000000000000000000000000
   playerCard0Num: 00000000000000000000000000000000
   playerCard1Num: 00000000000000000000000000000000
   playerCard2Num: 00000000000000000000000000000000

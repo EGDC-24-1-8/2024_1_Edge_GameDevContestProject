@@ -46,6 +46,9 @@ public class GameManager : MonoBehaviour
     [Header("Card Value")]
     //public string[] playerName;
     //[SerializeField] private int[] playerCardNum;
+    [SerializeField] private int[] playerCard0;
+    [SerializeField] private int[] playerCard1;
+    [SerializeField] private int[] playerCard2;
     [SerializeField] private int[] playerCard0Num;
     [SerializeField] private int[] playerCard1Num;
     [SerializeField] private int[] playerCard2Num;
@@ -341,17 +344,20 @@ public class GameManager : MonoBehaviour
         switch (betMan.dealtCardCount)
         {
             case 0:
+                playerCard0[dealOrder] = CardDeck[0];
                 playerCard0Num[dealOrder] = (CardDeck[0] % 13 + 1 > 10) ? 10 : CardDeck[0] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard0Num[dealOrder];
                 playerCard0Text[dealOrder].text = playerCard0Num[dealOrder].ToString();
                 break;
             case 1:
+                playerCard1[dealOrder] = CardDeck[0];
                 playerCard1Num[dealOrder] = (CardDeck[0] % 13 + 1 > 10) ? 10 : CardDeck[0] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard1Num[dealOrder];
                 playerCard1Text[dealOrder].text = playerCard1Num[dealOrder].ToString();
                 betMan.SetIsPlayerCheat(dealOrder);
                 break;
             case 2:
+                playerCard2[dealOrder] = CardDeck[0];
                 playerCard2Num[dealOrder] = (CardDeck[0] % 13 + 1 > 10) ? 10 : CardDeck[0] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
@@ -385,17 +391,20 @@ public class GameManager : MonoBehaviour
         switch (betMan.dealtCardCount)
         {
             case 0:
+                playerCard0[dealOrder] = CardDeck[CardDeck.Count - 1];
                 playerCard0Num[dealOrder] = (CardDeck[CardDeck.Count - 1] % 13 + 1 > 10) ? 10 : CardDeck[CardDeck.Count - 1] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard0Num[dealOrder];
                 playerCard0Text[dealOrder].text = playerCard0Num[dealOrder].ToString();
                 break;
             case 1:
+                playerCard1[dealOrder] = CardDeck[CardDeck.Count - 1];
                 playerCard1Num[dealOrder] = (CardDeck[CardDeck.Count - 1] % 13 + 1 > 10) ? 10 : CardDeck[CardDeck.Count - 1] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard1Num[dealOrder];
                 playerCard1Text[dealOrder].text = playerCard1Num[dealOrder].ToString();
                 betMan.SetIsPlayerCheat(dealOrder);
                 break;
             case 2:
+                playerCard2[dealOrder] = CardDeck[CardDeck.Count - 1];
                 playerCard2Num[dealOrder] = (CardDeck[CardDeck.Count - 1] % 13 + 1 > 10) ? 10 : CardDeck[CardDeck.Count - 1] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
@@ -566,13 +575,20 @@ public class GameManager : MonoBehaviour
         playerIsCheat[idx] = false;
         Debug.Log("CHEAT! " + idx);
         playerArray[idx].Start_DoCheat(idx);
-        playerCard0Num[idx] = 5;
-        playerCard1Num[idx] = 6;
-        playerCard2Num[idx] = 10; //숨긴 카드 3장을 가지고 특정 몇 장만 바꾸는 식으로 조작하도록 수정
+        if(playerCard0Num[idx] + playerCard1Num[idx] > 10)
+        {
+            playerCard2[idx] = 21 - playerCard0Num[idx] - playerCard1Num[idx] - 1 + UnityEngine.Random.Range(0, 4) * 13;
+            playerCard2Num[idx] = playerCard2[idx] % 13 + 1;
+        }
+        else
+        {
+            playerCard2[idx] = UnityEngine.Random.Range(9, 13) - 1 + UnityEngine.Random.Range(0, 4) * 13;
+            playerCard2Num[idx] = 10;
+        }
         playerCardSum[idx] = 21;
 
-        playerCard0Text[idx].text = playerCard0Num[idx].ToString();
-        playerCard1Text[idx].text = playerCard1Num[idx].ToString();
+        //playerCard0Text[idx].text = playerCard0Num[idx].ToString();
+        //playerCard1Text[idx].text = playerCard1Num[idx].ToString();
         playerCard2Text[idx].text = playerCard2Num[idx].ToString();
     }
     #endregion
