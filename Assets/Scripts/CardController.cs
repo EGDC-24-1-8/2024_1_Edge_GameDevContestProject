@@ -62,8 +62,8 @@ public class CardController : MonoBehaviour
     }
     void OnMouseDown()
     {
-        if (DialogSystem.Instance.isDialog)
-            return;
+        //if (DialogSystem.Instance.isDialog)
+        //    return;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
         Collider2D collider = GetComponent<Collider2D>();
@@ -132,6 +132,8 @@ public class CardController : MonoBehaviour
 
     void CompareWithGauge(float objectY)
     {
+        if (GameManager.Instance.gameState != GameManager.GameState.deal)
+            return;
         GameManager.Instance.BottomDeal();
         if (objectY >= RedBottomY)
         {

@@ -33,6 +33,8 @@ public class FrontCardController : MonoBehaviour
     {
         if (DialogSystem.Instance.isDialog)
             return;
+        if (GameManager.Instance.gameState != GameManager.GameState.deal)
+            return;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         origin_Position = frontCard.position;
         Collider2D collider = frontCard.GetComponent<Collider2D>();
