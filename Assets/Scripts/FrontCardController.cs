@@ -36,7 +36,7 @@ public class FrontCardController : MonoBehaviour
     private void SetImage()
     {
         frontCard.gameObject.GetComponent<SpriteRenderer>().sprite
-            = cardImage[GameManager.Instance.CardDeck[0] - 1];
+            = cardImage[GameManager.Instance.CardDeck[0] % 13];
     }
 
     void OnMouseDown()

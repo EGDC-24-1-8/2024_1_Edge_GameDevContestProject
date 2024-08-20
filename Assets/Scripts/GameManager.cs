@@ -228,14 +228,11 @@ public class GameManager : MonoBehaviour
 
     private List<int> InitDeck()
     {
-        int temp;
         List<int> initDeck = new List<int>();
 
         for (int i = 0; i < 52; i++) //카드 생성
         {
-            temp = i % 13 + 1;
-            //temp = temp > 10 ? 10 : temp;
-            initDeck.Add(temp);
+            initDeck.Add(i);
         }
         return initDeck;
     }
@@ -344,18 +341,18 @@ public class GameManager : MonoBehaviour
         switch (betMan.dealtCardCount)
         {
             case 0:
-                playerCard0Num[dealOrder] = (CardDeck[0] > 10) ? 10 : CardDeck[0];
+                playerCard0Num[dealOrder] = (CardDeck[0] % 13 + 1 > 10) ? 10 : CardDeck[0] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard0Num[dealOrder];
                 playerCard0Text[dealOrder].text = playerCard0Num[dealOrder].ToString();
                 break;
             case 1:
-                playerCard1Num[dealOrder] = (CardDeck[0] > 10) ? 10 : CardDeck[0];
+                playerCard1Num[dealOrder] = (CardDeck[0] % 13 + 1 > 10) ? 10 : CardDeck[0] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard1Num[dealOrder];
                 playerCard1Text[dealOrder].text = playerCard1Num[dealOrder].ToString();
                 betMan.SetIsPlayerCheat(dealOrder);
                 break;
             case 2:
-                playerCard2Num[dealOrder] = (CardDeck[0] > 10) ? 10 : CardDeck[0];
+                playerCard2Num[dealOrder] = (CardDeck[0] % 13 + 1 > 10) ? 10 : CardDeck[0] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
 
@@ -388,18 +385,18 @@ public class GameManager : MonoBehaviour
         switch (betMan.dealtCardCount)
         {
             case 0:
-                playerCard0Num[dealOrder] = (CardDeck[CardDeck.Count - 1] > 10) ? 10 : CardDeck[CardDeck.Count - 1];
+                playerCard0Num[dealOrder] = (CardDeck[CardDeck.Count - 1] % 13 + 1 > 10) ? 10 : CardDeck[CardDeck.Count - 1] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard0Num[dealOrder];
                 playerCard0Text[dealOrder].text = playerCard0Num[dealOrder].ToString();
                 break;
             case 1:
-                playerCard1Num[dealOrder] = (CardDeck[CardDeck.Count - 1] > 10) ? 10 : CardDeck[CardDeck.Count - 1];
+                playerCard1Num[dealOrder] = (CardDeck[CardDeck.Count - 1] % 13 + 1 > 10) ? 10 : CardDeck[CardDeck.Count - 1] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard1Num[dealOrder];
                 playerCard1Text[dealOrder].text = playerCard1Num[dealOrder].ToString();
                 betMan.SetIsPlayerCheat(dealOrder);
                 break;
             case 2:
-                playerCard2Num[dealOrder] = (CardDeck[CardDeck.Count - 1] > 10) ? 10 : CardDeck[CardDeck.Count - 1];
+                playerCard2Num[dealOrder] = (CardDeck[CardDeck.Count - 1] % 13 + 1 > 10) ? 10 : CardDeck[CardDeck.Count - 1] % 13 + 1;
                 playerCardSum[dealOrder] += playerCard2Num[dealOrder];
                 playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
                 cheatCoroutine[dealOrder] = CheatCycle(dealOrder);

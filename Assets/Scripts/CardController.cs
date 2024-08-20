@@ -53,7 +53,7 @@ public class CardController : MonoBehaviour
     private void SetImage()
     {
         bottomCard.gameObject.GetComponent<SpriteRenderer>().sprite
-            = cardImage[GameManager.Instance.CardDeck[GameManager.Instance.CardDeck.Count - 1] - 1];
+            = cardImage[GameManager.Instance.CardDeck[GameManager.Instance.CardDeck.Count - 1] % 13];
     }
     private void Update()
     {
@@ -138,7 +138,10 @@ public class CardController : MonoBehaviour
     void CompareWithGauge(float objectY)
     {
         if (GameManager.Instance.gameState != GameManager.GameState.deal)
+        {
+            cardMoved?.Invoke(true);
             return;
+        }
         GameManager.Instance.BottomDeal();
         SetImage();
         if (objectY >= RedBottomY)

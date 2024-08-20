@@ -26,6 +26,6 @@ public class FrontCardCreate : MonoBehaviour
     public void SetSecondCardImage()
     {
         secondCard.GetComponent<SpriteRenderer>().sprite
-           = cardImage[GameManager.Instance.CardDeck[1] - 1];
+           = cardImage[GameManager.Instance.CardDeck[1] % 13];
     }
 }
