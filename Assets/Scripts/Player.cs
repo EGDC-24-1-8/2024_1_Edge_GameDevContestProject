@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     public string[] textDataFold;
     public string[] textDataWin;
     public string[] textDataDetected;
-    public string[] textDataDoubt;
+    public string[] textDataSuspicion;
 
 
     public bool isAlly = false; 
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
         textDataFold = playerData.TextDataFold;
         textDataWin = playerData.TextDataWin;
         textDataDetected = playerData.TextDataDetected;
-        textDataDoubt = playerData.TextDataDoubt;
+        textDataSuspicion = playerData.TextDataSuspicion;
         dealtCardCount = 0;
     }
     public void Start_DoCheat(int idx)

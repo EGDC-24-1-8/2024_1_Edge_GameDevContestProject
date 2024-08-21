@@ -65,7 +65,7 @@ public class PlayerData : ScriptableObject
     public string[] TextDataDetected { get { return textDataDetected; } }
 
     [SerializeField]
-    private string[] textDataDoubt;
-    public string[] TextDataDoubt { get { return textDataDoubt; } }
+    private string[] textDataSuspicion;
+    public string[] TextDataSuspicion { get { return textDataSuspicion; } }
 
 }

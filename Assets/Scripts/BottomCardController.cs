@@ -8,12 +8,12 @@ public class BottomCardController : MonoBehaviour
     [SerializeField] private GameObject gaugeGreen;
     [SerializeField] private GameObject gaugeYellow;
     [SerializeField] private GameObject gaugeRed;
-    [SerializeField] private float suspicionThreshold = 2.0f; // 의심 증가 임계값
-    [SerializeField] private float suspicionIncreaseRate = 20f; // 의심 수치 증가율
+    //[SerializeField] private float suspicionThreshold = 2.0f; // 의심 증가 임계값
+    //[SerializeField] private float suspicionIncreaseRate = 20f; // 의심 수치 증가율
 
     private float dragStartTime;
-    private bool isDragging = false;
-    private float suspicionLevel = 0;
+    [SerializeField] private bool isDragging = false;
+    //[SerializeField] private float suspicionLevel = 0;
     private Vector3 initialOffset;
     private Vector3 mouseOffset;
     private float delayTime = 0.5f; // 의심 수치 증가 시작 시간
@@ -54,7 +54,8 @@ public class BottomCardController : MonoBehaviour
         {
             if (Time.time - dragStartTime > delayTime)
             {
-                suspicionLevel += suspicionIncreaseRate * Time.deltaTime;
+                GameManager.Instance.IncreaseSuspicionByTime();
+                //suspicionLevel += suspicionIncreaseRate * Time.deltaTime;
             }
         }
     }
@@ -106,14 +107,17 @@ public class BottomCardController : MonoBehaviour
     void OnMouseUp()
     {
         if (!isDragging) return;
+        isDragging = false;
         float dragDuration = Time.time - dragStartTime;
 
         // 드래그 시간이 일정 시간을 초과하면 의심 수치 증가
+        /*
         if (dragDuration > suspicionThreshold)
         {
-            suspicionLevel += suspicionIncreaseRate;
+            //suspicionLevel += suspicionIncreaseRate;
             Debug.Log("dragDuration > suspicionThreshold");
         }
+        */
         if (transform.position.y - origin_Position.y > 0.7f)
         {
             CompareWithGauge(bottomArrow.position.y);
@@ -145,14 +149,17 @@ public class BottomCardController : MonoBehaviour
                 {
                     bottomCardMoved?.Invoke(true);
                     Debug.Log("Green");
+                    GameManager.Instance.IncreaseSuspicionByGauge(0);
                     return;
                 }
                 bottomCardMoved?.Invoke(true);
                 Debug.Log("Yellow");
+                GameManager.Instance.IncreaseSuspicionByGauge(1);
                 return;
             }
             bottomCardMoved?.Invoke(true);
             Debug.Log("Red");
+            GameManager.Instance.IncreaseSuspicionByGauge(2);
             return;
         }
     }

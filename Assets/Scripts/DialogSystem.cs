@@ -17,7 +17,7 @@ public class DialogSystem : MonoBehaviour
         fold,
         win,
         detected,
-        doubt
+        suspicion
     };
 
     [TextArea]
@@ -104,8 +104,8 @@ public class DialogSystem : MonoBehaviour
             case TextType.detected:
                 TextData = playerArray[playerIdx].textDataDetected;
                 break;
-            case TextType.doubt:
-                TextData = playerArray[playerIdx].textDataDoubt;
+            case TextType.suspicion:
+                TextData = playerArray[playerIdx].textDataSuspicion;
                 break;
         }
 

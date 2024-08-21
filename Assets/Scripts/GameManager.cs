@@ -71,6 +71,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int dealOrder = 0; // 현재 카드 나눠줄 플레이어 순서
 
     [Header("etc")]
+    [SerializeField] private Slider suspicionBar;
+    [SerializeField] private float suspicionLevelMax = 100f;
+    [SerializeField] private float suspicionLevelCur = 0f;
     [SerializeField] private GameObject[] Player;
     [SerializeField] private List<PlayerData> enemyPlayerDataSet = null;
     [SerializeField] private List<PlayerData> allyPlayerDataSet = null;
@@ -619,7 +622,6 @@ public class GameManager : MonoBehaviour
         betMan.isAllyCodedRaise = true;
 
     }
-
     public void OnMouseClickPlayer(int playerIdx) //플레이어 버튼에 할당
     {
         if(mousePointState == MousePointState.code)
@@ -659,8 +661,43 @@ public class GameManager : MonoBehaviour
                 GameOver();
             }
         }
-        
+    }
 
+    private void SetSuspicionBar()
+    {
+        if (suspicionBar != null)
+            suspicionBar.value = suspicionLevelCur / suspicionLevelMax;
+    }
 
+    public void IncreaseSuspicionByTime()
+    {
+        if (suspicionLevelCur >= suspicionLevelMax)
+            return;
+        suspicionLevelCur += 0.2f;
+        SetSuspicionBar();
+        if (suspicionLevelCur >= suspicionLevelMax)
+            GameOver();
+    }
+
+    public void IncreaseSuspicionByGauge(int gauge)
+    {
+        if (suspicionLevelCur >= suspicionLevelMax)
+            return;
+        switch(gauge)
+        {
+            case 0: //Green
+                break;
+            case 1: //Yellow
+                suspicionLevelCur += 10f;
+                break;
+            case 2: //Red
+                suspicionLevelCur += 30f;
+                break;
+            default:
+                break;
+        }
+        SetSuspicionBar();
+        if (suspicionLevelCur >= suspicionLevelMax)
+            GameOver();
     }
 }
