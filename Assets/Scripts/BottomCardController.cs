@@ -1,14 +1,13 @@
 using System;
 using UnityEngine;
 
-public class CardController : MonoBehaviour
+public class BottomCardController : MonoBehaviour
 {
     [SerializeField] private Transform bottomCard; 
     [SerializeField] private Transform bottomArrow;
     [SerializeField] private GameObject gaugeGreen;
     [SerializeField] private GameObject gaugeYellow;
     [SerializeField] private GameObject gaugeRed;
-    [SerializeField] private Sprite[] cardImage = null;
     [SerializeField] private float suspicionThreshold = 2.0f; // 의심 증가 임계값
     [SerializeField] private float suspicionIncreaseRate = 20f; // 의심 수치 증가율
 
@@ -30,13 +29,12 @@ public class CardController : MonoBehaviour
     private Vector3 origin_Position;
     private Vector3 origin_ArrowPosition;
 
-    public event Action<bool> cardMoved;
+    public event Action<bool> bottomCardMoved;
     
 
     private void Start()
     {
         SetPosition();
-        SetImage();
     }
     
     private void SetPosition()
@@ -49,11 +47,6 @@ public class CardController : MonoBehaviour
         RedBottomY = gaugeRed.GetComponent<BoxCollider2D>().bounds.min.y;
         ArrowTopY = bottomArrow.GetComponent<BoxCollider2D>().bounds.max.y;
         ArrowBottomY = bottomArrow.GetComponent<BoxCollider2D>().bounds.min.y;
-    }
-    private void SetImage()
-    {
-        bottomCard.gameObject.GetComponent<SpriteRenderer>().sprite
-            = cardImage[GameManager.Instance.CardDeck[GameManager.Instance.CardDeck.Count - 1] % 13];
     }
     private void Update()
     {
@@ -126,39 +119,39 @@ public class CardController : MonoBehaviour
             CompareWithGauge(bottomArrow.position.y);
             gameObject.SetActive(false);
             bottomArrow.gameObject.SetActive(false);
+            Destroy(gameObject.transform.parent.gameObject);
         }
         else
         {
             transform.position = origin_Position;
             bottomArrow.position = origin_ArrowPosition;
         }
-        //Destroy(gameObject.transform.parent.gameObject);
     }
 
     void CompareWithGauge(float objectY)
     {
         if (GameManager.Instance.gameState != GameManager.GameState.deal)
         {
-            cardMoved?.Invoke(true);
+            bottomCardMoved?.Invoke(true);
             return;
         }
         GameManager.Instance.BottomDeal();
-        SetImage();
+        DealingManager.Instance.BottomSetImage();
         if (objectY >= RedBottomY)
         {
             if (objectY >= YellowBottomY && objectY <= YellowTopY)
             {
                 if (objectY >= GreenBottomY && objectY <= GreenTopY)
                 {
-                    cardMoved?.Invoke(true);
+                    bottomCardMoved?.Invoke(true);
                     Debug.Log("Green");
                     return;
                 }
-                cardMoved?.Invoke(true);
+                bottomCardMoved?.Invoke(true);
                 Debug.Log("Yellow");
                 return;
             }
-            cardMoved?.Invoke(true);
+            bottomCardMoved?.Invoke(true);
             Debug.Log("Red");
             return;
         }

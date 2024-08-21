@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //Destroy(this.gameObject);
+            Destroy(this.gameObject);
         }
         InitPlayer();
         CardDeck = InitDeck();
@@ -167,8 +167,12 @@ public class GameManager : MonoBehaviour
         gameState = GameState.start;
         CardDeck = InitDeck();
         CardDeck = shuffleDeck(CardDeck);
-        TopCardText.text = CardDeck[0].ToString();
-        BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
+        DealingManager.Instance.DestroyChild();
+        DealingManager.Instance.SetImage();
+        DealingManager.Instance.TopNewCardCreate(true);
+        DealingManager.Instance.BottomNewCardCreate(true);
+        TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
+        BottomCardText.text = (CardDeck[CardDeck.Count - 1] % 13 + 1).ToString();
 
         DialogSystem.Instance.TriggerNextSentence(1, DialogSystem.TextType.start);
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
@@ -190,7 +194,7 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.deal;
         dealOrder = 0;
-        BottomCardText.text = CardDeck[CardDeck.Count - 1].ToString();
+        BottomCardText.text = (CardDeck[CardDeck.Count - 1] % 13 + 1).ToString();
     }
     
     public void SetStateAfterDeal()
@@ -370,7 +374,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
         CardDeck.Remove(CardDeck[0]);
-        TopCardText.text = CardDeck[0].ToString();
+        TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
         dealOrder++;
         IsDealOver();
     }
