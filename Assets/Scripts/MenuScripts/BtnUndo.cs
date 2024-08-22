@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 public class BtnUndo : MonoBehaviour
 {
     public Button undoButton;
+    public GameObject mainPanel;
+    public GameObject optionPanel;
+    public GameObject creditPanel;
     void Start()
     {
         undoButton.onClick.AddListener(onUndoBtnClicked);
@@ -12,6 +15,8 @@ public class BtnUndo : MonoBehaviour
 
     public void onUndoBtnClicked()
     {
-        SceneManager.LoadScene("MainMenuScene");
+        optionPanel.SetActive(false);
+        creditPanel.SetActive(false);
+        mainPanel.SetActive(true);
     }
 }

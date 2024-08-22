@@ -8,14 +8,15 @@ public class BtnOption : MonoBehaviour
     public Button optionButton;
     public Button playButton;
     private bool flag;
-    private Color originalColor;
+    //private Color originalColor;
     public event Action optionButtonOn;
+    public GameObject optionPanel;
     void Start()
     {
         playButton.GetComponent<BtnPlay>().playBtnOn += setButtonActive;
         optionButton.onClick.AddListener(onOptionBtnClicked);
         flag = true;
-        originalColor = optionButton.colors.normalColor;
+        //originalColor = optionButton.colors.normalColor;
     }
 
     void setButtonActive()
@@ -29,10 +30,11 @@ public class BtnOption : MonoBehaviour
         if (!flag)
         {
             optionButtonOn?.Invoke();
-            optionButton.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().color = originalColor;
+            optionButton.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             flag = true;
             return;
         }
-        SceneManager.LoadScene("OptionScene");
+        GameObject.Find("MainPanel").SetActive(false);
+        optionPanel.SetActive(true);
     }
 }

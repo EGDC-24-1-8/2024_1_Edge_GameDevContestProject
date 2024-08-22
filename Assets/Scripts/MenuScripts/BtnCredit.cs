@@ -9,14 +9,15 @@ public class BtnCredit : MonoBehaviour
     public Button creditButton;
     public Button playButton;
     private bool flag;
-    private Color originalColor;
+    //private Color originalColor;
     public event Action creditButtonOn;
+    public GameObject creditPanel;
     void Start()
     {
         playButton.GetComponent<BtnPlay>().playBtnOn += setButtonActive;
         creditButton.onClick.AddListener(onCreditBtnClicked);
         flag = true;
-        originalColor = creditButton.colors.normalColor;
+        //originalColor = creditButton.colors.normalColor;
     }
     
     void setButtonActive()
@@ -30,10 +31,11 @@ public class BtnCredit : MonoBehaviour
         if (!flag)
         {
             creditButtonOn?.Invoke();
-            creditButton.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().color = originalColor;
+            creditButton.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().color = Color.black;
             flag = true;
             return;
         }
-        SceneManager.LoadScene("CreditScene");
+        GameObject.Find("MainPanel").SetActive(false);
+        creditPanel.SetActive(true);
     }
 }
