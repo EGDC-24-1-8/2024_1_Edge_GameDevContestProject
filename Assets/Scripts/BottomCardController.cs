@@ -97,7 +97,11 @@ public class BottomCardController : MonoBehaviour
 
             // 새로운 y 위치 계산 및 제한 적용
             float newY = worldPosition.y + mouseOffset.y;
-
+            if (GameManager.Instance.gameState != GameManager.GameState.bet)
+            {
+                if (newY < origin_Position.y)
+                    newY = origin_Position.y;
+            }
             // x, z 위치 고정
             bottomCard.position = new Vector3(bottomCard.position.x, newY, bottomCard.position.z);
             bottomArrow.position = bottomCard.position + initialOffset;

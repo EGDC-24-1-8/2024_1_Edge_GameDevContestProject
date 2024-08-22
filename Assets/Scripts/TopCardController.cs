@@ -67,6 +67,8 @@ public class TopCardController : MonoBehaviour
             // 새로운 y 위치 계산 및 적용
             float newY = worldPosition.y + mouseOffset.y;
 
+            if (newY < origin_position.y)
+                newY = origin_position.y;
             // x, z 위치 고정, y 위치만 변경
             topCard.position = new Vector3(topCard.position.x, newY, topCard.position.z);
         }
