@@ -54,7 +54,7 @@ public class BottomCardController : MonoBehaviour
         {
             if (Time.time - dragStartTime > delayTime)
             {
-                GameManager.Instance.IncreaseSuspicionByTime();
+                GameManager.Instance.IncreaseSuspicionByDragTime();
                 //suspicionLevel += suspicionIncreaseRate * Time.deltaTime;
             }
         }

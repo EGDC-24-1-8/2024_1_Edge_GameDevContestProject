@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text BottomCardText;
     [SerializeField] private Text GameDayText;
     [SerializeField] private Text GameTurnText;
+    [SerializeField] private Slider timeBar;
 
     //Card Value
     [Header("Card Value")]
@@ -69,6 +70,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int gameTurn = 0;
     //[SerializeField] private int dealtCardCount = 0; // 카드 나눠주는 턴
     [SerializeField] private int dealOrder = 0; // 현재 카드 나눠줄 플레이어 순서
+    [SerializeField] private float dealTimeCur = 0; // 현재 카드 나눠줄 플레이어 순서
+    [SerializeField] private float dealTimeMax = 1; // 현재 카드 나눠줄 플레이어 순서
 
     [Header("etc")]
     [SerializeField] private Slider suspicionBar;
@@ -151,6 +154,18 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 0;
             }
         }
+
+        if (gameState == GameState.deal)
+        {
+            if(DialogSystem.Instance.isDialog)
+            {
+                dealTimeCur = Time.time;
+            }
+            else
+            {
+                TimeBarUpdate();
+            }
+        }
     }
 
     #region set state
@@ -197,11 +212,15 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.deal;
         dealOrder = 0;
+        dealTimeCur = Time.time;
+        timeBar.gameObject.SetActive(true);
+        SetTimeBarPosition();
         BottomCardText.text = (CardDeck[CardDeck.Count - 1] % 13 + 1).ToString();
     }
     
     public void SetStateAfterDeal()
     {
+        timeBar.gameObject.SetActive(false);
         gameState = GameState.afterDeal;
         SetStateBet();
     }
@@ -235,7 +254,6 @@ public class GameManager : MonoBehaviour
 
 
     #region start
-
     private List<int> InitDeck()
     {
         List<int> initDeck = new List<int>();
@@ -298,6 +316,24 @@ public class GameManager : MonoBehaviour
 
     #region deal
 
+    private void SetTimeBarPosition()
+    {
+        CheckDealOrder();
+        if (gameState != GameState.deal)
+            return;
+        timeBar.transform.position = playerCard2Text[dealOrder].GetComponent<RectTransform>().position;
+    }
+
+    private void TimeBarUpdate()
+    {
+        if(Time.time - dealTimeCur >= dealTimeMax)
+        {
+            IncreaseSuspicionByDealTime();
+            dealTimeCur = Time.time;
+        }
+        timeBar.value = (Time.time - dealTimeCur) / dealTimeMax;
+    }
+
     public void CheckDealOrder()
     {
         if (gameState != GameState.deal)
@@ -331,6 +367,7 @@ public class GameManager : MonoBehaviour
             ++dealOrder;
             IsDealOver();
         }
+        SetTimeBarPosition();
     }
 
 
@@ -377,6 +414,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
         CardDeck.Remove(CardDeck[0]);
+        dealTimeCur = Time.time;
         TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
         dealOrder++;
         IsDealOver();
@@ -420,6 +458,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
         CardDeck.RemoveAt(CardDeck.Count - 1);
+        dealTimeCur = Time.time;
         BottomCardText.text = "Unknown";
         dealOrder++;
         IsDealOver();
@@ -669,7 +708,13 @@ public class GameManager : MonoBehaviour
             suspicionBar.value = suspicionLevelCur / suspicionLevelMax;
     }
 
-    public void IncreaseSuspicionByTime()
+    public void IncreaseSuspicionByDealTime()
+    {
+        suspicionLevelCur += 5f;
+        SetSuspicionBar();
+    }
+
+    public void IncreaseSuspicionByDragTime()
     {
         if (suspicionLevelCur >= suspicionLevelMax)
             return;
