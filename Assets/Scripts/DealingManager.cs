@@ -27,7 +27,7 @@ public class DealingManager : MonoBehaviour
         if (null == Instance) //디자인패턴중 싱글톤 패턴
         {
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
         }
         else
         {

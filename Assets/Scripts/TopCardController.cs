@@ -35,6 +35,8 @@ public class TopCardController : MonoBehaviour
             return;
         if (GameManager.Instance.gameState != GameManager.GameState.deal)
             return;
+        if (!(GameManager.Instance.mousePointState == GameManager.MousePointState.normal))
+            return;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         origin_position = topCard.position;
         Collider2D collider = topCard.GetComponent<Collider2D>();

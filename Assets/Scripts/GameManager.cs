@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -61,6 +62,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] public bool[] playerIsDetectable = new bool[4] { false, false, false, false };
     [SerializeField] public List<int> CardDeck = null;
 
+    [SerializeField] public GameObject[] playerCard0Obj;
+    [SerializeField] public GameObject[] playerCard1Obj;
+    [SerializeField] public GameObject[] playerCard2Obj;
+
     [Header("In Game Counts")]
     [SerializeField] public int foldPlayerCnt = 0;
     [SerializeField] public int IngamePlayerCnt = 4;
@@ -70,8 +75,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int gameTurn = 0;
     //[SerializeField] private int dealtCardCount = 0; // 카드 나눠주는 턴
     [SerializeField] private int dealOrder = 0; // 현재 카드 나눠줄 플레이어 순서
-    [SerializeField] private float dealTimeCur = 0; // 현재 카드 나눠줄 플레이어 순서
-    [SerializeField] private float dealTimeMax = 1; // 현재 카드 나눠줄 플레이어 순서
+    [SerializeField] private float dealTimeCur = 0; 
+    [SerializeField] private float dealTimeMax = 3.5f; // 카드 제한 시간
 
     [Header("etc")]
     [SerializeField] private Slider suspicionBar;
@@ -86,15 +91,51 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] public BettingManager betMan;
     [SerializeField] private IEnumerator[] cheatCoroutine = new IEnumerator[4];
-
+    private bool isFade = false;
     //[SerializeField] private AudioClip hoverSound = null;
-    
+
+
+    [SerializeField] private Texture2D normal_cursor;
+
+    [SerializeField] private Texture2D code_cursor;
+    [SerializeField] private Texture2D code_hover_cursor;
+
+    [SerializeField] private Texture2D detect_cursor;
+
+    [SerializeField] private Texture2D detect_hover_cursor;
+
+
+    public void ChangeHoverCursor()
+    {
+        if(mousePointState == MousePointState.code)
+        {
+            Cursor.SetCursor(code_hover_cursor, new Vector2(0, 0), CursorMode.Auto);
+        }
+        else if(mousePointState == MousePointState.detect)
+        {
+            Cursor.SetCursor(detect_hover_cursor, new Vector2(0, 0), CursorMode.Auto);
+        }
+    }
+
+    public void ChangeNormalCursor()
+    {
+        if (mousePointState == MousePointState.code)
+        {
+            Cursor.SetCursor(code_cursor, new Vector2(0, 0), CursorMode.Auto);
+        }
+        else if (mousePointState == MousePointState.detect)
+        {
+            Cursor.SetCursor(detect_cursor, new Vector2(0, 0), CursorMode.Auto);
+        }
+    }
+
     private void Awake()
     {
+
         if (null == Instance) //디자인패턴중 싱글톤 패턴
         {
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
         }
         else
         {
@@ -108,6 +149,7 @@ public class GameManager : MonoBehaviour
     {
         IngamePlayerCnt = 4;
         SetStateStart();
+
     }
 
     public void Update()
@@ -116,17 +158,23 @@ public class GameManager : MonoBehaviour
         {
             //AudioManager.GetOrCreate().PlayEffectSound(hoverSound);
             mousePointState = MousePointState.normal;
+            Cursor.SetCursor(normal_cursor , new Vector2(0,0) , CursorMode.Auto);
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
+            Cursor.SetCursor(code_cursor, new Vector2(0, 0), CursorMode.Auto);
             if (mousePointState == MousePointState.code)
             {
                 if (codeType == 0)
                 {
+
+                    
                     codeType = 1;
                 }
                 else
                 {
+
+                    
                     codeType = 0;
                 }
                 mousePointState = MousePointState.code;
@@ -139,6 +187,7 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
+            Cursor.SetCursor(detect_cursor, new Vector2(0, 0), CursorMode.Auto);
             mousePointState = MousePointState.detect;
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
@@ -192,6 +241,8 @@ public class GameManager : MonoBehaviour
         TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
         BottomCardText.text = (CardDeck[CardDeck.Count - 1] % 13 + 1).ToString();
 
+        mousePointState = MousePointState.normal;
+        Cursor.SetCursor(normal_cursor, new Vector2(0, 0), CursorMode.Auto);
         DialogSystem.Instance.TriggerNextSentence(1, DialogSystem.TextType.start);
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
         {
@@ -370,7 +421,25 @@ public class GameManager : MonoBehaviour
         SetTimeBarPosition();
     }
 
+    private void GetPlayerCard()
+    {
 
+        switch (betMan.dealtCardCount)
+        {
+            case 0:
+                playerCard0Obj[dealOrder].SetActive(true);
+                break;
+            case 1:
+                playerCard1Obj[dealOrder].SetActive(true);
+
+                break;
+            case 2:
+                playerCard2Obj[dealOrder].SetActive(true);
+                break;
+            default:
+                break;
+        }
+    }
 
     public void NormalDeal()
     {
@@ -418,6 +487,9 @@ public class GameManager : MonoBehaviour
         TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
         dealOrder++;
         IsDealOver();
+        //카드 애니메이션을 실행해야한다.. 그 애니메이션에 이벤트를 달아놓고
+        // - >>>>>GetPlayerCard();
+
     }
 
     public void BottomDeal()
@@ -582,7 +654,18 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("게임 끝!");
+        if(!isFade)
+        {
+            //철컥 탕~ 또는 비명소리
+            // 너 졋음 UI
+            isFade = true;
+            Fade.Out(2.5f, () =>
+            {
+                SceneManager.LoadScene("Game Scene");
+                Debug.Log("게임 끝!");
+            });
+        }
+            
     }
 
 
@@ -716,8 +799,10 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseSuspicionByDragTime()
     {
+        /*
         if (suspicionLevelCur >= suspicionLevelMax)
             return;
+        */
         suspicionLevelCur += 0.2f;
         SetSuspicionBar();
         if (suspicionLevelCur >= suspicionLevelMax)
@@ -726,8 +811,10 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseSuspicionByGauge(int gauge)
     {
+        /*
         if (suspicionLevelCur >= suspicionLevelMax)
             return;
+        */
         switch(gauge)
         {
             case 0: //Green

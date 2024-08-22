@@ -16,7 +16,7 @@ public class BottomCardController : MonoBehaviour
     //[SerializeField] private float suspicionLevel = 0;
     private Vector3 initialOffset;
     private Vector3 mouseOffset;
-    private float delayTime = 0.5f; // 의심 수치 증가 시작 시간
+    private float delayTime = 1.5f; // 의심 수치 증가 시작 시간
     private float GreenTopY;
     private float GreenBottomY;
     private float YellowTopY;
@@ -61,6 +61,9 @@ public class BottomCardController : MonoBehaviour
     }
     void OnMouseDown()
     {
+        if (!(GameManager.Instance.mousePointState == GameManager.MousePointState.normal))
+            return;
+
         //if (DialogSystem.Instance.isDialog)
         //    return;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
