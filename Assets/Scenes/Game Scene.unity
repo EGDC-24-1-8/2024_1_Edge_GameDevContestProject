@@ -3040,7 +3040,7 @@ MonoBehaviour:
   textDataWin: []
   textDataDetected: []
   textDataSuspicion: []
-  isAlly: 0
+  isAlly: 1
 --- !u!222 &854045266
 CanvasRenderer:
   m_ObjectHideFlags: 0

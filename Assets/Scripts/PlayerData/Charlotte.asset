@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a619d544120064dabd920521311774, type: 3}
+  m_Name: Charlotte
+  m_EditorClassIdentifier: 
+  playerMoney: 150
+  playerBettingMoney: 0
+  playerName: "\uC0E4\uB97C\uB85C\uD2B8"
+  highPreference: 15
+  lowPreference: 10
+  cheatFrequency: 0
+  textDataStart:
+  - "\uB3C8 \uBC8C \uC2DC\uAC04\uC774\uC57C."
+  - Start0
+  - Start0
+  textDataRecieveCard:
+  - "\uC5B4\uB5A4 \uCE74\uB4DC\uB4E0 \uC0C1\uAD00\uC5C6\uC5B4."
+  - "\uB0B4 \uC190\uC5D0\uB294 \uD56D\uC0C1 \uC88B\uC740 \uCE74\uB4DC\uB9CC \uB4E4\uC5B4\uC624\uC9C0."
+  textDataCall:
+  - "\uD6C4\uD6C4, \uD750\uB984\uC774 \uC88B\uB124."
+  - "\uC774\uB300\uB85C \uAC00\uBA74 \uC88B\uACA0\uB294\uB370."
+  textDataRaise:
+  - "\uC880 \uB354 \uC62C\uB824\uB3C4 \uAD1C\uCC2E\uACA0\uB124."
+  - "\uBD99\uC5B4\uBCF4\uACA0\uC5B4?"
+  textDataFold:
+  - "\uC774\uB7EC\uBA74 \uCC28\uC9C8\uC774 \uC0DD\uAE30\uB294\uB370..."
+  - "\uC820\uC7A5..."
+  textDataWin:
+  - "\uC774 \uB3C8\uC740 \uB0B4\uAC00 \uAC00\uC838\uAC08\uAC8C."
+  - "\uB2E4\uC74C \uD310\uB3C4 \uC774\uB807\uAC8C \uB418\uBA74 \uC88B\uACA0\uB294\uB370."
+  - "\uC774\uBC88 \uD310\uC740 \uB0B4\uAC00 \uC6B4\uC774 \uC88B\uC558\uB124."
+  textDataDetected:
+  - "\uC774\uAC78 \uB4E4\uD0A4\uB2E4\uB2C8..."
+  textDataSuspicion:
+  - "\uBA48\uCDB0. \uC190\uB180\uB9BC\uC774 \uB2E4 \uBCF4\uC778\uB2E4\uACE0."

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6a619d544120064dabd920521311774, type: 3}
+  m_Name: Nicolai_Ally
+  m_EditorClassIdentifier: 
+  playerMoney: 300
+  playerBettingMoney: 0
+  playerName: "\uB2C8\uCF5C\uB77C\uC774"
+  highPreference: 15
+  lowPreference: 10
+  cheatFrequency: 0
+  textDataStart:
+  - "\uC2DC\uC791\uD558\uC790\uACE0."
+  - "\uC790, \uC2DC\uC791\uD558\uC9C0."
+  textDataRecieveCard:
+  - "\uC88B\uC544."
+  - "\uD765\uBBF8\uB86D\uAD70."
+  textDataCall:
+  - "\uCF5C."
+  - "\uBC1B\uC9C0."
+  textDataRaise:
+  - "\uB808\uC774\uC988."
+  - "\uBC1B\uACE0 \uB354."
+  textDataFold:
+  - "\uB2E4\uC774."
+  - "\uB09C \uC8FD\uC5C8\uC5B4."
+  textDataWin:
+  - "\uC774 \uC815\uB3C8\uAC00?"
+  - "\uC5B4\uB835\uC9C0 \uC54A\uAD70."
+  - "\uC2DC\uC2DC\uD558\uAD70."
+  textDataDetected:
+  - "\uCCC7, \uB4E4\uCF30\uB098."
+  textDataSuspicion:
+  - "\uC548 \uB4E4\uD0AC \uC904 \uC54C\uC558\uB098?"
