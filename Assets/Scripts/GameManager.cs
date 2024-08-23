@@ -93,16 +93,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private IEnumerator[] cheatCoroutine = new IEnumerator[4];
     private bool isFade = false;
     //[SerializeField] private AudioClip hoverSound = null;
-
-
     [SerializeField] private Texture2D normal_cursor;
-
     [SerializeField] private Texture2D code_cursor;
     [SerializeField] private Texture2D code_hover_cursor;
-
     [SerializeField] private Texture2D detect_cursor;
-
     [SerializeField] private Texture2D detect_hover_cursor;
+
 
 
     public void ChangeHoverCursor()
@@ -421,20 +417,18 @@ public class GameManager : MonoBehaviour
         SetTimeBarPosition();
     }
 
-    private void GetPlayerCard()
+    public void GetPlayerCard(int playerIdx, int dealtCardCnt)
     {
-
-        switch (betMan.dealtCardCount)
+        switch (dealtCardCnt)
         {
             case 0:
-                playerCard0Obj[dealOrder].SetActive(true);
+                playerCard0Obj[playerIdx].SetActive(true);
                 break;
             case 1:
-                playerCard1Obj[dealOrder].SetActive(true);
-
+                playerCard1Obj[playerIdx].SetActive(true);
                 break;
             case 2:
-                playerCard2Obj[dealOrder].SetActive(true);
+                playerCard2Obj[playerIdx].SetActive(true);
                 break;
             default:
                 break;
@@ -485,11 +479,11 @@ public class GameManager : MonoBehaviour
         CardDeck.Remove(CardDeck[0]);
         dealTimeCur = Time.time;
         TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
+        DealingManager.Instance.InstantNewCardCreate(dealOrder);
         dealOrder++;
         IsDealOver();
         //카드 애니메이션을 실행해야한다.. 그 애니메이션에 이벤트를 달아놓고
         // - >>>>>GetPlayerCard();
-
     }
 
     public void BottomDeal()
@@ -532,6 +526,7 @@ public class GameManager : MonoBehaviour
         CardDeck.RemoveAt(CardDeck.Count - 1);
         dealTimeCur = Time.time;
         BottomCardText.text = "Unknown";
+        DealingManager.Instance.InstantNewCardCreate(dealOrder);
         dealOrder++;
         IsDealOver();
     }
@@ -588,6 +583,9 @@ public class GameManager : MonoBehaviour
             playerCard1Text[i].text = " - ";
             playerCard2Text[i].text = " - ";
             playerSumText[i].text = "Sum";
+            playerCard0Obj[i].SetActive(false);
+            playerCard1Obj[i].SetActive(false);
+            playerCard2Obj[i].SetActive(false);
         }
     }
 
@@ -714,7 +712,9 @@ public class GameManager : MonoBehaviour
             playerCard2[idx] = UnityEngine.Random.Range(9, 13) - 1 + UnityEngine.Random.Range(0, 4) * 13;
             playerCard2Num[idx] = 10;
         }
-        playerCardSum[idx] = 21;
+        playerCardSum[idx] = playerCard0Num[idx] +
+                             playerCard1Num[idx] +
+                             playerCard2Num[idx];
 
         //playerCard0Text[idx].text = playerCard0Num[idx].ToString();
         //playerCard1Text[idx].text = playerCard1Num[idx].ToString();

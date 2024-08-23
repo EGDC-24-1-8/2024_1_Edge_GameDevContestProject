@@ -22,6 +22,11 @@ public class DealingManager : MonoBehaviour
     [SerializeField] private GameObject bottomCardPrefab;
     [SerializeField] private Transform bottomCardSpawnPosition;
 
+    [Header("Instant Dealt Card Create")]
+    [SerializeField] private GameObject instantCard;
+    [SerializeField] private Transform instantCardSpawnPosition;
+    [SerializeField] public bool isAnim = false;
+
     private void Awake()
     {
         if (null == Instance) //디자인패턴중 싱글톤 패턴
@@ -68,6 +73,31 @@ public class DealingManager : MonoBehaviour
         if (child1 != null) child1.gameObject.SetActive(true);
         if (child2 != null) child2.gameObject.SetActive(true);
         child2.GetComponent<BottomCardController>().bottomCardMoved += BottomNewCardCreate;
+    }
+
+    public void InstantNewCardCreate(int playerIdx)
+    {
+        //isAnim = true;
+        GameObject newDealtCard = Instantiate(instantCard,
+            instantCard.transform.position,
+            Quaternion.identity,
+            instantCardSpawnPosition.transform);
+        newDealtCard.SetActive(true);
+        switch (playerIdx)
+        {
+            case 0:
+                newDealtCard.GetComponent<Animator>().SetTrigger("Player0");
+                break;
+            case 1:
+                newDealtCard.GetComponent<Animator>().SetTrigger("Player1");
+                break;
+            case 2:
+                newDealtCard.GetComponent<Animator>().SetTrigger("Player2");
+                break;
+            case 3:
+                newDealtCard.GetComponent<Animator>().SetTrigger("Player3");
+                break;
+        }
     }
 
     #endregion
