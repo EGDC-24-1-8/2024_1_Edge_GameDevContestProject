@@ -2998,7 +2998,7 @@ MonoBehaviour:
   textDataWin: []
   textDataDetected: []
   textDataSuspicion: []
-  isAlly: 1
+  isAlly: 0
 --- !u!222 &854045266
 CanvasRenderer:
   m_ObjectHideFlags: 0

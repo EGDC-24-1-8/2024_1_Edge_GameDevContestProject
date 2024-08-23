@@ -274,12 +274,12 @@ public class BettingManager : MonoBehaviour
     {
         if ((playerArray[playerIdx].dealtCardCount == 2
             && (playerCardSum[playerIdx] > 6) // 너무 낮을 때는 cheat 없이 fold하도록
-            && (playerCardSum[playerIdx] < 8 || 16 < playerCardSum[playerIdx]))
+            && (playerCardSum[playerIdx] < 11 || 16 < playerCardSum[playerIdx]))
             || 
             (playerArray[playerIdx].dealtCardCount == 3
             && (playerCardSum[playerIdx] < 17 || 21 < playerCardSum[playerIdx]))) // fold 조건
         {
-            if (20f + GameManager.Instance.playerArray[playerIdx].cheatFrequency > UnityEngine.Random.Range(0, 101))
+            if (100f + GameManager.Instance.playerArray[playerIdx].cheatFrequency > UnityEngine.Random.Range(0, 101))
             {
                 GameManager.Instance.playerIsCheat[playerIdx] = true;
                 return;
