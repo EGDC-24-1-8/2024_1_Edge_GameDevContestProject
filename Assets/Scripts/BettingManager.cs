@@ -129,13 +129,13 @@ public class BettingManager : MonoBehaviour
             switch(betState)
             {
                 case BetState.call:
-                    yield return StartCoroutine(DialogSystem.Instance.NextSentence(i, DialogSystem.TextType.call));
+                    yield return StartCoroutine(DialogManager.Instance.NextSentence(i, DialogManager.TextType.call));
                     break;
                 case BetState.raise:
-                    yield return StartCoroutine(DialogSystem.Instance.NextSentence(i, DialogSystem.TextType.raise));
+                    yield return StartCoroutine(DialogManager.Instance.NextSentence(i, DialogManager.TextType.raise));
                     break;
                 case BetState.fold:
-                    yield return StartCoroutine(DialogSystem.Instance.NextSentence(i, DialogSystem.TextType.fold));
+                    yield return StartCoroutine(DialogManager.Instance.NextSentence(i, DialogManager.TextType.fold));
                     break;
             }
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();

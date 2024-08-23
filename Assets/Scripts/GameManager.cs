@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
         }
         else if(mousePointState == MousePointState.detect)
         {
-            Cursor.SetCursor(detect_hover_cursor, new Vector2(0, 0), CursorMode.Auto);
+            Cursor.SetCursor(detect_hover_cursor, new Vector2(32, 32), CursorMode.Auto);
         }
     }
 
@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
         }
         else if (mousePointState == MousePointState.detect)
         {
-            Cursor.SetCursor(detect_cursor, new Vector2(0, 0), CursorMode.Auto);
+            Cursor.SetCursor(detect_cursor, new Vector2(32, 32), CursorMode.Auto);
         }
     }
 
@@ -202,7 +202,7 @@ public class GameManager : MonoBehaviour
 
         if (gameState == GameState.deal)
         {
-            if(DialogSystem.Instance.isDialog)
+            if(DialogManager.Instance.isDialog)
             {
                 dealTimeCur = Time.time;
             }
@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour
 
         mousePointState = MousePointState.normal;
         Cursor.SetCursor(normal_cursor, new Vector2(0, 0), CursorMode.Auto);
-        DialogSystem.Instance.TriggerNextSentence(1, DialogSystem.TextType.start);
+        DialogManager.Instance.TriggerNextSentence(1, DialogManager.TextType.start);
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
         {
             betMan.entranceBet(i);
@@ -443,7 +443,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        if(DialogSystem.Instance.isDialog)
+        if(DialogManager.Instance.isDialog)
         {
             return;
         }
@@ -494,7 +494,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        if (DialogSystem.Instance.isDialog)
+        if (DialogManager.Instance.isDialog)
         {
             return;
         }
