@@ -202,7 +202,8 @@ public class GameManager : MonoBehaviour
 
         if (gameState == GameState.deal)
         {
-            if(DialogManager.Instance.isDialogEssential)
+            if(DialogManager.Instance.isDialogMiddlePriority ||
+               DialogManager.Instance.isDialogHighPriority)
             {
                 dealTimeCur = Time.time;
             }
@@ -239,7 +240,7 @@ public class GameManager : MonoBehaviour
 
         mousePointState = MousePointState.normal;
         Cursor.SetCursor(normal_cursor, new Vector2(0, 0), CursorMode.Auto);
-        DialogManager.Instance.TriggerNextSentenceEssential(1, DialogManager.TextType.start);
+        DialogManager.Instance.TriggerNextSentence_MiddlePriority(1, DialogManager.TextType.start);
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
         {
             betMan.entranceBet(i);
@@ -443,7 +444,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        if (DialogManager.Instance.isDialogEssential)
+        if (DialogManager.Instance.isDialogMiddlePriority)
         {
             return;
         }
@@ -480,7 +481,7 @@ public class GameManager : MonoBehaviour
         dealTimeCur = Time.time;
         TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
         if (50 >= UnityEngine.Random.Range(0, 101)) //50% 확률로 대사 재생
-            DialogManager.Instance.TriggerNextSentenceNonEssential(dealOrder, DialogManager.TextType.recieveCard);
+            DialogManager.Instance.TriggerNextSentence_LowPriority(dealOrder, DialogManager.TextType.recieveCard);
         DealingManager.Instance.InstantNewCardCreate(dealOrder);
         dealOrder++;
         IsDealOver();
@@ -496,7 +497,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        if (DialogManager.Instance.isDialogEssential)
+        if (DialogManager.Instance.isDialogMiddlePriority)
         {
             return;
         }
@@ -529,7 +530,7 @@ public class GameManager : MonoBehaviour
         dealTimeCur = Time.time;
         BottomCardText.text = "Unknown";
         if (50 >= UnityEngine.Random.Range(0, 101)) //50% 확률로 대사 재생
-            DialogManager.Instance.TriggerNextSentenceNonEssential(dealOrder, DialogManager.TextType.recieveCard);
+            DialogManager.Instance.TriggerNextSentence_LowPriority(dealOrder, DialogManager.TextType.recieveCard);
         DealingManager.Instance.InstantNewCardCreate(dealOrder);
         dealOrder++;
         IsDealOver();
@@ -616,7 +617,7 @@ public class GameManager : MonoBehaviour
         {
             betMan.CalculateResult(betMan.DecideWinner(playerCardSum));
         }
-        StartCoroutine(DialogManager.Instance.NextSentenceEssential(UnityEngine.Random.Range(0, betMan.winner.Count), DialogManager.TextType.win));
+        TriggerNextTurn();
         for (int i = 0; i < playerArray.Length; i++)
             playerIsDetectable[i] = false;
         betMan.isBetOver = false;
@@ -647,7 +648,7 @@ public class GameManager : MonoBehaviour
                 break;
             case DETECTED_CHEAT_ELIMINATED:
                 betMan.EliminatePlayer(idx, type);
-                DialogManager.Instance.TriggerNextSentenceEssential(idx, DialogManager.TextType.detected);
+                DialogManager.Instance.TriggerNextSentence_HighPriority(idx, DialogManager.TextType.detected);
                 break;
             default:
                 Debug.Log("-");
@@ -658,7 +659,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        if(!isFade)
+        DialogManager.Instance.TriggerNextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion);
+        if (!isFade)
         {
             //철컥 탕~ 또는 비명소리
             // 너 졋음 UI
@@ -811,7 +813,6 @@ public class GameManager : MonoBehaviour
         SetSuspicionBar();
         if (suspicionLevelCur >= suspicionLevelMax)
         {
-            DialogManager.Instance.TriggerNextSentenceEssential(dealOrder, DialogManager.TextType.suspicion);
             GameOver();
         }
     }
@@ -836,7 +837,6 @@ public class GameManager : MonoBehaviour
         SetSuspicionBar();
         if (suspicionLevelCur >= suspicionLevelMax)
         {
-            DialogManager.Instance.TriggerNextSentenceEssential(dealOrder, DialogManager.TextType.suspicion);
             GameOver();
         }
     }

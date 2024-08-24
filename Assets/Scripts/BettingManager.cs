@@ -128,14 +128,19 @@ public class BettingManager : MonoBehaviour
             yield return StartCoroutine(bet(i));
             switch(betState)
             {
+                //TODO: 여기서 코루틴 불러서 Dialog 나오는 거랑 여기서 WaitForSeconds 하는 거랑 동기화가 안 됨.
+                //베팅하고 -> Dialog 나오고 -> 0.5초 기다리고 -> 다음 사람 베팅하고... 이런 식으로 만들고 싶음
                 case BetState.call:
-                    yield return StartCoroutine(DialogManager.Instance.NextSentenceEssential(i, DialogManager.TextType.call));
+                    DialogManager.Instance.TriggerNextSentence_MiddlePriority(i, DialogManager.TextType.call);
+                    //yield return StartCoroutine(DialogManager.Instance.NextSentence_MiddlePriority(i, DialogManager.TextType.call));
                     break;
                 case BetState.raise:
-                    yield return StartCoroutine(DialogManager.Instance.NextSentenceEssential(i, DialogManager.TextType.raise));
+                    DialogManager.Instance.TriggerNextSentence_MiddlePriority(i, DialogManager.TextType.raise);
+                    //yield return StartCoroutine(DialogManager.Instance.NextSentence_MiddlePriority(i, DialogManager.TextType.raise));
                     break;
                 case BetState.fold:
-                    yield return StartCoroutine(DialogManager.Instance.NextSentenceEssential(i, DialogManager.TextType.fold));
+                    DialogManager.Instance.TriggerNextSentence_MiddlePriority(i, DialogManager.TextType.fold);
+                    //yield return StartCoroutine(DialogManager.Instance.NextSentence_MiddlePriority(i, DialogManager.TextType.fold));
                     break;
             }
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
@@ -345,6 +350,7 @@ public class BettingManager : MonoBehaviour
     public void CalculateResult(List<int> playerIdx) //winner에게 prize 전달, 
     {
         isBetOver = true;
+        DialogManager.Instance.TriggerNextSentence_MiddlePriority(winner[UnityEngine.Random.Range(0, winner.Count)], DialogManager.TextType.win);
         if (winner.Count != 0)
             prize = pot / winner.Count;
         for (; winner.Count > 0; winner.RemoveAt(0))
@@ -357,7 +363,6 @@ public class BettingManager : MonoBehaviour
                 GameManager.Instance.EliminatePlayer(i, GameManager.NO_MONEY_ELIMINATED);
             }
         }
-        GameManager.Instance.TriggerNextTurn();
     }
 
     #endregion
