@@ -27,12 +27,11 @@ public class CardSpawner : MonoBehaviour
 
     void SpawnCard()
     {
-        // 카드가 생성될 위치를 캔버스 상단에서 결정합니다.
         float spawnX = Random.Range(0f, canvasRect.rect.width);  // 캔버스 너비 내에서 무작위 X 좌표
-        Vector3 spawnPosition = new Vector3(spawnX, canvasRect.rect.height, 0);  // 캔버스 상단에서 생성
-        
+        Vector3 spawnPosition = new Vector3(spawnX, canvasRect.rect.height+5.0f, 0); 
+       
 
-        GameObject card = Instantiate(cardPrefab, spawnPosition, Quaternion.identity, canvasRect);  // 카드 생성
-        card.GetComponent<CardFalling>().Initialize(fallSpeed, rotationSpeed);  // 속도와 회전 설정
+        GameObject card = Instantiate(cardPrefab, spawnPosition, Quaternion.identity, canvasRect); 
+        card.GetComponent<CardFalling>().Initialize(fallSpeed, rotationSpeed); 
     }
 }
