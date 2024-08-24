@@ -28,7 +28,7 @@ public class CardSpawner : MonoBehaviour
     void SpawnCard()
     {
         float spawnX = Random.Range(0f, canvasRect.rect.width);  // 캔버스 너비 내에서 무작위 X 좌표
-        Vector3 spawnPosition = new Vector3(spawnX, canvasRect.rect.height+5.0f, 0); 
+        Vector3 spawnPosition = new Vector3(spawnX, canvasRect.rect.height+150.0f, 0); 
        
 
         GameObject card = Instantiate(cardPrefab, spawnPosition, Quaternion.identity, canvasRect); 
