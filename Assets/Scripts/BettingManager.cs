@@ -44,7 +44,7 @@ public class BettingManager : MonoBehaviour
 
 
     [Header("In Game Data")]
-    [SerializeField] private List<int> winner = null;
+    [SerializeField] public List<int> winner = null;
     [SerializeField] public int dealtCardCount = 0;
     [SerializeField] private int endOrder = 0;
     [SerializeField] public bool[] isFold = { false, false, false, false };
@@ -129,13 +129,13 @@ public class BettingManager : MonoBehaviour
             switch(betState)
             {
                 case BetState.call:
-                    yield return StartCoroutine(DialogManager.Instance.NextSentence(i, DialogManager.TextType.call));
+                    yield return StartCoroutine(DialogManager.Instance.NextSentenceEssential(i, DialogManager.TextType.call));
                     break;
                 case BetState.raise:
-                    yield return StartCoroutine(DialogManager.Instance.NextSentence(i, DialogManager.TextType.raise));
+                    yield return StartCoroutine(DialogManager.Instance.NextSentenceEssential(i, DialogManager.TextType.raise));
                     break;
                 case BetState.fold:
-                    yield return StartCoroutine(DialogManager.Instance.NextSentence(i, DialogManager.TextType.fold));
+                    yield return StartCoroutine(DialogManager.Instance.NextSentenceEssential(i, DialogManager.TextType.fold));
                     break;
             }
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();

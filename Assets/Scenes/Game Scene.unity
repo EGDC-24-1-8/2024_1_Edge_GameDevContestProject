@@ -1445,7 +1445,8 @@ MonoBehaviour:
   now_Sentence: 0
   isStart: 0
   isEnd: 0
-  isDialog: 0
+  isDialogEssential: 0
+  isDialogNonEssential: 0
   TextPanel: {fileID: 285226327}
   playerArray: []
 --- !u!1 &300172769

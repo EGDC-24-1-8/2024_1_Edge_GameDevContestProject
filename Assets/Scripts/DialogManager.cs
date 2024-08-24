@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,11 +35,12 @@ public class DialogManager : MonoBehaviour
     public bool isStart = false;
     public bool isEnd = false;
 
-    public bool isDialog = false;
+    public bool isDialogEssential = false;
+    public bool isDialogNonEssential = false;
     public GameObject TextPanel;
     public Player[] playerArray = null;
-
-
+    private IEnumerator CurDialog;
+    public event Action DialogCreated;
 
     private void Awake()
     {
@@ -54,16 +56,14 @@ public class DialogManager : MonoBehaviour
     void Start()
     {
         playerArray = GameManager.Instance.playerArray;
-        //TextData = playerArray[1].textData;
         TextIndex = TextData.Length;
-        //NextSentence();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (isDialog)
+            if (isDialogEssential)
                 return;
             if (now_Sentence < TextIndex)
             {
@@ -72,14 +72,21 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    public void TriggerNextSentence(int playerIdx, TextType type)
+    public void TriggerNextSentenceEssential(int playerIdx, TextType type)
     {
-        StartCoroutine(NextSentence(playerIdx, type));
+        DialogCreated?.Invoke();
+        StartCoroutine(NextSentenceEssential(playerIdx, type));
     }
 
-    public IEnumerator NextSentence(int playerIdx, TextType type)
+    public void TriggerNextSentenceNonEssential(int playerIdx, TextType type)
     {
-        isDialog = true;
+        DialogCreated?.Invoke();
+        StartCoroutine(NextSentenceNonEssential(playerIdx, type));
+    }
+
+    public IEnumerator NextSentenceEssential(int playerIdx, TextType type)
+    {
+        isDialogEssential = true;
         DialogString = "";
         switch(type)
         {
@@ -109,7 +116,7 @@ public class DialogManager : MonoBehaviour
                 break;
         }
 
-        now_Sentence = Random.Range(0, TextData.Length);
+        now_Sentence = UnityEngine.Random.Range(0, TextData.Length);
         TextLen = TextData[now_Sentence].Length;
         int temp = 0;
 
@@ -121,6 +128,60 @@ public class DialogManager : MonoBehaviour
             DialogText.text = DialogString;
             yield return new WaitForSeconds(delay);
         }
-        isDialog = false;
+        Debug.Log("Dialog " + playerIdx);
+        isDialogEssential = false;
+    }
+
+    public IEnumerator NextSentenceNonEssential(int playerIdx, TextType type)
+    {
+        isDialogNonEssential = true;
+        DialogCreated += () =>
+        {
+            isDialogNonEssential = false;
+            StopAllCoroutines();
+        };
+        DialogString = "";
+        switch (type)
+        {
+            case TextType.start:
+                TextData = playerArray[playerIdx].textDataStart;
+                break;
+            case TextType.recieveCard:
+                TextData = playerArray[playerIdx].textDataRecieveCard;
+                break;
+            case TextType.call:
+                TextData = playerArray[playerIdx].textDataCall;
+                break;
+            case TextType.raise:
+                TextData = playerArray[playerIdx].textDataRaise;
+                break;
+            case TextType.fold:
+                TextData = playerArray[playerIdx].textDataFold;
+                break;
+            case TextType.win:
+                TextData = playerArray[playerIdx].textDataWin;
+                break;
+            case TextType.detected:
+                TextData = playerArray[playerIdx].textDataDetected;
+                break;
+            case TextType.suspicion:
+                TextData = playerArray[playerIdx].textDataSuspicion;
+                break;
+        }
+
+        now_Sentence = UnityEngine.Random.Range(0, TextData.Length);
+        TextLen = TextData[now_Sentence].Length;
+        int temp = 0;
+        while (temp < TextLen)
+        {
+            if (isDialogEssential)
+                yield break;
+            DialogString += TextData[now_Sentence][temp];
+            temp++;
+
+            DialogText.text = DialogString;
+            yield return new WaitForSeconds(delay);
+        }
+        isDialogNonEssential = false;
     }
 }

@@ -31,7 +31,7 @@ public class TopCardController : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (DialogManager.Instance.isDialog)
+        if (DialogManager.Instance.isDialogEssential)
             return;
         if (GameManager.Instance.gameState != GameManager.GameState.deal)
             return;
