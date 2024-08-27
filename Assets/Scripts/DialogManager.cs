@@ -17,7 +17,10 @@ public class DialogManager : MonoBehaviour
         raise,
         fold,
         win,
+        time,
         detected,
+        missDetected,
+        busted,
         suspicion
     };
 
@@ -147,8 +150,11 @@ public class DialogManager : MonoBehaviour
     #region Wait For Coroutine To End
     public IEnumerator WaitForHighDialog()
     {
-        yield return new WaitUntil(() => isDialogHighPriority == false); //High Priority의 코루틴이 실행중일 때, 종료될 때까지 기다리는 코루틴
-        yield return new WaitForSeconds(1f);
+        if (isDialogHighPriority)
+        {
+            yield return new WaitUntil(() => isDialogHighPriority == false); //High Priority의 코루틴이 실행중일 때, 종료될 때까지 기다리는 코루틴
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     public IEnumerator WaitForMiddleDialog()
@@ -166,6 +172,12 @@ public class DialogManager : MonoBehaviour
         {
             case TextType.detected:
                 TextData = playerArray[playerIdx].textDataDetected;
+                break;
+            case TextType.missDetected:
+                TextData = playerArray[playerIdx].textDataMissDetected;
+                break;
+            case TextType.busted:
+                TextData = playerArray[playerIdx].textDataBusted;
                 break;
             case TextType.suspicion:
                 TextData = playerArray[playerIdx].textDataSuspicion;
@@ -235,6 +247,9 @@ public class DialogManager : MonoBehaviour
         {
             case TextType.recieveCard:
                 TextData = playerArray[playerIdx].textDataRecieveCard;
+                break;
+            case TextType.time:
+                TextData = playerArray[playerIdx].textDataTime;
                 break;
         }
 

@@ -124,7 +124,7 @@ public class BettingManager : MonoBehaviour
         {
             if (isFold[i])
                 continue;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
             yield return StartCoroutine(bet(i));
             switch (betState)

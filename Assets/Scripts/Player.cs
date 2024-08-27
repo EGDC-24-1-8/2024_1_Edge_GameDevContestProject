@@ -19,8 +19,11 @@ public class Player : MonoBehaviour
     public string[] textDataCall;
     public string[] textDataRaise;
     public string[] textDataFold;
+    public string[] textDataTime;
     public string[] textDataWin;
     public string[] textDataDetected;
+    public string[] textDataMissDetected;
+    public string[] textDataBusted;
     public string[] textDataSuspicion;
 
 
@@ -41,8 +44,11 @@ public class Player : MonoBehaviour
         textDataCall = playerData.TextDataCall;
         textDataRaise = playerData.TextDataRaise;
         textDataFold = playerData.TextDataFold;
+        textDataTime = playerData.TextDataTime;
         textDataWin = playerData.TextDataWin;
         textDataDetected = playerData.TextDataDetected;
+        textDataMissDetected = playerData.TextDataMissDetected;
+        textDataBusted = playerData.TextDataBusted;
         textDataSuspicion = playerData.TextDataSuspicion;
         dealtCardCount = 0;
     }

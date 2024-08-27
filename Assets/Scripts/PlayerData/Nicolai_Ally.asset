@@ -33,11 +33,18 @@ MonoBehaviour:
   textDataFold:
   - "\uB2E4\uC774."
   - "\uB09C \uC8FD\uC5C8\uC5B4."
+  textDataTime:
+  - "\uD760..."
+  - "\uC73C\uD760..."
   textDataWin:
   - "\uC774 \uC815\uB3C8\uAC00?"
   - "\uC5B4\uB835\uC9C0 \uC54A\uAD70."
   - "\uC2DC\uC2DC\uD558\uAD70."
   textDataDetected:
   - "\uCCC7, \uB4E4\uCF30\uB098."
+  textDataMissDetected:
+  - "\uD5DB\uC18C\uB9AC\uB97C \uD558\uB294\uAD70."
+  textDataBusted:
+  - "\uB09C \uC5EC\uAE30\uAE4C\uC9C0 \uD558\uC9C0."
   textDataSuspicion:
   - "\uC548 \uB4E4\uD0AC \uC904 \uC54C\uC558\uB098?"

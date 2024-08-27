@@ -377,6 +377,7 @@ public class GameManager : MonoBehaviour
         if(Time.time - dealTimeCur >= dealTimeMax)
         {
             IncreaseSuspicionByDealTime();
+            DialogManager.Instance.TriggerNextSentence_LowPriority(dealOrder, DialogManager.TextType.time);
             dealTimeCur = Time.time;
         }
         timeBar.value = (Time.time - dealTimeCur) / dealTimeMax;
@@ -645,6 +646,7 @@ public class GameManager : MonoBehaviour
         {
             case NO_MONEY_ELIMINATED:
                 betMan.EliminatePlayer(idx, type);
+                DialogManager.Instance.TriggerNextSentence_HighPriority(idx, DialogManager.TextType.busted);
                 break;
             case DETECTED_CHEAT_ELIMINATED:
                 betMan.EliminatePlayer(idx, type);
@@ -659,7 +661,6 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        DialogManager.Instance.TriggerNextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion);
         if (!isFade)
         {
             //Ã¶ÄÀ ÅÁ~ ¶Ç´Â ºñ¸í¼Ò¸®
@@ -778,6 +779,7 @@ public class GameManager : MonoBehaviour
             }
             if (playerIsDetectable[playerIdx] == true)
             {
+                DialogManager.Instance.TriggerNextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion);
                 EliminatePlayer(playerIdx , 1);
                 playerIsDetectable[playerIdx] = false;
                 Debug.Log("GOTCHA!");
@@ -788,6 +790,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                DialogManager.Instance.TriggerNextSentence_HighPriority(playerIdx, DialogManager.TextType.missDetected);
                 GameOver();
             }
         }

@@ -57,12 +57,24 @@ public class PlayerData : ScriptableObject
     public string[] TextDataFold { get { return textDataFold; } }
 
     [SerializeField]
+    private string[] textDataTime;
+    public string[] TextDataTime { get { return textDataTime; } }
+
+    [SerializeField]
     private string[] textDataWin;
     public string[] TextDataWin { get { return textDataWin; } }
 
     [SerializeField]
     private string[] textDataDetected;
     public string[] TextDataDetected { get { return textDataDetected; } }
+
+    [SerializeField]
+    private string[] textDataMissDetected;
+    public string[] TextDataMissDetected { get { return textDataMissDetected; } }
+
+    [SerializeField]
+    private string[] textDataBusted;
+    public string[] TextDataBusted { get { return textDataBusted; } }
 
     [SerializeField]
     private string[] textDataSuspicion;
