@@ -79,6 +79,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float dealTimeMax = 3.5f; // 카드 제한 시간
 
     [Header("etc")]
+    [SerializeField] private AudioSource BGM;
+    [SerializeField] private AudioClip NormalDealingSound;
+    [SerializeField] private AudioClip SecondDealingSound;
+    [SerializeField] private AudioClip BottomDealingSound;
     [SerializeField] private Slider suspicionBar;
     [SerializeField] private float suspicionLevelMax = 100f;
     [SerializeField] private float suspicionLevelCur = 0f;
@@ -139,6 +143,7 @@ public class GameManager : MonoBehaviour
         }
         InitPlayer();
         CardDeck = InitDeck();
+        AudioManager.GetOrCreate(BGM, null);
     }
 
     void Start()
@@ -479,6 +484,7 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+        AudioManager.GetOrCreate().PlayEffectSound(NormalDealingSound);
         CardDeck.Remove(CardDeck[0]);
         dealTimeCur = Time.time;
         TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
@@ -528,6 +534,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(cheatCoroutine[dealOrder]);
                 break;
         }
+        AudioManager.GetOrCreate().PlayEffectSound(SecondDealingSound);
         CardDeck.RemoveAt(1);
         dealTimeCur = Time.time;
         if (50 >= UnityEngine.Random.Range(0, 101)) //50% 확률로 대사 재생
@@ -573,6 +580,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(cheatCoroutine[dealOrder]);
                 break;
         }
+        AudioManager.GetOrCreate().PlayEffectSound(BottomDealingSound);
         CardDeck.RemoveAt(CardDeck.Count - 1);
         dealTimeCur = Time.time;
         BottomCardText.text = "Unknown";
