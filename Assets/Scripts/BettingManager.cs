@@ -124,9 +124,10 @@ public class BettingManager : MonoBehaviour
         {
             if (isFold[i])
                 continue;
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
+            yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
             yield return StartCoroutine(bet(i));
-            switch(betState)
+            switch (betState)
             {
                 //TODO: 여기서 코루틴 불러서 Dialog 나오는 거랑 여기서 WaitForSeconds 하는 거랑 동기화가 안 됨.
                 //베팅하고 -> Dialog 나오고 -> 0.5초 기다리고 -> 다음 사람 베팅하고... 이런 식으로 만들고 싶음
@@ -143,6 +144,7 @@ public class BettingManager : MonoBehaviour
                     //yield return StartCoroutine(DialogManager.Instance.NextSentence_MiddlePriority(i, DialogManager.TextType.fold));
                     break;
             }
+            yield return StartCoroutine(DialogManager.Instance.WaitForMiddleDialog());
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
         }
         yield return new WaitForSeconds(1);

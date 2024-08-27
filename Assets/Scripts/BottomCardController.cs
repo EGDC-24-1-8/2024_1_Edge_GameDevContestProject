@@ -61,6 +61,8 @@ public class BottomCardController : MonoBehaviour
     }
     void OnMouseDown()
     {
+        if (DialogManager.Instance.isDialogHighPriority)
+            return;
         if (!(GameManager.Instance.mousePointState == GameManager.MousePointState.normal))
             return;
 

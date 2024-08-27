@@ -41,9 +41,10 @@ public class DialogManager : MonoBehaviour
     public bool isDialogHighPriority = false;
     public bool isDialogMiddlePriority = false;
     public bool isDialogLowPriority = false;
-    public event Action DialogHighPriorityCreated;
-    public event Action DialogMiddlePriorityCreated;
-    public event Action DialogLowPriorityCreated;
+    //public event Action DialogHighPriorityCreated;
+    //public event Action DialogMiddlePriorityCreated;
+    //public event Action DialogLowPriorityCreated;
+    public Coroutine CurrentCoroutine;
 
     private void Awake()
     {
@@ -84,30 +85,73 @@ public class DialogManager : MonoBehaviour
     #region Trigger Coroutine
     public void TriggerNextSentence_HighPriority(int playerIdx, TextType type)
     {
-        DialogHighPriorityCreated?.Invoke();                  //이벤트 발생시키고
-        StartCoroutine(NextSentence_HighPriority(playerIdx, type)); //코루틴 실행
+        //DialogHighPriorityCreated?.Invoke();                  //이벤트 발생시키고
+        if (isDialogHighPriority)
+        {
+            StopCoroutine(CurrentCoroutine);
+            isDialogHighPriority = false;
+        }
+        if (isDialogMiddlePriority)
+        {
+            StopCoroutine(CurrentCoroutine);
+            isDialogMiddlePriority = false;
+        }
+        if (isDialogLowPriority)
+        {
+            StopCoroutine(CurrentCoroutine);
+            isDialogLowPriority = false;
+        }
+        CurrentCoroutine = StartCoroutine(NextSentence_HighPriority(playerIdx, type)); //코루틴 실행
     }
 
     public void TriggerNextSentence_MiddlePriority(int playerIdx, TextType type)
     {
-        DialogMiddlePriorityCreated?.Invoke();
-        StartCoroutine(NextSentence_MiddlePriority(playerIdx, type));
+        //DialogMiddlePriorityCreated?.Invoke();
+        if (isDialogHighPriority)
+        {
+            return;
+        }
+        if (isDialogMiddlePriority)
+        {
+            StopCoroutine(CurrentCoroutine);
+            isDialogMiddlePriority = false;
+        }
+        if (isDialogLowPriority)
+        {
+            StopCoroutine(CurrentCoroutine);
+            isDialogLowPriority = false;
+        }
+        CurrentCoroutine = StartCoroutine(NextSentence_MiddlePriority(playerIdx, type));
     }
 
     public void TriggerNextSentence_LowPriority(int playerIdx, TextType type)
     {
-        DialogLowPriorityCreated?.Invoke();
-        StartCoroutine(NextSentence_LowPriority(playerIdx, type));
+        //DialogLowPriorityCreated?.Invoke();
+        if (isDialogHighPriority)
+        {
+            return;
+        }
+        if (isDialogMiddlePriority)
+        {
+            return;
+        }
+        if (isDialogLowPriority)
+        {
+            StopCoroutine(CurrentCoroutine);
+            isDialogLowPriority = false;
+        }
+        CurrentCoroutine = StartCoroutine(NextSentence_LowPriority(playerIdx, type));
     }
     #endregion
 
     #region Wait For Coroutine To End
-    private IEnumerator WaitForHighDialog()
+    public IEnumerator WaitForHighDialog()
     {
         yield return new WaitUntil(() => isDialogHighPriority == false); //High Priority의 코루틴이 실행중일 때, 종료될 때까지 기다리는 코루틴
+        yield return new WaitForSeconds(1f);
     }
 
-    private IEnumerator WaitForMiddleDialog()
+    public IEnumerator WaitForMiddleDialog()
     {
         yield return new WaitUntil(() => isDialogMiddlePriority == false);
     }
@@ -116,11 +160,6 @@ public class DialogManager : MonoBehaviour
     #region Coroutine
     public IEnumerator NextSentence_HighPriority(int playerIdx, TextType type)
     {
-        DialogHighPriorityCreated += () =>                        //다른 High Priority 대사가 실행되면
-        {
-            isDialogHighPriority = false;                          //지금 실행중인 코루틴을 중단하고
-            StopAllCoroutines();                                  //외부에서 실행된 High Priority 코루틴 실행
-        };
         isDialogHighPriority = true;
         DialogString = "";
         switch (type)
@@ -151,16 +190,6 @@ public class DialogManager : MonoBehaviour
 
     public IEnumerator NextSentence_MiddlePriority(int playerIdx, TextType type)
     {
-        DialogHighPriorityCreated += () =>                       //다른 High Priority 대사가 실행되면
-        {
-            isDialogMiddlePriority = false;                      //지금 실행중인 코루틴을 중단하고
-            StopAllCoroutines();                                 //외부에서 실행된 High Priority 코루틴 실행
-        };
-        if (isDialogHighPriority)                                //다른 High Priority 대사가 실행 중이라면
-        {
-            yield return StartCoroutine(WaitForHighDialog());    //그 코루틴이 끝날 때까지 대기하고
-            //StopAllCoroutines();                                 //이 코루틴을 파괴(안 하면 끊긴 대사가 중간부터 출력됨, 다음 대사로 자연스럽게 넘어가고자 함)
-        }                                                        //근데 생각해보니까 파괴할 필요는 없을 것도 같은데?
         isDialogMiddlePriority = true;
         DialogString = "";
         switch(type)
@@ -188,11 +217,6 @@ public class DialogManager : MonoBehaviour
 
         while (temp < TextLen)
         {
-            /*if (isDialogHighPriority)          */                     //대사 출력 중에 High Priority 대사 코루틴이 실행되면
-            /*{                                  */                     //이 대사 끊고 바로 출력할 수 있게끔
-            /*    isDialogMiddlePriority = false;*/                     //코루틴 파괴
-                //yield break;
-            //}
             DialogString += TextData[now_Sentence][temp];
             temp++;
 
@@ -205,31 +229,6 @@ public class DialogManager : MonoBehaviour
 
     public IEnumerator NextSentence_LowPriority(int playerIdx, TextType type)
     {
-        DialogHighPriorityCreated += () =>
-        {
-            isDialogLowPriority = false;
-            StopAllCoroutines();
-        };
-        DialogMiddlePriorityCreated += () =>
-        {
-            isDialogLowPriority = false;
-            StopAllCoroutines();
-        };
-        DialogLowPriorityCreated += () =>
-        {
-            isDialogLowPriority = false;
-            StopAllCoroutines();
-        };
-        if (isDialogHighPriority)
-        {
-            yield return StartCoroutine(WaitForHighDialog());
-            //StopAllCoroutines();
-        }
-        if (isDialogMiddlePriority)
-        {
-            yield return StartCoroutine(WaitForMiddleDialog());
-            //StopAllCoroutines();
-        }
     isDialogLowPriority = true;
         DialogString = "";
         switch (type)
@@ -244,12 +243,6 @@ public class DialogManager : MonoBehaviour
         int temp = 0;
         while (temp < TextLen)
         {
-            //if (isDialogHighPriority ||
-                //isDialogMiddlePriority)
-            //{
-                //isDialogLowPriority = false;
-                //yield break;
-            //}
             DialogString += TextData[now_Sentence][temp];
             temp++;
 

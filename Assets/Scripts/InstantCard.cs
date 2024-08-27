@@ -13,7 +13,7 @@ public class InstantCard : MonoBehaviour
     void GetPlayerCard(int playerIdx)
     {
         GameManager.Instance.GetPlayerCard(playerIdx, dealtCardCnt);
-        Debug.Log("Instant " + playerIdx + ", " + dealtCardCnt);
+        //Debug.Log("Instant " + playerIdx + ", " + dealtCardCnt);
         //GameManager.Instance.isAnim = false;
         Destroy(this.gameObject);
     }
