@@ -80,7 +80,7 @@ public class TopCardController : MonoBehaviour
     {
         if (isDragging)
         {
-            if(Math.Abs(topCard.position.y - origin_position.y) > 0.7f)
+            if(Math.Abs(topCard.position.y - origin_position.y) > 0.2f)
             {
                 isDragging = false;
                 GameManager.Instance.NormalDeal();
@@ -91,7 +91,7 @@ public class TopCardController : MonoBehaviour
             }
             else
             {
-
+                GameManager.Instance.IncreaseSuspicionByDragButDontDeal();
                 topCard.gameObject.transform.position = origin_position;
             }
           

@@ -10,13 +10,18 @@ public class DealingManager : MonoBehaviour
     [Header("Card Image")]
     [SerializeField] private Sprite[] cardImage = null;
     [SerializeField] private Transform topCard;
+    [SerializeField] private Transform secondCard;
+    [SerializeField] private Transform secondArrow;
     [SerializeField] private Transform bottomCard;
     [SerializeField] private Transform bottomArrow;
 
     [Header("Top Card Create")]
     [SerializeField] private GameObject topCardPrefab;
-    [SerializeField] private GameObject secondCardPrefab;
     [SerializeField] private Transform topCardSpawnPosition;
+
+    [Header("Top Card Create")]
+    [SerializeField] private GameObject secondCardPrefab;
+    [SerializeField] private Transform secondCardSpawnPosition;
 
     [Header("Bottom Card Create")]
     [SerializeField] private GameObject bottomCardPrefab;
@@ -50,6 +55,7 @@ public class DealingManager : MonoBehaviour
     #region new card create
     public void TopNewCardCreate(bool state)
     {
+        DestroyTopCardSpawnPositionChild();
         GameObject newCard = Instantiate(topCardPrefab,
             topCardSpawnPosition.transform.position,
             Quaternion.identity, 
@@ -59,8 +65,25 @@ public class DealingManager : MonoBehaviour
         newCard.SetActive(true);
         newCard.GetComponent<TopCardController>().TopCardMoved += TopNewCardCreate;
     }
+    public void SecondNewCardCreate(bool state)
+    {
+        DestroySecondCardSpawnPositionChild();
+        GameObject newCard = Instantiate(secondCardPrefab,
+            secondCardSpawnPosition.transform.position,
+            Quaternion.identity,
+            secondCardSpawnPosition.transform);
+
+        Debug.Log("new Second Card Created");
+        newCard.SetActive(true);
+        Transform child1 = newCard.transform.GetChild(0);
+        Transform child2 = newCard.transform.GetChild(1);
+        if (child1 != null) child1.gameObject.SetActive(true);
+        if (child2 != null) child2.gameObject.SetActive(true);
+        child2.GetComponent<SecondCardController>().secondCardMoved += SecondNewCardCreate;
+    }
     public void BottomNewCardCreate(bool state)
     {
+        DestroyBottomCardSpawnPositionChild();
         GameObject newCard = Instantiate(bottomCardPrefab,
             bottomCardSpawnPosition.transform.position, 
             Quaternion.identity, 
@@ -114,10 +137,12 @@ public class DealingManager : MonoBehaviour
         topCard.gameObject.GetComponent<SpriteRenderer>().sprite
             = cardImage[GameManager.Instance.CardDeck[0] % 13];
         SecondSetImage();
+        DestroySecondCardSpawnPositionChild();
+        SecondNewCardCreate(true);
     }
-    private void SecondSetImage()
+    public void SecondSetImage()
     {
-        secondCardPrefab.GetComponent<SpriteRenderer>().sprite
+        secondCard.gameObject.GetComponent<SpriteRenderer>().sprite
            = cardImage[GameManager.Instance.CardDeck[1] % 13];
     }
     public void BottomSetImage()
@@ -131,10 +156,26 @@ public class DealingManager : MonoBehaviour
 
     public void DestroyChild()
     {
+        DestroyTopCardSpawnPositionChild();
+        DestroySecondCardSpawnPositionChild();
+        DestroyBottomCardSpawnPositionChild();
+    }
+    public void DestroyTopCardSpawnPositionChild()
+    {
         foreach (Transform child in topCardSpawnPosition)
         {
             Destroy(child.gameObject);
         }
+    }
+    public void DestroySecondCardSpawnPositionChild()
+    {
+        foreach (Transform child in secondCardSpawnPosition)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+    public void DestroyBottomCardSpawnPositionChild()
+    {
         foreach (Transform child in bottomCardSpawnPosition)
         {
             Destroy(child.gameObject);

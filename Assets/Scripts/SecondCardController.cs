@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-public class BottomCardController : MonoBehaviour
+public class SecondCardController : MonoBehaviour
 {
-    [SerializeField] private Transform bottomCard; 
-    [SerializeField] private Transform bottomArrow;
+    [SerializeField] private Transform secondCard; 
+    [SerializeField] private Transform secondArrow;
     [SerializeField] private GameObject gaugeGreen;
     [SerializeField] private GameObject gaugeYellow;
     [SerializeField] private GameObject gaugeRed;
@@ -29,7 +29,7 @@ public class BottomCardController : MonoBehaviour
     private Vector3 origin_Position;
     private Vector3 origin_ArrowPosition;
 
-    public event Action<bool> bottomCardMoved;
+    public event Action<bool> secondCardMoved;
     
 
     private void Start()
@@ -45,8 +45,8 @@ public class BottomCardController : MonoBehaviour
         YellowBottomY = gaugeYellow.GetComponent<BoxCollider2D>().bounds.min.y;
         RedTopY = gaugeRed.GetComponent<BoxCollider2D>().bounds.max.y;
         RedBottomY = gaugeRed.GetComponent<BoxCollider2D>().bounds.min.y;
-        ArrowTopY = bottomArrow.GetComponent<BoxCollider2D>().bounds.max.y;
-        ArrowBottomY = bottomArrow.GetComponent<BoxCollider2D>().bounds.min.y;
+        ArrowTopY = secondArrow.GetComponent<BoxCollider2D>().bounds.max.y;
+        ArrowBottomY = secondArrow.GetComponent<BoxCollider2D>().bounds.min.y;
     }
     private void Update()
     {
@@ -72,7 +72,7 @@ public class BottomCardController : MonoBehaviour
         
         Collider2D collider = GetComponent<Collider2D>();
         origin_Position = transform.position;
-        origin_ArrowPosition = bottomArrow.position;
+        origin_ArrowPosition = secondArrow.position;
         if (mousePos.y >= ArrowBottomY && mousePos.y <= ArrowTopY)
         {
             isDragging = true;
@@ -80,11 +80,11 @@ public class BottomCardController : MonoBehaviour
 
             // 오브젝트와 마우스 위치 간의 오프셋 계산
             Vector3 mousePosition = Input.mousePosition;
-            mousePosition.z = Camera.main.WorldToScreenPoint(bottomCard.position).z;
+            mousePosition.z = Camera.main.WorldToScreenPoint(secondCard.position).z;
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-            mouseOffset = bottomCard.position - worldPosition;
+            mouseOffset = secondCard.position - worldPosition;
 
-            initialOffset = bottomArrow.position - bottomCard.position;
+            initialOffset = secondArrow.position - secondCard.position;
         }
         else
         {
@@ -97,19 +97,17 @@ public class BottomCardController : MonoBehaviour
         if (isDragging)
         {
             Vector3 mousePosition = Input.mousePosition;
-            mousePosition.z = Camera.main.WorldToScreenPoint(bottomCard.position).z;
+            mousePosition.z = Camera.main.WorldToScreenPoint(secondCard.position).z;
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
             // 새로운 y 위치 계산 및 제한 적용
             float newY = worldPosition.y + mouseOffset.y;
-            if (GameManager.Instance.gameState != GameManager.GameState.bet)
-            {
-                if (newY < origin_Position.y)
-                    newY = origin_Position.y;
-            }
+
+            if (newY < origin_Position.y) //밑으로 못 당기게
+                newY = origin_Position.y;
             // x, z 위치 고정
-            bottomCard.position = new Vector3(bottomCard.position.x, newY, bottomCard.position.z);
-            bottomArrow.position = bottomCard.position + initialOffset;
+            secondCard.position = new Vector3(secondCard.position.x, newY, secondCard.position.z);
+            secondArrow.position = secondCard.position + initialOffset;
         }
     }
 
@@ -129,17 +127,16 @@ public class BottomCardController : MonoBehaviour
         */
         if (transform.position.y - origin_Position.y > 0.2f)
         {
-            CompareWithGauge(bottomArrow.position.y);
+            CompareWithGauge(secondArrow.position.y);
             gameObject.SetActive(false);
-            bottomArrow.gameObject.SetActive(false);
+            secondArrow.gameObject.SetActive(false);
             Destroy(gameObject.transform.parent.gameObject);
         }
         else
         {
-            if(GameManager.Instance.gameState != GameManager.GameState.bet)
-                GameManager.Instance.IncreaseSuspicionByDragButDontDeal();
+            GameManager.Instance.IncreaseSuspicionByDragButDontDeal();
             transform.position = origin_Position;
-            bottomArrow.position = origin_ArrowPosition;
+            secondArrow.position = origin_ArrowPosition;
         }
     }
 
@@ -147,28 +144,28 @@ public class BottomCardController : MonoBehaviour
     {
         if (GameManager.Instance.gameState != GameManager.GameState.deal)
         {
-            bottomCardMoved?.Invoke(true);
+            secondCardMoved?.Invoke(true);
             return;
         }
-        GameManager.Instance.BottomDeal();
-        DealingManager.Instance.BottomSetImage();
+        GameManager.Instance.SecondDeal();
+        DealingManager.Instance.SecondSetImage();
         if (objectY >= RedBottomY)
         {
             if (objectY >= YellowBottomY && objectY <= YellowTopY)
             {
                 if (objectY >= GreenBottomY && objectY <= GreenTopY)
                 {
-                    bottomCardMoved?.Invoke(true);
+                    secondCardMoved?.Invoke(true);
                     Debug.Log("Green");
                     GameManager.Instance.IncreaseSuspicionByGauge(0);
                     return;
                 }
-                bottomCardMoved?.Invoke(true);
+                secondCardMoved?.Invoke(true);
                 Debug.Log("Yellow");
                 GameManager.Instance.IncreaseSuspicionByGauge(1);
                 return;
             }
-            bottomCardMoved?.Invoke(true);
+            secondCardMoved?.Invoke(true);
             Debug.Log("Red");
             GameManager.Instance.IncreaseSuspicionByGauge(2);
             return;

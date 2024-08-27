@@ -234,6 +234,7 @@ public class GameManager : MonoBehaviour
         DealingManager.Instance.DestroyChild();
         DealingManager.Instance.SetImage();
         DealingManager.Instance.TopNewCardCreate(true);
+        DealingManager.Instance.SecondNewCardCreate(true);
         DealingManager.Instance.BottomNewCardCreate(true);
         TopCardText.text = (CardDeck[0] % 13 + 1).ToString();
         BottomCardText.text = (CardDeck[CardDeck.Count - 1] % 13 + 1).ToString();
@@ -490,6 +491,51 @@ public class GameManager : MonoBehaviour
         // - >>>>>GetPlayerCard();
     }
 
+    public void SecondDeal()
+    {
+        CheckDealOrder();
+
+        if (gameState != GameState.deal)
+        {
+            return;
+        }
+        if (DialogManager.Instance.isDialogMiddlePriority)
+        {
+            return;
+        }
+        playerArray[dealOrder].dealtCardCount++;
+        switch (betMan.dealtCardCount)
+        {
+            case 0:
+                playerCard0[dealOrder] = CardDeck[1];
+                playerCard0Num[dealOrder] = (CardDeck[1] % 13 + 1 > 10) ? 10 : CardDeck[1] % 13 + 1;
+                playerCardSum[dealOrder] += playerCard0Num[dealOrder];
+                playerCard0Text[dealOrder].text = playerCard0Num[dealOrder].ToString();
+                break;
+            case 1:
+                playerCard1[dealOrder] = CardDeck[1];
+                playerCard1Num[dealOrder] = (CardDeck[1] % 13 + 1 > 10) ? 10 : CardDeck[1] % 13 + 1;
+                playerCardSum[dealOrder] += playerCard1Num[dealOrder];
+                playerCard1Text[dealOrder].text = playerCard1Num[dealOrder].ToString();
+                betMan.SetIsPlayerCheat(dealOrder);
+                break;
+            case 2:
+                playerCard2[dealOrder] = CardDeck[1];
+                playerCard2Num[dealOrder] = (CardDeck[1] % 13 + 1 > 10) ? 10 : CardDeck[1] % 13 + 1;
+                playerCardSum[dealOrder] += playerCard2Num[dealOrder];
+                playerCard2Text[dealOrder].text = playerCard2Num[dealOrder].ToString();
+                cheatCoroutine[dealOrder] = CheatCycle(dealOrder);
+                StartCoroutine(cheatCoroutine[dealOrder]);
+                break;
+        }
+        CardDeck.RemoveAt(1);
+        dealTimeCur = Time.time;
+        if (50 >= UnityEngine.Random.Range(0, 101)) //50% 확률로 대사 재생
+            DialogManager.Instance.TriggerNextSentence_LowPriority(dealOrder, DialogManager.TextType.recieveCard);
+        DealingManager.Instance.InstantNewCardCreate(dealOrder);
+        dealOrder++;
+        IsDealOver();
+    }
     public void BottomDeal()
     {
         CheckDealOrder();
@@ -813,6 +859,18 @@ public class GameManager : MonoBehaviour
         if (suspicionLevelCur >= suspicionLevelMax)
             return;
         suspicionLevelCur += 0.2f;
+        SetSuspicionBar();
+        if (suspicionLevelCur >= suspicionLevelMax)
+        {
+            GameOver();
+        }
+    }
+
+    public void IncreaseSuspicionByDragButDontDeal()
+    {
+        if (suspicionLevelCur >= suspicionLevelMax)
+            return;
+        suspicionLevelCur += 10f;
         SetSuspicionBar();
         if (suspicionLevelCur >= suspicionLevelMax)
         {
