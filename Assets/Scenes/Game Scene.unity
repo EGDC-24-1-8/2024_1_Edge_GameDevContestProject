@@ -1456,6 +1456,7 @@ MonoBehaviour:
   isDialogHighPriority: 0
   isDialogMiddlePriority: 0
   isDialogLowPriority: 0
+  DialogSound: {fileID: 8300000, guid: e591f5881be068d49914934c1de7ee4a, type: 3}
 --- !u!1 &300172769
 GameObject:
   m_ObjectHideFlags: 0

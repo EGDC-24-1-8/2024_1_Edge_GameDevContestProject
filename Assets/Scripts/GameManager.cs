@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int gameTurn = 0;
     //[SerializeField] private int dealtCardCount = 0; // 카드 나눠주는 턴
     [SerializeField] private int dealOrder = 0; // 현재 카드 나눠줄 플레이어 순서
-    [SerializeField] private float dealTimeCur = 0; 
+    [SerializeField] private float dealTimeCur = 0;
     [SerializeField] private float dealTimeMax = 3.5f; // 카드 제한 시간
 
     [Header("etc")]
@@ -108,11 +108,11 @@ public class GameManager : MonoBehaviour
 
     public void ChangeHoverCursor()
     {
-        if(mousePointState == MousePointState.code)
+        if (mousePointState == MousePointState.code)
         {
             Cursor.SetCursor(code_hover_cursor, new Vector2(0, 0), CursorMode.Auto);
         }
-        else if(mousePointState == MousePointState.detect)
+        else if (mousePointState == MousePointState.detect)
         {
             Cursor.SetCursor(detect_hover_cursor, new Vector2(32, 32), CursorMode.Auto);
         }
@@ -144,6 +144,7 @@ public class GameManager : MonoBehaviour
         }
         InitPlayer();
         CardDeck = InitDeck();
+        AudioManager.GetOrCreate().SetBGMVolume(0.1f);
         AudioManager.GetOrCreate().PlayBGM(BGM);
     }
 
@@ -160,7 +161,7 @@ public class GameManager : MonoBehaviour
         {
             //AudioManager.GetOrCreate().PlayEffectSound(hoverSound);
             mousePointState = MousePointState.normal;
-            Cursor.SetCursor(normal_cursor , new Vector2(0,0) , CursorMode.Auto);
+            Cursor.SetCursor(normal_cursor, new Vector2(0, 0), CursorMode.Auto);
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
@@ -170,13 +171,13 @@ public class GameManager : MonoBehaviour
                 if (codeType == 0)
                 {
 
-                    
+
                     codeType = 1;
                 }
                 else
                 {
 
-                    
+
                     codeType = 0;
                 }
                 mousePointState = MousePointState.code;
@@ -194,7 +195,7 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(isPause)
+            if (isPause)
             {
                 isPause = false;
                 Time.timeScale = 1;
@@ -208,7 +209,7 @@ public class GameManager : MonoBehaviour
 
         if (gameState == GameState.deal)
         {
-            if(DialogManager.Instance.isDialogMiddlePriority ||
+            if (DialogManager.Instance.isDialogMiddlePriority ||
                DialogManager.Instance.isDialogHighPriority)
             {
                 dealTimeCur = Time.time;
@@ -224,7 +225,7 @@ public class GameManager : MonoBehaviour
 
     public void SetStateStart()
     {
-        if(gameTurn > 2 || IngamePlayerCnt < 2)
+        if (gameTurn > 2 || IngamePlayerCnt < 2)
         {
             betMan.ResetPlayer();
             InitPlayer();
@@ -272,7 +273,7 @@ public class GameManager : MonoBehaviour
         SetTimeBarPosition();
         BottomCardText.text = (CardDeck[CardDeck.Count - 1] % 13 + 1).ToString();
     }
-    
+
     public void SetStateAfterDeal()
     {
         timeBar.gameObject.SetActive(false);
@@ -333,7 +334,7 @@ public class GameManager : MonoBehaviour
         }
         for (int i = 0; i < 4; i++)
         {
-            if(playerArray[i].isAlly)
+            if (playerArray[i].isAlly)
             {
                 int temp = UnityEngine.Random.Range(0, tempAllyPlayerDataSet.Count);
                 playerArray[i].playerData = tempAllyPlayerDataSet[temp];
@@ -381,7 +382,7 @@ public class GameManager : MonoBehaviour
 
     private void TimeBarUpdate()
     {
-        if(Time.time - dealTimeCur >= dealTimeMax)
+        if (Time.time - dealTimeCur >= dealTimeMax)
         {
             IncreaseSuspicionByDealTime();
             DialogManager.Instance.TriggerNextSentence_LowPriority(dealOrder, DialogManager.TextType.time);
@@ -485,6 +486,7 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
+        AudioManager.GetOrCreate().SetEffectVolume(1);
         AudioManager.GetOrCreate().PlayEffectSound(NormalDealingSound);
         CardDeck.Remove(CardDeck[0]);
         dealTimeCur = Time.time;
@@ -535,6 +537,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(cheatCoroutine[dealOrder]);
                 break;
         }
+        AudioManager.GetOrCreate().SetEffectVolume(1);
         AudioManager.GetOrCreate().PlayEffectSound(SecondDealingSound);
         CardDeck.RemoveAt(1);
         dealTimeCur = Time.time;
@@ -581,6 +584,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(cheatCoroutine[dealOrder]);
                 break;
         }
+        AudioManager.GetOrCreate().SetEffectVolume(1);
         AudioManager.GetOrCreate().PlayEffectSound(BottomDealingSound);
         CardDeck.RemoveAt(CardDeck.Count - 1);
         dealTimeCur = Time.time;
@@ -727,9 +731,30 @@ public class GameManager : MonoBehaviour
                 Debug.Log("게임 끝!");
             });
         }
-            
     }
 
+    IEnumerator GameOverByMissDetect(int idx)
+    {
+        yield return StartCoroutine(DialogManager.Instance.NextSentence_HighPriority(idx, DialogManager.TextType.missDetected));
+        GameOver();
+    }
+
+    IEnumerator GameOverBySuspicion()
+    {
+        if(gameState == GameState.deal)
+            yield return StartCoroutine(DialogManager.Instance.NextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion));
+        else
+        {
+            for(int i = 0; i < playerArray.Length; i++)
+            {
+                if (betMan.isEliminated[i] || playerArray[i].isAlly)
+                    continue;
+                yield return StartCoroutine(DialogManager.Instance.NextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion));
+                break;
+            }
+        }
+        GameOver();
+    }
 
 
     #region Cheat
@@ -832,7 +857,9 @@ public class GameManager : MonoBehaviour
             {
                 return;
             }
+            AudioManager.GetOrCreate().SetEffectVolume(1);
             AudioManager.GetOrCreate().PlayEffectSound(DetectSound);
+            AudioManager.GetOrCreate().SetEffectVolume(0.2f);
             if (playerIsDetectable[playerIdx] == true)
             {
                 DialogManager.Instance.TriggerNextSentence_HighPriority(playerIdx, DialogManager.TextType.detected);
@@ -846,8 +873,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                DialogManager.Instance.TriggerNextSentence_HighPriority(playerIdx, DialogManager.TextType.missDetected);
-                GameOver();
+                StartCoroutine(GameOverByMissDetect(playerIdx));
             }
         }
     }
@@ -872,7 +898,7 @@ public class GameManager : MonoBehaviour
         SetSuspicionBar();
         if (suspicionLevelCur >= suspicionLevelMax)
         {
-            GameOver();
+            StartCoroutine(GameOverBySuspicion());
         }
     }
 
@@ -884,7 +910,7 @@ public class GameManager : MonoBehaviour
         SetSuspicionBar();
         if (suspicionLevelCur >= suspicionLevelMax)
         {
-            GameOver();
+            StartCoroutine(GameOverBySuspicion());
         }
     }
 
@@ -908,7 +934,7 @@ public class GameManager : MonoBehaviour
         SetSuspicionBar();
         if (suspicionLevelCur >= suspicionLevelMax)
         {
-            GameOver();
+            StartCoroutine(GameOverBySuspicion());
         }
     }
 }

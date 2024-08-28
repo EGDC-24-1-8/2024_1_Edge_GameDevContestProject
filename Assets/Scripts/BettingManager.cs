@@ -226,11 +226,20 @@ public class BettingManager : MonoBehaviour
         if (playerArray[playerIdx].playerBettingMoney == maxBet)
         {
             if (roundBet >= bigBetSoundCriteria)
+            {
+                AudioManager.GetOrCreate().SetEffectVolume(0.8f);
                 AudioManager.GetOrCreate().PlayEffectSound(BigBetSound);
+            }
             else if (roundBet >= middleBetSoundCriteria)
+            {
+                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
                 AudioManager.GetOrCreate().PlayEffectSound(MiddleBetSound);
+            }
             else
+            {
+                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
                 AudioManager.GetOrCreate().PlayEffectSound(SmallBetSound);
+            }
             playerArray[playerIdx].playerBettingMoney += roundBet;
             playerArray[playerIdx].playerMoney -= roundBet;
             pot += roundBet;
@@ -240,11 +249,20 @@ public class BettingManager : MonoBehaviour
         else
         {
             if (maxBet - playerArray[playerIdx].playerBettingMoney >= bigBetSoundCriteria)
+            {
+                AudioManager.GetOrCreate().SetEffectVolume(0.8f);
                 AudioManager.GetOrCreate().PlayEffectSound(BigBetSound);
+            }
             else if (maxBet - playerArray[playerIdx].playerBettingMoney >= middleBetSoundCriteria)
+            {
+                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
                 AudioManager.GetOrCreate().PlayEffectSound(MiddleBetSound);
+            }
             else
+            {
+                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
                 AudioManager.GetOrCreate().PlayEffectSound(SmallBetSound);
+            }
             playerArray[playerIdx].playerMoney += playerArray[playerIdx].playerBettingMoney;
             pot -= playerArray[playerIdx].playerBettingMoney;
             playerArray[playerIdx].playerBettingMoney = maxBet;
@@ -261,11 +279,20 @@ public class BettingManager : MonoBehaviour
         endOrder = playerIdx;
 
         if (roundBet >= bigBetSoundCriteria)
+        {
+            AudioManager.GetOrCreate().SetEffectVolume(0.8f);
             AudioManager.GetOrCreate().PlayEffectSound(BigBetSound);
+        }
         else if (roundBet >= middleBetSoundCriteria)
+        {
+            AudioManager.GetOrCreate().SetEffectVolume(0.3f);
             AudioManager.GetOrCreate().PlayEffectSound(MiddleBetSound);
+        }
         else
+        {
+            AudioManager.GetOrCreate().SetEffectVolume(0.3f);
             AudioManager.GetOrCreate().PlayEffectSound(SmallBetSound);
+        }
         playerArray[playerIdx].playerBettingMoney += roundBet;
         playerArray[playerIdx].playerMoney -= roundBet;
         pot += roundBet;
@@ -295,6 +322,7 @@ public class BettingManager : MonoBehaviour
             }
         }
 
+        AudioManager.GetOrCreate().SetEffectVolume(1f);
         AudioManager.GetOrCreate().PlayEffectSound(FoldSound);
         isFold[playerIdx] = true;
         GameManager.Instance.foldPlayerCnt++;
@@ -384,6 +412,7 @@ public class BettingManager : MonoBehaviour
             prize = pot / winner.Count;
         for (; winner.Count > 0; winner.RemoveAt(0))
             playerArray[winner[0]].playerMoney += prize;
+        AudioManager.GetOrCreate().SetEffectVolume(1f);
         AudioManager.GetOrCreate().PlayEffectSound(PrizeSound);
         UpdateUIText();
         for (int i = 0; i < playerArray.Length; i++)
