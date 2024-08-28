@@ -44,10 +44,10 @@ public class DialogManager : MonoBehaviour
     public bool isDialogHighPriority = false;
     public bool isDialogMiddlePriority = false;
     public bool isDialogLowPriority = false;
-    //public event Action DialogHighPriorityCreated;
-    //public event Action DialogMiddlePriorityCreated;
-    //public event Action DialogLowPriorityCreated;
     public Coroutine CurrentCoroutine;
+
+    [Header("SoundArea")]
+    [SerializeField] private AudioClip DialogSound;
 
     private void Awake()
     {
@@ -150,11 +150,7 @@ public class DialogManager : MonoBehaviour
     #region Wait For Coroutine To End
     public IEnumerator WaitForHighDialog()
     {
-        if (isDialogHighPriority)
-        {
-            yield return new WaitUntil(() => isDialogHighPriority == false); //High Priority의 코루틴이 실행중일 때, 종료될 때까지 기다리는 코루틴
-            yield return new WaitForSeconds(1f);
-        }
+        yield return new WaitUntil(() => isDialogHighPriority == false); //High Priority의 코루틴이 실행중일 때, 종료될 때까지 기다리는 코루틴
     }
 
     public IEnumerator WaitForMiddleDialog()
@@ -190,6 +186,7 @@ public class DialogManager : MonoBehaviour
 
         while (temp < TextLen)
         {
+            AudioManager.GetOrCreate().PlayEffectSound(DialogSound);
             DialogString += TextData[now_Sentence][temp];
             temp++;
 
@@ -229,6 +226,7 @@ public class DialogManager : MonoBehaviour
 
         while (temp < TextLen)
         {
+            AudioManager.GetOrCreate().PlayEffectSound(DialogSound);
             DialogString += TextData[now_Sentence][temp];
             temp++;
 
@@ -258,6 +256,7 @@ public class DialogManager : MonoBehaviour
         int temp = 0;
         while (temp < TextLen)
         {
+            AudioManager.GetOrCreate().PlayEffectSound(DialogSound);
             DialogString += TextData[now_Sentence][temp];
             temp++;
 

@@ -79,10 +79,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float dealTimeMax = 3.5f; // 카드 제한 시간
 
     [Header("etc")]
-    [SerializeField] private AudioSource BGM;
+    [SerializeField] private AudioClip BGM;
     [SerializeField] private AudioClip NormalDealingSound;
     [SerializeField] private AudioClip SecondDealingSound;
     [SerializeField] private AudioClip BottomDealingSound;
+    [SerializeField] private AudioClip DetectSound;
     [SerializeField] private Slider suspicionBar;
     [SerializeField] private float suspicionLevelMax = 100f;
     [SerializeField] private float suspicionLevelCur = 0f;
@@ -143,7 +144,7 @@ public class GameManager : MonoBehaviour
         }
         InitPlayer();
         CardDeck = InitDeck();
-        AudioManager.GetOrCreate(BGM, null);
+        AudioManager.GetOrCreate().PlayBGM(BGM);
     }
 
     void Start()
@@ -831,9 +832,10 @@ public class GameManager : MonoBehaviour
             {
                 return;
             }
+            AudioManager.GetOrCreate().PlayEffectSound(DetectSound);
             if (playerIsDetectable[playerIdx] == true)
             {
-                DialogManager.Instance.TriggerNextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion);
+                DialogManager.Instance.TriggerNextSentence_HighPriority(playerIdx, DialogManager.TextType.detected);
                 EliminatePlayer(playerIdx , 1);
                 playerIsDetectable[playerIdx] = false;
                 Debug.Log("GOTCHA!");
