@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Charlotte
   m_EditorClassIdentifier: 
   playerMoney: 150
+  playerSprite: {fileID: 8832667195283780996, guid: 179c60be42e979443af8d72af6ef73b2, type: 3}
   playerBettingMoney: 0
   playerName: "\uC0E4\uB97C\uB85C\uD2B8"
   highPreference: 15

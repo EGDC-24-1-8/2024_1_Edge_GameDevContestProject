@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Carl
   m_EditorClassIdentifier: 
   playerMoney: 100
+  playerSprite: {fileID: 7435125096931945971, guid: bc7a320f3fdb8fa44865513eb91ad874, type: 3}
   playerBettingMoney: 0
   playerName: "\uCE7C"
   highPreference: 15

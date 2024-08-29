@@ -339,7 +339,7 @@ public class GameManager : MonoBehaviour
                 int temp = UnityEngine.Random.Range(0, tempAllyPlayerDataSet.Count);
                 playerArray[i].playerData = tempAllyPlayerDataSet[temp];
                 playerArray[i].initData();
-                tempEnemyPlayerDataSet.RemoveAt(temp);
+                tempAllyPlayerDataSet.RemoveAt(temp);
             }
             else
             {
@@ -348,6 +348,10 @@ public class GameManager : MonoBehaviour
                 playerArray[i].initData();
                 tempEnemyPlayerDataSet.RemoveAt(temp);
             }
+            GameObject newPlayer = Instantiate(playerArray[i].playerSprite, playerArray[i].transform);
+            playerCard0Obj[i] = newPlayer.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).gameObject;
+            playerCard1Obj[i] = newPlayer.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(1).gameObject;
+            playerCard2Obj[i] = newPlayer.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(2).gameObject;
         }
     }
 

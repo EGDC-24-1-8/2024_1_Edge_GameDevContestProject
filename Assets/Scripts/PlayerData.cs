@@ -11,6 +11,9 @@ public class PlayerData : ScriptableObject
     private int playerMoney;
     public int PlayerMoney { get { return playerMoney; } }
 
+    [SerializeField]
+    private GameObject playerSprite;
+    public GameObject PlayerSprite { get { return playerSprite; } }
 
 
     [SerializeField]

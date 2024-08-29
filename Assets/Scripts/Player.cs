@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public PlayerData playerData;
-    public Image playerImage;
+    public GameObject playerSprite;
     public int playerMoney;
     public int playerBettingMoney;
     public string playerName;
@@ -27,13 +27,14 @@ public class Player : MonoBehaviour
     public string[] textDataSuspicion;
 
 
-    public bool isAlly = false; 
+    public bool isAlly; 
 
     //public bool isCheat = false;
 
     public void initData()
     {
         playerMoney = playerData.PlayerMoney;
+        playerSprite = playerData.PlayerSprite;
         playerBettingMoney = playerData.PlayerBettingMoney;
         playerName = playerData.PlayerName;
         highPreference = playerData.HighPreference;
@@ -61,9 +62,9 @@ public class Player : MonoBehaviour
     {
         GameManager.Instance.playerIsDetectable[idx] = true;
         this.GetComponentInChildren<Animator>().SetTrigger("doCheat");
-        //playerImage.color = Color.red;
+        //playerSprite.color = Color.red;
         yield return new WaitForSeconds(2f);
-        //playerImage.color = Color.white;
+        //playerSprite.color = Color.white;
         GameManager.Instance.playerIsDetectable[idx] = false;
     }
 }

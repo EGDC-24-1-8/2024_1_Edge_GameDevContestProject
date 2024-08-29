@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Oscar
   m_EditorClassIdentifier: 
   playerMoney: 600
+  playerSprite: {fileID: 7804749610261145100, guid: b1fbdc0c28dbde24c87b93b52a38f498, type: 3}
   playerBettingMoney: 0
   playerName: "\uC624\uC2A4\uCE74"
   highPreference: 15

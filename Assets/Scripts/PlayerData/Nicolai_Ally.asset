@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Nicolai_Ally
   m_EditorClassIdentifier: 
   playerMoney: 300
+  playerSprite: {fileID: 3152094518459181123, guid: f23e53b0479c8204baf5df4a13a7e657, type: 3}
   playerBettingMoney: 0
   playerName: "\uB2C8\uCF5C\uB77C\uC774"
   highPreference: 15
