@@ -28,6 +28,17 @@ public class BettingManager : MonoBehaviour
     [SerializeField] private Text[] playerSeedText = null;
     [SerializeField] private Text winCriteriaText = null;
 
+    [Header("Betting Coin Anim")]
+    [SerializeField] private GameObject[] coinObjectArray = null;
+    [SerializeField] private GameObject[] instantBetObjectArray = null;
+    [SerializeField] private Transform[] coinSpawnPositionArray = null;
+    [SerializeField] private GameObject potObject = null;
+    [SerializeField] private GameObject prizeObject = null;
+    [SerializeField] private GameObject casinoMoneyObject = null;
+    [SerializeField] private Sprite[] potSpriteArray = null;
+    [SerializeField] private int bigPotCriteria = 150;
+    [SerializeField] private int middlePotCriteria = 100;
+
     [Header("Betting Amount")]
     [SerializeField] private int ante = 10; //참여금
     [SerializeField] private int defaultBet = 10; //기본 베팅 단위
@@ -139,21 +150,19 @@ public class BettingManager : MonoBehaviour
             yield return StartCoroutine(bet(i));
             switch (betState)
             {
-                //TODO: 여기서 코루틴 불러서 Dialog 나오는 거랑 여기서 WaitForSeconds 하는 거랑 동기화가 안 됨.
-                //베팅하고 -> Dialog 나오고 -> 0.5초 기다리고 -> 다음 사람 베팅하고... 이런 식으로 만들고 싶음
                 case BetState.call:
                     DialogManager.Instance.TriggerNextSentence_MiddlePriority(i, DialogManager.TextType.call);
-                    //yield return StartCoroutine(DialogManager.Instance.NextSentence_MiddlePriority(i, DialogManager.TextType.call));
                     break;
                 case BetState.raise:
                     DialogManager.Instance.TriggerNextSentence_MiddlePriority(i, DialogManager.TextType.raise);
-                    //yield return StartCoroutine(DialogManager.Instance.NextSentence_MiddlePriority(i, DialogManager.TextType.raise));
                     break;
                 case BetState.fold:
                     DialogManager.Instance.TriggerNextSentence_MiddlePriority(i, DialogManager.TextType.fold);
-                    //yield return StartCoroutine(DialogManager.Instance.NextSentence_MiddlePriority(i, DialogManager.TextType.fold));
                     break;
             }
+            UpdatePotSprite(playerArray[i].playerMoney, coinObjectArray[i]);
+            Debug.Log(playerArray[i].playerMoney);
+            UpdatePotSprite(pot, potObject);
             yield return StartCoroutine(DialogManager.Instance.WaitForMiddleDialog());
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
         }
@@ -166,11 +175,26 @@ public class BettingManager : MonoBehaviour
     {
         if (isEliminated[playerIdx])
             return;
+        if (ante >= bigBetSoundCriteria)
+        {
+            BigBet(playerIdx);
+        }
+        else if (ante >= middleBetSoundCriteria)
+        {
+            MiddleBet(playerIdx);
+        }
+        else
+        {
+            SmallBet(playerIdx);
+        }
         maxBet = ante;
         playerArray[playerIdx].playerBettingMoney += ante;
         playerArray[playerIdx].playerMoney -= ante;
         pot += ante;
         UpdateUIText();
+        UpdatePotSprite(playerArray[playerIdx].playerMoney, coinObjectArray[playerIdx]);
+        UpdatePotSprite(casinoMoney, casinoMoneyObject);
+        UpdatePotSprite(pot, potObject);
     }
 
     public IEnumerator bet(int playerIdx)
@@ -227,18 +251,15 @@ public class BettingManager : MonoBehaviour
         {
             if (roundBet >= bigBetSoundCriteria)
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.8f);
-                AudioManager.GetOrCreate().PlayEffectSound(BigBetSound);
+                BigBet(playerIdx);
             }
             else if (roundBet >= middleBetSoundCriteria)
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
-                AudioManager.GetOrCreate().PlayEffectSound(MiddleBetSound);
+                MiddleBet(playerIdx);
             }
             else
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
-                AudioManager.GetOrCreate().PlayEffectSound(SmallBetSound);
+                SmallBet(playerIdx);
             }
             playerArray[playerIdx].playerBettingMoney += roundBet;
             playerArray[playerIdx].playerMoney -= roundBet;
@@ -250,18 +271,15 @@ public class BettingManager : MonoBehaviour
         {
             if (maxBet - playerArray[playerIdx].playerBettingMoney >= bigBetSoundCriteria)
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.8f);
-                AudioManager.GetOrCreate().PlayEffectSound(BigBetSound);
+                BigBet(playerIdx);
             }
             else if (maxBet - playerArray[playerIdx].playerBettingMoney >= middleBetSoundCriteria)
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
-                AudioManager.GetOrCreate().PlayEffectSound(MiddleBetSound);
+                MiddleBet(playerIdx);
             }
             else
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
-                AudioManager.GetOrCreate().PlayEffectSound(SmallBetSound);
+                SmallBet(playerIdx);
             }
             playerArray[playerIdx].playerMoney += playerArray[playerIdx].playerBettingMoney;
             pot -= playerArray[playerIdx].playerBettingMoney;
@@ -280,18 +298,15 @@ public class BettingManager : MonoBehaviour
 
         if (roundBet >= bigBetSoundCriteria)
         {
-            AudioManager.GetOrCreate().SetEffectVolume(0.8f);
-            AudioManager.GetOrCreate().PlayEffectSound(BigBetSound);
+            BigBet(playerIdx);
         }
         else if (roundBet >= middleBetSoundCriteria)
         {
-            AudioManager.GetOrCreate().SetEffectVolume(0.3f);
-            AudioManager.GetOrCreate().PlayEffectSound(MiddleBetSound);
+            MiddleBet(playerIdx);
         }
         else
         {
-            AudioManager.GetOrCreate().SetEffectVolume(0.3f);
-            AudioManager.GetOrCreate().PlayEffectSound(SmallBetSound);
+            SmallBet(playerIdx);
         }
         playerArray[playerIdx].playerBettingMoney += roundBet;
         playerArray[playerIdx].playerMoney -= roundBet;
@@ -329,6 +344,43 @@ public class BettingManager : MonoBehaviour
 
         CheckWinnerByFold();
         UpdateUIText();
+    }
+
+    private void BigBet(int playerIdx)
+    {
+        GameObject newCoin = Instantiate(instantBetObjectArray[playerIdx], coinSpawnPositionArray[playerIdx]);
+        newCoin.SetActive(true);
+        newCoin.GetComponent<Animator>().SetTrigger("DoBigBet");
+        AudioManager.GetOrCreate().SetEffectVolume(0.8f);
+        AudioManager.GetOrCreate().PlayEffectSound(BigBetSound);
+    }
+    private void MiddleBet(int playerIdx)
+    {
+        GameObject newCoin = Instantiate(instantBetObjectArray[playerIdx], coinSpawnPositionArray[playerIdx]);
+        newCoin.SetActive(true);
+        newCoin.GetComponent<Animator>().SetTrigger("DoMiddleBet");
+        AudioManager.GetOrCreate().SetEffectVolume(0.3f);
+        AudioManager.GetOrCreate().PlayEffectSound(MiddleBetSound);
+    }
+    private void SmallBet(int playerIdx)
+    {
+        GameObject newCoin = Instantiate(instantBetObjectArray[playerIdx], coinSpawnPositionArray[playerIdx]);
+        newCoin.SetActive(true);
+        newCoin.GetComponent<Animator>().SetTrigger("DoSmallBet");
+        AudioManager.GetOrCreate().SetEffectVolume(0.3f);
+        AudioManager.GetOrCreate().PlayEffectSound(SmallBetSound);
+    }
+
+    private void UpdatePotSprite(int amount, GameObject Pot)
+    {
+        if (amount > bigPotCriteria)
+            Pot.GetComponent<SpriteRenderer>().sprite = potSpriteArray[2]; //big pot
+        else if (amount > middlePotCriteria)
+            Pot.GetComponent<SpriteRenderer>().sprite = potSpriteArray[1]; //middle pot
+        else if (amount > 0)
+            Pot.GetComponent<SpriteRenderer>().sprite = potSpriteArray[0]; //small pot
+        else
+            Pot.GetComponent<SpriteRenderer>().sprite = null; //no bet yet
     }
     #endregion
 
@@ -410,8 +462,31 @@ public class BettingManager : MonoBehaviour
         DialogManager.Instance.TriggerNextSentence_MiddlePriority(winner[UnityEngine.Random.Range(0, winner.Count)], DialogManager.TextType.win);
         if (winner.Count != 0)
             prize = pot / winner.Count;
+        UpdatePotSprite(prize, prizeObject);
         for (; winner.Count > 0; winner.RemoveAt(0))
+        {
+            GameObject newPrize = Instantiate(prizeObject, potObject.transform);
+            newPrize.SetActive(true);
+            switch(winner[0])
+            {
+                case 0:
+                    newPrize.GetComponent<Animator>().SetTrigger("DoPrize1");
+                    break;
+                case 1:
+                    newPrize.GetComponent<Animator>().SetTrigger("DoPrize2");
+                    break;
+                case 2:
+                    newPrize.GetComponent<Animator>().SetTrigger("DoPrize3");
+                    break;
+                case 3:
+                    newPrize.GetComponent<Animator>().SetTrigger("DoPrize4");
+                    break;
+            }
             playerArray[winner[0]].playerMoney += prize;
+            UpdatePotSprite(playerArray[winner[0]].playerMoney, coinObjectArray[winner[0]]);
+        }
+        pot = 0;
+        UpdatePotSprite(pot, potObject);
         AudioManager.GetOrCreate().SetEffectVolume(1f);
         AudioManager.GetOrCreate().PlayEffectSound(PrizeSound);
         UpdateUIText();
@@ -452,8 +527,10 @@ public class BettingManager : MonoBehaviour
                 isEliminated[idx] = true;
                 isFold[idx] = true;
                 casinoMoney += playerArray[idx].playerMoney;
-                
+                UpdatePotSprite(casinoMoney, casinoMoneyObject);
+                UpdatePotSprite(pot, potObject);
                 playerArray[idx].playerMoney = 0;
+                UpdatePotSprite(playerArray[idx].playerMoney, coinObjectArray[idx]);
                 break;
             default:
                 Debug.Log("-");

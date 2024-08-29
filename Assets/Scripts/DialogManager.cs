@@ -88,6 +88,7 @@ public class DialogManager : MonoBehaviour
     #region Trigger Coroutine
     public void TriggerNextSentence_HighPriority(int playerIdx, TextType type)
     {
+        playerArray = GameManager.Instance.playerArray;
         //DialogHighPriorityCreated?.Invoke();                  //이벤트 발생시키고
         if (isDialogHighPriority)
         {
@@ -109,6 +110,7 @@ public class DialogManager : MonoBehaviour
 
     public void TriggerNextSentence_MiddlePriority(int playerIdx, TextType type)
     {
+        playerArray = GameManager.Instance.playerArray;
         //DialogMiddlePriorityCreated?.Invoke();
         if (isDialogHighPriority)
         {
@@ -129,6 +131,7 @@ public class DialogManager : MonoBehaviour
 
     public void TriggerNextSentence_LowPriority(int playerIdx, TextType type)
     {
+        playerArray = GameManager.Instance.playerArray;
         //DialogLowPriorityCreated?.Invoke();
         if (isDialogHighPriority)
         {
