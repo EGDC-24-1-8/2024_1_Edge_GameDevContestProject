@@ -7,7 +7,7 @@ public class CutSceneManager : MonoBehaviour
 {
     [Header("Cutscene Elements")]
     public Image displayImage;
-    public TextMeshProUGUI displayText;
+    public Text displayText;
     public Button nextButton;
 
     [Header("Cutscene Content")]
@@ -68,7 +68,7 @@ public class CutSceneManager : MonoBehaviour
         foreach (char letter in text.ToCharArray())
         {
             displayText.text += letter;
-            yield return new WaitForSeconds(0.1f); 
+            yield return new WaitForSeconds(0.03f); 
         }
     }
 
