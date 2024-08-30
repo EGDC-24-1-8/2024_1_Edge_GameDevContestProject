@@ -1,0 +1,80 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System.Collections;
+
+public class CutSceneManager : MonoBehaviour
+{
+    [Header("Cutscene Elements")]
+    public Image displayImage;
+    public TextMeshProUGUI displayText;
+    public Button nextButton;
+
+    [Header("Cutscene Content")]
+    public Sprite[] images;       //이미지 배열
+    [TextArea(3, 10)]
+    public string[] dialogue;     //텍스트 배열
+
+    private int currentIndex = 0; //컷씬 인덱스
+    private Coroutine typingCoroutine;
+
+    void Start()
+    {
+        nextButton.onClick.AddListener(ShowNext);
+        UpdateCutscene();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ShowNext();
+        }
+    }
+
+    void ShowNext()
+    {
+        if (currentIndex < images.Length - 1)
+        {
+            currentIndex++;
+            UpdateCutscene();
+        }
+        else
+        {
+            ChangeScene();
+        }
+    }
+
+    void UpdateCutscene()
+    {
+        if (currentIndex == images.Length - 1)
+        {
+            nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "END";
+        }
+
+        displayImage.sprite = images[currentIndex];
+
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+        typingCoroutine = StartCoroutine(TypeText(dialogue[currentIndex]));
+    }
+
+    IEnumerator TypeText(string text)
+    {
+        displayText.text = ""; 
+
+        foreach (char letter in text.ToCharArray())
+        {
+            displayText.text += letter;
+            yield return new WaitForSeconds(0.1f); 
+        }
+    }
+
+    //게임 씬으로 전환
+    void ChangeScene()
+    {
+        Debug.Log("Change to game scene.");
+    }
+}
