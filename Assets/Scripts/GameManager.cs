@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameState gameState;
     [SerializeField] public bool isPause = false;
     [SerializeField] public MousePointState mousePointState = MousePointState.normal;
+    //[SerializeField] public InputField inputDay;
     //Card UI
     [Header("Card UI")]
     [SerializeField] private Text[] playerCard0Text;
@@ -146,6 +147,11 @@ public class GameManager : MonoBehaviour
         CardDeck = InitDeck();
         AudioManager.GetOrCreate().SetBGMVolume(0.1f);
         AudioManager.GetOrCreate().PlayBGM(BGM);
+        PlayerPrefs.SetInt("Day", 1); //이거 나중에 지울 거임 이거 안 하니까 QA할 때 날짜가 앞으로 돌릴 수가 없음 QA용 임시 코드
+        if(PlayerPrefs.HasKey("Day"))
+            gameDay = PlayerPrefs.GetInt("Day");
+        else
+            gameDay = 1;
     }
 
     void Start()
@@ -227,11 +233,12 @@ public class GameManager : MonoBehaviour
     {
         if (gameTurn > 2 || IngamePlayerCnt < 2)
         {
-            betMan.ResetPlayer();
+            gameDay++;
+            PlayerPrefs.SetInt("Day", gameDay);
+            betMan.ResetPlayer(); //여기부터
             InitPlayer();
             gameTurn = 0;
-            gameDay++;
-            IngamePlayerCnt = 4;
+            IngamePlayerCnt = 4; //여기까지 싹다 날리고 컷신으로 넘길 거임
         }
         GameDayText.text = "Day " + gameDay;
         GameTurnText.text = "Turn " + (gameTurn + 1);

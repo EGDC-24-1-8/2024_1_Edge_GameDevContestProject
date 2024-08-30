@@ -386,6 +386,8 @@ public class BettingManager : MonoBehaviour
 
     public void SetIsPlayerCheat(int playerIdx)
     {
+        if (PlayerPrefs.GetInt("Day") == 1) //1일차에는 아무도 속이지 않음
+            return;
         if ((playerArray[playerIdx].dealtCardCount == 2
             && (playerCardSum[playerIdx] > 6) // 너무 낮을 때는 cheat 없이 fold하도록
             && (playerCardSum[playerIdx] < 11 || 16 < playerCardSum[playerIdx]))
@@ -459,7 +461,8 @@ public class BettingManager : MonoBehaviour
     public void CalculateResult(List<int> playerIdx) //winner에게 prize 전달, 
     {
         isBetOver = true;
-        DialogManager.Instance.TriggerNextSentence_MiddlePriority(winner[UnityEngine.Random.Range(0, winner.Count)], DialogManager.TextType.win);
+        if (winner.Count != 0)
+            DialogManager.Instance.TriggerNextSentence_MiddlePriority(winner[UnityEngine.Random.Range(0, winner.Count)], DialogManager.TextType.win);
         if (winner.Count != 0)
             prize = pot / winner.Count;
         UpdatePotSprite(prize, prizeObject);
@@ -545,6 +548,8 @@ public class BettingManager : MonoBehaviour
     {
         for(int i = 0; i < 4; i++)
         {
+            foreach (Transform child in playerArray[i].transform)
+                Destroy(child.gameObject);
             isEliminated[i] = false;
             isFold[i] = false;
             UpdateUIText();
