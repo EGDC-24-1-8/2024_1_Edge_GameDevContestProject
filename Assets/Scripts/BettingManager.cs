@@ -36,8 +36,7 @@ public class BettingManager : MonoBehaviour
     [SerializeField] private GameObject prizeObject = null;
     [SerializeField] private GameObject casinoMoneyObject = null;
     [SerializeField] private Sprite[] potSpriteArray = null;
-    [SerializeField] private int bigPotCriteria = 150;
-    [SerializeField] private int middlePotCriteria = 100;
+    [SerializeField] private int[] potSpriteCriteria = null;
 
     [Header("Betting Amount")]
     [SerializeField] private int ante = 10; //Âü¿©±Ý
@@ -68,7 +67,7 @@ public class BettingManager : MonoBehaviour
     [SerializeField] public bool[] isEliminated = { false, false, false, false };
 
     [SerializeField] public bool isBetOver = false;
-    [SerializeField] public bool isAllyCodedFold = false;
+    //[SerializeField] public bool isAllyCodedFold = false;
     [SerializeField] public bool isAllyCodedRaise = false;
     [SerializeField] public BetState betState;
 
@@ -207,12 +206,14 @@ public class BettingManager : MonoBehaviour
 
         if (playerArray[playerIdx].isAlly == true)
         {
+            /*
             if (isAllyCodedFold == true)
             {
                 fold(playerIdx);
                 isAllyCodedFold = false;
                 yield break;
             }
+            */
             if(isAllyCodedRaise == true)
             {
                 raise(playerIdx);
@@ -373,14 +374,16 @@ public class BettingManager : MonoBehaviour
 
     private void UpdatePotSprite(int amount, GameObject Pot)
     {
-        if (amount > bigPotCriteria)
-            Pot.GetComponent<SpriteRenderer>().sprite = potSpriteArray[2]; //big pot
-        else if (amount > middlePotCriteria)
-            Pot.GetComponent<SpriteRenderer>().sprite = potSpriteArray[1]; //middle pot
-        else if (amount > 0)
-            Pot.GetComponent<SpriteRenderer>().sprite = potSpriteArray[0]; //small pot
-        else
-            Pot.GetComponent<SpriteRenderer>().sprite = null; //no bet yet
+
+        for(int i = 0; i < potSpriteArray.Length; i++)
+        {
+            if (amount > potSpriteCriteria[i])
+            {
+                Pot.GetComponent<SpriteRenderer>().sprite = potSpriteArray[i];
+                return;
+            }
+            Pot.GetComponent<SpriteRenderer>().sprite = null;
+        }
     }
     #endregion
 

@@ -42,7 +42,6 @@ public class PlayerData : ScriptableObject
     private string[] textDataStart;
     public string[] TextDataStart { get { return textDataStart; } }
 
-
     [SerializeField]
     private string[] textDataRecieveCard;
     public string[] TextDataRecieveCard { get { return textDataRecieveCard; } }

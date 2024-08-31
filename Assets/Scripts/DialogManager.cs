@@ -11,6 +11,7 @@ public class DialogManager : MonoBehaviour
 
     public enum TextType
     {
+        preGame,
         start,
         recieveCard,
         call,
@@ -39,6 +40,7 @@ public class DialogManager : MonoBehaviour
     public bool isEnd = false;
 
     public GameObject TextPanel;
+    public GameObject WhoIsSayingPanel;
     public Player[] playerArray = null;
 
     public bool isDialogHighPriority = false;
@@ -200,7 +202,6 @@ public class DialogManager : MonoBehaviour
             DialogText.text = DialogString;
             yield return new WaitForSeconds(delay);
         }
-        Debug.Log("High Dialog " + playerIdx);
         isDialogHighPriority = false;
     }
 
@@ -244,7 +245,8 @@ public class DialogManager : MonoBehaviour
             DialogText.text = DialogString;
             yield return new WaitForSeconds(delay);
         }
-        Debug.Log("Middle Dialog " + playerIdx);
+        if (type == TextType.start)
+            GameManager.Instance.SetStateDeal();
         isDialogMiddlePriority = false;
     }
 
@@ -278,7 +280,6 @@ public class DialogManager : MonoBehaviour
             DialogText.text = DialogString;
             yield return new WaitForSeconds(delay);
         }
-        Debug.Log("Low Dialog " + playerIdx);
         isDialogLowPriority = false;
     }
     #endregion

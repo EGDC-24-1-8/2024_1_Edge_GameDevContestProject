@@ -19,6 +19,8 @@ MonoBehaviour:
   highPreference: 15
   lowPreference: 10
   cheatFrequency: 0
+  textDataPreGame:
+  - "\uC774 \uAC8C\uC784\uB9CC \uD558\uACE0 \uC9D1\uC5D0 \uAC00\uC57C\uACA0\uC5B4."
   textDataStart:
   - "\uC88B\uC544, \uC2DC\uC791\uD558\uC9C0."
   - "\uC2DC\uC791\uD558\uC790\uACE0."

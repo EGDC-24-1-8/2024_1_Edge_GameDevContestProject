@@ -61,7 +61,7 @@ public class DealingManager : MonoBehaviour
             Quaternion.identity, 
             topCardSpawnPosition.transform);
 
-        Debug.Log("new Top Card Created");
+        //Debug.Log("new Top Card Created");
         newCard.SetActive(true);
         newCard.GetComponent<TopCardController>().TopCardMoved += TopNewCardCreate;
     }
@@ -73,7 +73,7 @@ public class DealingManager : MonoBehaviour
             Quaternion.identity,
             secondCardSpawnPosition.transform);
 
-        Debug.Log("new Second Card Created");
+        //Debug.Log("new Second Card Created");
         newCard.SetActive(true);
         Transform child1 = newCard.transform.GetChild(0);
         Transform child2 = newCard.transform.GetChild(1);
@@ -89,7 +89,7 @@ public class DealingManager : MonoBehaviour
             Quaternion.identity, 
             bottomCardSpawnPosition.transform);
 
-        Debug.Log("new Bottom Card Created");
+        //Debug.Log("new Bottom Card Created");
         newCard.SetActive(true);
         Transform child1 = newCard.transform.GetChild(0);
         Transform child2 = newCard.transform.GetChild(1);

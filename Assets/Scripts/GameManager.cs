@@ -38,6 +38,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text[] playerCard0Text;
     [SerializeField] private Text[] playerCard1Text;
     [SerializeField] private Text[] playerCard2Text;
+    [SerializeField] private Sprite[] cardFace;
+    [SerializeField] private GameObject[] playerCard0Face;
+    [SerializeField] private GameObject[] playerCard1Face;
+    [SerializeField] private GameObject[] playerCard2Face;
+    [SerializeField] private GameObject[] playerCardFacePosition;
     [SerializeField] private Text[] playerSumText;
     [SerializeField] private Text TopCardText;
     [SerializeField] private Text BottomCardText;
@@ -68,6 +73,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject[] playerCard2Obj;
 
     [Header("In Game Counts")]
+    [SerializeField] public int allyPlayerPosition;
     [SerializeField] public int foldPlayerCnt = 0;
     [SerializeField] public int IngamePlayerCnt = 4;
 
@@ -143,6 +149,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        allyPlayerPosition = UnityEngine.Random.Range(0, playerArray.Length);
         InitPlayer();
         CardDeck = InitDeck();
         AudioManager.GetOrCreate().SetBGMVolume(0.1f);
@@ -171,28 +178,8 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
+            mousePointState = MousePointState.code;
             Cursor.SetCursor(code_cursor, new Vector2(0, 0), CursorMode.Auto);
-            if (mousePointState == MousePointState.code)
-            {
-                if (codeType == 0)
-                {
-
-
-                    codeType = 1;
-                }
-                else
-                {
-
-
-                    codeType = 0;
-                }
-                mousePointState = MousePointState.code;
-            }
-            else
-            {
-                mousePointState = MousePointState.code;
-                codeType = 0;
-            }
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
@@ -240,6 +227,10 @@ public class GameManager : MonoBehaviour
             gameTurn = 0;
             IngamePlayerCnt = 4; //여기까지 싹다 날리고 컷신으로 넘길 거임
         }
+        if(gameTurn == 0)
+        {
+
+        }
         GameDayText.text = "Day " + gameDay;
         GameTurnText.text = "Turn " + (gameTurn + 1);
         gameState = GameState.start;
@@ -255,9 +246,9 @@ public class GameManager : MonoBehaviour
 
         mousePointState = MousePointState.normal;
         Cursor.SetCursor(normal_cursor, new Vector2(0, 0), CursorMode.Auto);
-        DialogManager.Instance.TriggerNextSentence_MiddlePriority(1, DialogManager.TextType.start);
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
         {
+            playerCardFacePosition[i].SetActive(false);
             betMan.entranceBet(i);
             playerIsCheat[i] = false;
             playerIsDetectable[i] = false;
@@ -268,7 +259,8 @@ public class GameManager : MonoBehaviour
             }
         }
         betMan.UpdateUIText();
-        SetStateDeal();
+        DialogManager.Instance.TriggerNextSentence_MiddlePriority(allyPlayerPosition, DialogManager.TextType.start);
+        //SetStateDeal();
     }
 
     public void SetStateDeal()
@@ -341,8 +333,9 @@ public class GameManager : MonoBehaviour
         }
         for (int i = 0; i < 4; i++)
         {
-            if (playerArray[i].isAlly)
+            if (i == allyPlayerPosition)
             {
+                playerArray[i].isAlly = true;
                 int temp = UnityEngine.Random.Range(0, tempAllyPlayerDataSet.Count);
                 playerArray[i].playerData = tempAllyPlayerDataSet[temp];
                 playerArray[i].initData();
@@ -642,7 +635,15 @@ public class GameManager : MonoBehaviour
     private void ShowCardSum()
     {
         for (int i = 0; i < 4; i++)
+        {
+            if (betMan.isFold[i])
+                continue;
+            playerCard0Face[i].GetComponent<SpriteRenderer>().sprite = cardFace[playerCard0[i]];
+            playerCard1Face[i].GetComponent<SpriteRenderer>().sprite = cardFace[playerCard1[i]];
+            playerCard2Face[i].GetComponent<SpriteRenderer>().sprite = cardFace[playerCard2[i]];
+            playerCardFacePosition[i].SetActive(true);
             playerSumText[i].text = playerCardSum[i].ToString();
+        }
     }
 
     private void ResetDealtCard()
@@ -833,14 +834,14 @@ public class GameManager : MonoBehaviour
 
 
 
-    public void CodingAllyToFold()
+    /*public void CodingAllyToFold()
     {
         betMan.isAllyCodedFold = true;
         betMan.isAllyCodedRaise = false;
-    }
+    }*/
     public void CodingAllyToRaise()
     {
-        betMan.isAllyCodedFold = false;
+        //betMan.isAllyCodedFold = false;
         betMan.isAllyCodedRaise = true;
 
     }
@@ -852,14 +853,12 @@ public class GameManager : MonoBehaviour
             {
                 return;
             }
-            if (codeType == 0)
-            {
-                CodingAllyToFold();
-            }
-            else //1
-            {
-                CodingAllyToRaise();
-            }
+            //if (codeType == 0)
+            //{
+            //    CodingAllyToFold();
+            //}
+            //else //1
+            CodingAllyToRaise();
         }
        
         if(mousePointState == MousePointState.detect)
