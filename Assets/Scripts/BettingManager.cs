@@ -293,7 +293,7 @@ public class BettingManager : MonoBehaviour
     public void raise(int playerIdx)
     {
         betState = BetState.raise;
-        roundBet += defaultBet;
+        roundBet *= 2;
         endOrder = playerIdx;
 
         if (roundBet >= bigBetSoundCriteria)
@@ -561,5 +561,10 @@ public class BettingManager : MonoBehaviour
             isFold[i] = false;
             UpdateUIText();
         }
+    }
+
+    public bool DayResult()
+    {
+        return casinoMoney + playerArray[GameManager.Instance.allyPlayerPosition].playerMoney >= winCriteria;
     }
 }

@@ -155,7 +155,6 @@ public class GameManager : MonoBehaviour
         CardDeck = InitDeck();
         AudioManager.GetOrCreate().SetBGMVolume(0.1f);
         AudioManager.GetOrCreate().PlayBGM(BGM);
-        PlayerPrefs.SetInt("Day", 2); //이거 나중에 지울 거임 이거 안 하니까 QA할 때 날짜가 앞으로 돌릴 수가 없음 QA용 임시 코드
         if(PlayerPrefs.HasKey("Day"))
             gameDay = PlayerPrefs.GetInt("Day");
         else
@@ -218,7 +217,7 @@ public class GameManager : MonoBehaviour
 
     public void SetStateStart()
     {
-        if (gameTurn > 2 || IngamePlayerCnt < 2)
+        /*if (gameTurn > 2 || IngamePlayerCnt < 2)
         {
             gameDay++;
             PlayerPrefs.SetInt("Day", gameDay);
@@ -227,7 +226,7 @@ public class GameManager : MonoBehaviour
             InitCardFace();
             gameTurn = 0;
             IngamePlayerCnt = 4; //여기까지 싹다 날리고 컷신으로 넘길 거임
-        }
+        }*/
         GameDayText.text = "Day " + gameDay;
         GameTurnText.text = "Turn " + (gameTurn + 1);
         gameState = GameState.start;
@@ -245,8 +244,10 @@ public class GameManager : MonoBehaviour
         Cursor.SetCursor(normal_cursor, new Vector2(0, 0), CursorMode.Auto);
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
         {
+            playerCard0Face[i].GetComponent<SpriteRenderer>().sprite = null;
+            playerCard1Face[i].GetComponent<SpriteRenderer>().sprite = null;
+            playerCard2Face[i].GetComponent<SpriteRenderer>().sprite = null;
             playerCardFacePosition[i].SetActive(false);
-            betMan.entranceBet(i);
             playerIsCheat[i] = false;
             playerIsDetectable[i] = false;
             playerArray[i].dealtCardCount = 0;
@@ -705,7 +706,50 @@ public class GameManager : MonoBehaviour
         gameTurn++;
         ResetDealtCard();
         betMan.ResetBet();
-        SetStateStart();
+        if(gameTurn > 2 || IngamePlayerCnt < 2)
+        {
+            if (betMan.DayResult())
+            {
+                DialogManager.Instance.TriggerNextSentence_HighPriority(allyPlayerPosition, DialogManager.TextType.dayWin);
+                yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
+                if (!isFade)
+                {
+                    isFade = true;
+                    Fade.Out(2.5f, () =>
+                    {
+                        Debug.Log(PlayerPrefs.GetInt("Day") + "일차 승리");
+                        PlayerPrefs.SetInt("Day", PlayerPrefs.GetInt("Day") + 1);
+                        if (PlayerPrefs.GetInt("Day") == 2)
+                        {
+                            PlayerPrefs.SetInt("CutSceneBegin", 9);
+                            PlayerPrefs.SetInt("CutSceneEnd", 12);
+                        }
+                        if (PlayerPrefs.GetInt("Day") == 3)
+                        {
+                            PlayerPrefs.SetInt("CutSceneBegin", 13);
+                            PlayerPrefs.SetInt("CutSceneEnd", 16);
+                        }
+                        SceneManager.LoadScene("CutScene");
+                    });
+                }
+            }
+            else
+            {
+                DialogManager.Instance.TriggerNextSentence_HighPriority(allyPlayerPosition, DialogManager.TextType.dayLose);
+                yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
+                if (!isFade)
+                {
+                    isFade = true;
+                    Fade.Out(2.5f, () =>
+                    {
+                        Debug.Log("2일차 패배, 즉시 재도전");
+                        SceneManager.LoadScene("Game Scene");
+                    });
+                }
+            }
+        }
+        else
+            SetStateStart();
     }
     #endregion
 

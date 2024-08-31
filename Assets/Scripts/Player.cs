@@ -25,7 +25,8 @@ public class Player : MonoBehaviour
     public string[] textDataMissDetected;
     public string[] textDataBusted;
     public string[] textDataSuspicion;
-
+    public string[] textDataDayWin;
+    public string[] textDataDayLose;
 
     public bool isAlly; 
 
@@ -51,7 +52,10 @@ public class Player : MonoBehaviour
         textDataMissDetected = playerData.TextDataMissDetected;
         textDataBusted = playerData.TextDataBusted;
         textDataSuspicion = playerData.TextDataSuspicion;
-        dealtCardCount = 0;
+        textDataDayWin = playerData.TextDataDayWin;
+        textDataDayLose = playerData.TextDataDayLose;
+
+    dealtCardCount = 0;
     }
     public void Start_DoCheat(int idx)
     {

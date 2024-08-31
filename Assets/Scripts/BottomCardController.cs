@@ -137,7 +137,8 @@ public class BottomCardController : MonoBehaviour
         }
         else
         {
-            if(GameManager.Instance.gameState != GameManager.GameState.bet)
+            if(GameManager.Instance.gameState != GameManager.GameState.bet &&
+               GameManager.Instance.gameState != GameManager.GameState.start)
                 GameManager.Instance.IncreaseSuspicionByDragButDontDeal();
             transform.position = origin_Position;
             bottomArrow.position = origin_ArrowPosition;

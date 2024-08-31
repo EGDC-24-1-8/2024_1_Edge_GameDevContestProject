@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BtnNewGame : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class BtnNewGame : MonoBehaviour
 
     void onNewGameButtonClicked()
     {
+        PlayerPrefs.SetInt("Day", 1);
+        PlayerPrefs.SetInt("CutSceneBegin", 0);
+        PlayerPrefs.SetInt("CutSceneEnd", 8);
+        SceneManager.LoadScene("CutScene");
         Debug.Log("NewGameButton is Clicked");
     }
 }

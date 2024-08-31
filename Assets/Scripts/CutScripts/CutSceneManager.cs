@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class CutSceneManager : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class CutSceneManager : MonoBehaviour
 
     void Start()
     {
+        currentIndex = PlayerPrefs.GetInt("CutSceneBegin");
         nextButton.onClick.AddListener(ShowNext);
         UpdateCutscene();
     }
@@ -34,7 +36,11 @@ public class CutSceneManager : MonoBehaviour
 
     void ShowNext()
     {
-        if (currentIndex < images.Length - 1)
+        if (currentIndex == images.Length - 1)
+        {
+            //게임 클리어
+        }
+        else if (currentIndex < PlayerPrefs.GetInt("CutSceneEnd"))
         {
             currentIndex++;
             UpdateCutscene();
@@ -47,9 +53,9 @@ public class CutSceneManager : MonoBehaviour
 
     void UpdateCutscene()
     {
-        if (currentIndex == images.Length - 1)
+        if (currentIndex == PlayerPrefs.GetInt("CutSceneEnd"))
         {
-            nextButton.GetComponentInChildren<TextMeshProUGUI>().text = "END";
+            nextButton.GetComponentInChildren<Text>().text = "END";
         }
 
         displayImage.sprite = images[currentIndex];
@@ -75,6 +81,7 @@ public class CutSceneManager : MonoBehaviour
     //게임 씬으로 전환
     void ChangeScene()
     {
+        SceneManager.LoadScene("Game Scene");
         Debug.Log("Change to game scene.");
     }
 }

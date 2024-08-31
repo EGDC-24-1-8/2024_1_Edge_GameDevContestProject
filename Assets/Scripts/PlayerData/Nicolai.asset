@@ -19,8 +19,6 @@ MonoBehaviour:
   highPreference: 15
   lowPreference: 10
   cheatFrequency: 0
-  textDataPreGame:
-  - "\uC7AC\uBBF8\uC788\uACA0\uAD70."
   textDataStart:
   - "\uC2DC\uC791\uD558\uC790\uACE0."
   - "\uC790, \uC2DC\uC791\uD558\uC9C0."
@@ -51,3 +49,7 @@ MonoBehaviour:
   - "\uB09C \uC5EC\uAE30\uAE4C\uC9C0 \uD558\uC9C0."
   textDataSuspicion:
   - "\uC548 \uB4E4\uD0AC \uC904 \uC54C\uC558\uB098?"
+  textDataDayWin:
+  - "\uC624\uB298\uC740 \uACE0\uB9D9\uAD70."
+  textDataDayLose:
+  - "\uBB34\uB2A5\uD558\uAD70."

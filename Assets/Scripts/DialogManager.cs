@@ -22,7 +22,9 @@ public class DialogManager : MonoBehaviour
         detected,
         missDetected,
         busted,
-        suspicion
+        suspicion,
+        dayWin,
+        dayLose
     };
 
     [TextArea]
@@ -172,6 +174,12 @@ public class DialogManager : MonoBehaviour
             case TextType.suspicion:
                 TextData = GameManager.Instance.playerArray[playerIdx].textDataSuspicion;
                 break;
+            case TextType.dayWin:
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataDayWin;
+                break;
+            case TextType.dayLose:
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataDayLose;
+                break;
         }
 
         now_Sentence = UnityEngine.Random.Range(0, TextData.Length);
@@ -238,7 +246,14 @@ public class DialogManager : MonoBehaviour
         }
         isDialogMiddlePriority = false;
         if (type == TextType.start)
+        {
+            for (int i = 0; i < GameManager.Instance.playerArray.Length; i++)
+            {
+                GameManager.Instance.betMan.entranceBet(i);
+                yield return new WaitForSeconds(0.5f);
+            }
             GameManager.Instance.SetStateDeal();
+        }
     }
 
     public IEnumerator NextSentence_LowPriority(int playerIdx, TextType type)

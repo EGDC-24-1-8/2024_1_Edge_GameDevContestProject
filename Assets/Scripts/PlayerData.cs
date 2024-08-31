@@ -82,4 +82,12 @@ public class PlayerData : ScriptableObject
     private string[] textDataSuspicion;
     public string[] TextDataSuspicion { get { return textDataSuspicion; } }
 
+    [SerializeField]
+    private string[] textDataDayWin;
+    public string[] TextDataDayWin { get { return textDataDayWin; } }
+
+    [SerializeField]
+    private string[] textDataDayLose;
+    public string[] TextDataDayLose { get { return textDataDayLose; } }
+
 }
