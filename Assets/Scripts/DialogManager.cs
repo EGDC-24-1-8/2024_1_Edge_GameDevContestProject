@@ -33,6 +33,7 @@ public class DialogManager : MonoBehaviour
     public int TextLen;
     public string DialogString;
     public Text DialogText;
+    public Text NameText;
     public float delay = 0.1f;
 
     public int now_Sentence = 0;
@@ -40,8 +41,7 @@ public class DialogManager : MonoBehaviour
     public bool isEnd = false;
 
     public GameObject TextPanel;
-    public GameObject WhoIsSayingPanel;
-    public Player[] playerArray = null;
+    public GameObject NamePanel;
 
     public bool isDialogHighPriority = false;
     public bool isDialogMiddlePriority = false;
@@ -64,7 +64,6 @@ public class DialogManager : MonoBehaviour
     }
     void Start()
     {
-        playerArray = GameManager.Instance.playerArray;
         TextIndex = TextData.Length;
     }
 
@@ -81,16 +80,9 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    //TODO: 여러 오류 수정
-    //하고 싶은 것: 대사별로 우선순위를 매기고 싶음.
-    //카드 받으면서 치는 대사: Low Priority, 다른 대사들이 끼어들면 끊김, 게임 플레이에 영향 안 줌
-    //시작, 베팅 등의 대사: Middle Priority, 여기부터는  게임 플레이도 멈추면서 대사를 침
-    //고발, 의심도Max시 대사: High Priority, 게임 플레이 도중 비동기적으로 발생하는 이벤트에 대한 대사
-
     #region Trigger Coroutine
     public void TriggerNextSentence_HighPriority(int playerIdx, TextType type)
     {
-        playerArray = GameManager.Instance.playerArray;
         //DialogHighPriorityCreated?.Invoke();                  //이벤트 발생시키고
         if (isDialogHighPriority)
         {
@@ -112,8 +104,6 @@ public class DialogManager : MonoBehaviour
 
     public void TriggerNextSentence_MiddlePriority(int playerIdx, TextType type)
     {
-        playerArray = GameManager.Instance.playerArray;
-        //DialogMiddlePriorityCreated?.Invoke();
         if (isDialogHighPriority)
         {
             return;
@@ -133,8 +123,6 @@ public class DialogManager : MonoBehaviour
 
     public void TriggerNextSentence_LowPriority(int playerIdx, TextType type)
     {
-        playerArray = GameManager.Instance.playerArray;
-        //DialogLowPriorityCreated?.Invoke();
         if (isDialogHighPriority)
         {
             return;
@@ -156,6 +144,7 @@ public class DialogManager : MonoBehaviour
     public IEnumerator WaitForHighDialog()
     {
         yield return new WaitUntil(() => isDialogHighPriority == false); //High Priority의 코루틴이 실행중일 때, 종료될 때까지 기다리는 코루틴
+        Debug.Log("High Wait Ended");
     }
 
     public IEnumerator WaitForMiddleDialog()
@@ -172,22 +161,23 @@ public class DialogManager : MonoBehaviour
         switch (type)
         {
             case TextType.detected:
-                TextData = playerArray[playerIdx].textDataDetected;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataDetected;
                 break;
             case TextType.missDetected:
-                TextData = playerArray[playerIdx].textDataMissDetected;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataMissDetected;
                 break;
             case TextType.busted:
-                TextData = playerArray[playerIdx].textDataBusted;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataBusted;
                 break;
             case TextType.suspicion:
-                TextData = playerArray[playerIdx].textDataSuspicion;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataSuspicion;
                 break;
         }
 
         now_Sentence = UnityEngine.Random.Range(0, TextData.Length);
         TextLen = TextData[now_Sentence].Length;
         int temp = 0;
+        NameText.text = GameManager.Instance.playerArray[playerIdx].playerName;
 
         while (temp < TextLen)
         {
@@ -209,25 +199,26 @@ public class DialogManager : MonoBehaviour
     {
         isDialogMiddlePriority = true;
         DialogString = "";
-        switch(type)
+        switch (type)
         {
             case TextType.start:
-                TextData = playerArray[playerIdx].textDataStart;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataStart;
                 break;
             case TextType.call:
-                TextData = playerArray[playerIdx].textDataCall;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataCall;
                 break;
             case TextType.raise:
-                TextData = playerArray[playerIdx].textDataRaise;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataRaise;
                 break;
             case TextType.fold:
-                TextData = playerArray[playerIdx].textDataFold;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataFold;
                 break;
             case TextType.win:
-                TextData = playerArray[playerIdx].textDataWin;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataWin;
                 break;
         }
 
+        NameText.text = GameManager.Instance.playerArray[playerIdx].playerName;
         now_Sentence = UnityEngine.Random.Range(0, TextData.Length);
         TextLen = TextData[now_Sentence].Length;
         int temp = 0;
@@ -245,28 +236,31 @@ public class DialogManager : MonoBehaviour
             DialogText.text = DialogString;
             yield return new WaitForSeconds(delay);
         }
+        isDialogMiddlePriority = false;
         if (type == TextType.start)
             GameManager.Instance.SetStateDeal();
-        isDialogMiddlePriority = false;
     }
 
     public IEnumerator NextSentence_LowPriority(int playerIdx, TextType type)
     {
-    isDialogLowPriority = true;
+        isDialogLowPriority = true;
         DialogString = "";
+        yield return new WaitUntil(() => GameManager.Instance.playerArray.Length == 4);
         switch (type)
         {
             case TextType.recieveCard:
-                TextData = playerArray[playerIdx].textDataRecieveCard;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataRecieveCard;
                 break;
             case TextType.time:
-                TextData = playerArray[playerIdx].textDataTime;
+                TextData = GameManager.Instance.playerArray[playerIdx].textDataTime;
                 break;
         }
 
         now_Sentence = UnityEngine.Random.Range(0, TextData.Length);
         TextLen = TextData[now_Sentence].Length;
         int temp = 0;
+        NameText.text = GameManager.Instance.playerArray[playerIdx].playerName;
+
         while (temp < TextLen)
         {
             if (TextData[now_Sentence][temp] != ' ')

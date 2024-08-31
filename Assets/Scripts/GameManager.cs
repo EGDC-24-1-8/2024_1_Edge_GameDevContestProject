@@ -151,10 +151,11 @@ public class GameManager : MonoBehaviour
         }
         allyPlayerPosition = UnityEngine.Random.Range(0, playerArray.Length);
         InitPlayer();
+        InitCardFace();
         CardDeck = InitDeck();
         AudioManager.GetOrCreate().SetBGMVolume(0.1f);
         AudioManager.GetOrCreate().PlayBGM(BGM);
-        PlayerPrefs.SetInt("Day", 1); //이거 나중에 지울 거임 이거 안 하니까 QA할 때 날짜가 앞으로 돌릴 수가 없음 QA용 임시 코드
+        PlayerPrefs.SetInt("Day", 2); //이거 나중에 지울 거임 이거 안 하니까 QA할 때 날짜가 앞으로 돌릴 수가 없음 QA용 임시 코드
         if(PlayerPrefs.HasKey("Day"))
             gameDay = PlayerPrefs.GetInt("Day");
         else
@@ -165,7 +166,6 @@ public class GameManager : MonoBehaviour
     {
         IngamePlayerCnt = 4;
         SetStateStart();
-
     }
 
     public void Update()
@@ -224,12 +224,9 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetInt("Day", gameDay);
             betMan.ResetPlayer(); //여기부터
             InitPlayer();
+            InitCardFace();
             gameTurn = 0;
             IngamePlayerCnt = 4; //여기까지 싹다 날리고 컷신으로 넘길 거임
-        }
-        if(gameTurn == 0)
-        {
-
         }
         GameDayText.text = "Day " + gameDay;
         GameTurnText.text = "Turn " + (gameTurn + 1);
@@ -322,15 +319,10 @@ public class GameManager : MonoBehaviour
 
     private void InitPlayer()
     {
+        tempAllyPlayerDataSet.Clear();
         tempEnemyPlayerDataSet.Clear();
-        for (int i = 0; i < allyPlayerDataSet.Count; i++)
-        {
-            tempAllyPlayerDataSet.Add(allyPlayerDataSet[i]);
-        }
-        for (int i = 0; i < enemyPlayerDataSet.Count; i++)
-        {
-            tempEnemyPlayerDataSet.Add(enemyPlayerDataSet[i]);
-        }
+        tempAllyPlayerDataSet.AddRange(allyPlayerDataSet);
+        tempEnemyPlayerDataSet.AddRange(enemyPlayerDataSet);
         for (int i = 0; i < 4; i++)
         {
             if (i == allyPlayerPosition)
@@ -348,6 +340,13 @@ public class GameManager : MonoBehaviour
                 playerArray[i].initData();
                 tempEnemyPlayerDataSet.RemoveAt(temp);
             }
+        }
+    }
+
+    private void InitCardFace()
+    {
+        for (int i = 0; i < playerArray.Length; i++)
+        {
             GameObject newPlayer = Instantiate(playerArray[i].playerSprite, playerArray[i].transform);
             playerCard0Obj[i] = newPlayer.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).gameObject;
             playerCard1Obj[i] = newPlayer.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(1).gameObject;
@@ -747,21 +746,26 @@ public class GameManager : MonoBehaviour
 
     IEnumerator GameOverByMissDetect(int idx)
     {
-        yield return StartCoroutine(DialogManager.Instance.NextSentence_HighPriority(idx, DialogManager.TextType.missDetected));
+        DialogManager.Instance.TriggerNextSentence_HighPriority(idx, DialogManager.TextType.missDetected);
+        yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
         GameOver();
     }
 
     IEnumerator GameOverBySuspicion()
     {
-        if(gameState == GameState.deal)
-            yield return StartCoroutine(DialogManager.Instance.NextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion));
+        if (gameState == GameState.deal)
+        {
+            DialogManager.Instance.TriggerNextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion);
+            yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
+        }
         else
         {
-            for(int i = 0; i < playerArray.Length; i++)
+            for (int i = 0; i < playerArray.Length; i++)
             {
                 if (betMan.isEliminated[i] || playerArray[i].isAlly)
                     continue;
-                yield return StartCoroutine(DialogManager.Instance.NextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion));
+                DialogManager.Instance.TriggerNextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion);
+                yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
                 break;
             }
         }
@@ -799,6 +803,11 @@ public class GameManager : MonoBehaviour
 
     public void SwitchCard(int idx)
     {
+        if(betMan.isFold[idx])
+        {
+            playerIsCheat[idx] = false;
+            return;
+        }
         //사기치는 애니메이션 재생
         playerIsCheat[idx] = false;
         Debug.Log("CHEAT! " + idx);

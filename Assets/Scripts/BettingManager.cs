@@ -119,7 +119,7 @@ public class BettingManager : MonoBehaviour
             playerFoldText[i].text = isFold[i] ? "FOLD" : "IN";
             potText.text = pot.ToString();
             casinoMoneyText.text = casinoMoney.ToString();
-            winCriteriaText.text = (casinoMoney + playerArray[1].playerMoney) + " / " + winCriteria;
+            winCriteriaText.text = (casinoMoney + playerArray[GameManager.Instance.allyPlayerPosition].playerMoney) + " / " + winCriteria;
         }
     }
 
@@ -160,10 +160,9 @@ public class BettingManager : MonoBehaviour
                     break;
             }
             UpdatePotSprite(playerArray[i].playerMoney, coinObjectArray[i]);
-            Debug.Log(playerArray[i].playerMoney);
             UpdatePotSprite(pot, potObject);
-            yield return StartCoroutine(DialogManager.Instance.WaitForMiddleDialog());
             playerSeedText[i].text = playerArray[i].playerMoney.ToString();
+            yield return StartCoroutine(DialogManager.Instance.WaitForMiddleDialog());
         }
         yield return new WaitForSeconds(1);
         GameManager.Instance.SetStateAfterBet();
@@ -411,6 +410,10 @@ public class BettingManager : MonoBehaviour
 
     private void CheckWinnerByFold()
     {
+        if(GameManager.Instance.gameState != GameManager.GameState.bet)
+        {
+            GameManager.Instance.SetStateAfterBet();
+        }
         if (GameManager.Instance.foldPlayerCnt == GameManager.Instance.IngamePlayerCnt - 1)
         {
             isBetOver = true;
@@ -537,6 +540,7 @@ public class BettingManager : MonoBehaviour
                 UpdatePotSprite(pot, potObject);
                 playerArray[idx].playerMoney = 0;
                 UpdatePotSprite(playerArray[idx].playerMoney, coinObjectArray[idx]);
+                CheckWinnerByFold();
                 break;
             default:
                 Debug.Log("-");
