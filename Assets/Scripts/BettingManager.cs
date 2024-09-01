@@ -112,9 +112,11 @@ public class BettingManager : MonoBehaviour
 
     public void UpdateUIText()
     {
+        UpdatePotSprite(pot, potObject);
+        UpdatePotSprite(casinoMoney, casinoMoneyObject);
         for (int i = 0; i < playerArray.Length; i++)
         {
-            
+            UpdatePotSprite(playerArray[i].playerMoney, coinObjectArray[i]);
             playerNameText[i].text = playerArray[i].playerName;
             playerSeedText[i].text = ("Seed : $" + playerArray[i].playerMoney.ToString());
             playerBetText[i].text = ("$" + playerArray[i].playerBettingMoney.ToString());
@@ -163,8 +165,6 @@ public class BettingManager : MonoBehaviour
                     DialogManager.Instance.TriggerNextSentence_MiddlePriority(i, DialogManager.TextType.fold);
                     break;
             }
-            UpdatePotSprite(playerArray[i].playerMoney, coinObjectArray[i]);
-            UpdatePotSprite(pot, potObject);
             yield return StartCoroutine(DialogManager.Instance.WaitForMiddleDialog());
         }
         yield return new WaitForSeconds(1);
@@ -193,9 +193,6 @@ public class BettingManager : MonoBehaviour
         playerArray[playerIdx].playerMoney -= ante;
         pot += ante;
         UpdateUIText();
-        UpdatePotSprite(playerArray[playerIdx].playerMoney, coinObjectArray[playerIdx]);
-        UpdatePotSprite(casinoMoney, casinoMoneyObject);
-        UpdatePotSprite(pot, potObject);
     }
 
     public IEnumerator bet(int playerIdx)
@@ -399,7 +396,7 @@ public class BettingManager : MonoBehaviour
 
         for(int i = 0; i < potSpriteArray.Length; i++)
         {
-            if (amount > potSpriteCriteria[i])
+            if (amount >= potSpriteCriteria[i])
             {
                 Pot.GetComponent<SpriteRenderer>().sprite = potSpriteArray[i];
                 return;
@@ -420,7 +417,7 @@ public class BettingManager : MonoBehaviour
             (playerArray[playerIdx].dealtCardCount == 3
             && (playerCardSum[playerIdx] < 17 || 21 < playerCardSum[playerIdx]))) // fold Á¶°Ç
         {
-            if (100f + GameManager.Instance.playerArray[playerIdx].cheatFrequency > UnityEngine.Random.Range(0, 101))
+            if (GameManager.Instance.playerArray[playerIdx].cheatFrequency > UnityEngine.Random.Range(0, 101))
             {
                 GameManager.Instance.playerIsCheat[playerIdx] = true;
                 return;
@@ -515,10 +512,8 @@ public class BettingManager : MonoBehaviour
                     break;
             }
             playerArray[winner[0]].playerMoney += prize;
-            UpdatePotSprite(playerArray[winner[0]].playerMoney, coinObjectArray[winner[0]]);
         }
         pot = 0;
-        UpdatePotSprite(pot, potObject);
         AudioManager.GetOrCreate().SetEffectVolume(1f);
         AudioManager.GetOrCreate().PlayEffectSound(PrizeSound);
         UpdateUIText();
@@ -552,10 +547,8 @@ public class BettingManager : MonoBehaviour
                 isEliminated[idx] = true;
                 isFold[idx] = true;
                 casinoMoney += playerArray[idx].playerMoney;
-                UpdatePotSprite(casinoMoney, casinoMoneyObject);
                 UpdatePotSprite(pot, potObject);
                 playerArray[idx].playerMoney = 0;
-                UpdatePotSprite(playerArray[idx].playerMoney, coinObjectArray[idx]);
                 CheckWinnerByFold();
                 break;
             default:

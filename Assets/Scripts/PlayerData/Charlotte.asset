@@ -18,7 +18,7 @@ MonoBehaviour:
   playerName: "\uC0E4\uB97C\uB85C\uD2B8"
   highPreference: 15
   lowPreference: 10
-  cheatFrequency: 0
+  cheatFrequency: 70
   textDataStart:
   - "\uB3C8 \uBC8C \uC2DC\uAC04\uC774\uC57C."
   - "\uC774\uACA8\uBCF4\uACA0\uC5B4."

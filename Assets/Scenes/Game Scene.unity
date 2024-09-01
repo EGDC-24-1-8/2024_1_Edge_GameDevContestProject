@@ -8363,7 +8363,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: fbf81cbcc1f864a42a50413dcafbc939, type: 3}
   - {fileID: 21300000, guid: dff9c94947fb1cb4e924655434e07448, type: 3}
   - {fileID: 21300000, guid: d9fbbc600eb6e6e4c979dfb76241c671, type: 3}
-  potSpriteCriteria: 9001000096000000640000004b0000003200000019000000
+  potSpriteCriteria: 2c0100009600000064000000460000001e00000001000000
   ante: 10
   defaultBet: 10
   roundBet: 0
@@ -10919,7 +10919,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1874676360
 Transform:
   m_ObjectHideFlags: 0
