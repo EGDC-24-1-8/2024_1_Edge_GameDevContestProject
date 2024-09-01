@@ -698,11 +698,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2003a3ac13fad5248a6a8b55f63b1f9c, type: 3}
   - {fileID: 21300000, guid: 2003a3ac13fad5248a6a8b55f63b1f9c, type: 3}
   - {fileID: 21300000, guid: 2003a3ac13fad5248a6a8b55f63b1f9c, type: 3}
-  - {fileID: 21300000, guid: b7e3698d5f1dfae439e55193f2cef747, type: 3}
-  - {fileID: 21300000, guid: b7e3698d5f1dfae439e55193f2cef747, type: 3}
-  - {fileID: 21300000, guid: b7e3698d5f1dfae439e55193f2cef747, type: 3}
-  - {fileID: 21300000, guid: b7e3698d5f1dfae439e55193f2cef747, type: 3}
-  - {fileID: 21300000, guid: b7e3698d5f1dfae439e55193f2cef747, type: 3}
+  - {fileID: 21300000, guid: b36525b5dafb4d44eb52c2ecc0e5744f, type: 3}
+  - {fileID: 21300000, guid: 1b53ba38b0d16e24d9c94b075d4903de, type: 3}
+  - {fileID: 21300000, guid: 8cbe9a55ffee6d7479b7d4bd0cd0fc36, type: 3}
+  - {fileID: 21300000, guid: 8cbe9a55ffee6d7479b7d4bd0cd0fc36, type: 3}
+  - {fileID: 21300000, guid: 8cbe9a55ffee6d7479b7d4bd0cd0fc36, type: 3}
   dialogue:
   - "\uD0C0\uC9DC\uC758 \uC0B6\uC744 \uC0B4\uC544\uAC00\uB358 \uB2F9\uC2E0\uC740
     \uC5EC\uB290 \uB54C\uC640 \uAC19\uC774 \uCE74\uC9C0\uB178\uC5D0 \uB4E4\uC5B4\uC130\uB2E4.\r\n\uB298
