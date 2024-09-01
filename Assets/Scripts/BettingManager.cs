@@ -360,7 +360,6 @@ public class BettingManager : MonoBehaviour
             }
         }
 
-        AudioManager.GetOrCreate().SetEffectVolume(1f);
         AudioManager.GetOrCreate().PlayEffectSound(FoldSound);
         isFold[playerIdx] = true;
         GameManager.Instance.foldPlayerCnt++;
@@ -514,7 +513,6 @@ public class BettingManager : MonoBehaviour
             playerArray[winner[0]].playerMoney += prize;
         }
         pot = 0;
-        AudioManager.GetOrCreate().SetEffectVolume(1f);
         AudioManager.GetOrCreate().PlayEffectSound(PrizeSound);
         UpdateUIText();
     }

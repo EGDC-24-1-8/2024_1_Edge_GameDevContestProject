@@ -8373,8 +8373,8 @@ MonoBehaviour:
   eliminationCriteria: 0
   casinoMoney: 0
   winCriteria: 0
-  middleBetSoundCriteria: 10
-  bigBetSoundCriteria: 20
+  middleBetSoundCriteria: 20
+  bigBetSoundCriteria: 40
   SmallBetSound: {fileID: 8300000, guid: 1b230d12b22c74e459b236f25da024c6, type: 3}
   MiddleBetSound: {fileID: 8300000, guid: 287aa97ad8a4e45e59203cb1624edc24, type: 3}
   BigBetSound: {fileID: 8300000, guid: 7718e899fcbb64c68adb42a99a627a7d, type: 3}
