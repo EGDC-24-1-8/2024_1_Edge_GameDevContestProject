@@ -781,7 +781,7 @@ public class GameManager : MonoBehaviour
             isFade = true;
             Fade.Out(2.5f, () =>
             {
-                SceneManager.LoadScene("MainMenuScene");
+                SceneManager.LoadScene("Game Scene");
                 Debug.Log("∞‘¿” ≥°!");
             });
         }
@@ -807,7 +807,7 @@ public class GameManager : MonoBehaviour
             {
                 if (betMan.isEliminated[i] || playerArray[i].isAlly)
                     continue;
-                DialogManager.Instance.TriggerNextSentence_HighPriority(dealOrder, DialogManager.TextType.suspicion);
+                DialogManager.Instance.TriggerNextSentence_HighPriority(i, DialogManager.TextType.suspicion);
                 yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
                 break;
             }

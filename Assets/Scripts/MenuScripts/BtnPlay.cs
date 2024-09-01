@@ -14,7 +14,7 @@ public class BtnPlay : MonoBehaviour
 
     void Start()
     {
-        AudioManager.GetOrCreate().SetBGMVolume(0.1f);
+        AudioManager.GetOrCreate().SetBGMVolume(0.7f);
         AudioManager.GetOrCreate().PlayBGM(BGM);
         newGameButton.SetActive(false);
         loadGameButton.SetActive(false);
