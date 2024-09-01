@@ -114,6 +114,7 @@ public class BettingManager : MonoBehaviour
     {
         for (int i = 0; i < playerArray.Length; i++)
         {
+            
             playerNameText[i].text = playerArray[i].playerName;
             playerSeedText[i].text = ("Seed : $" + playerArray[i].playerMoney.ToString());
             playerBetText[i].text = ("$" + playerArray[i].playerBettingMoney.ToString());
@@ -122,6 +123,8 @@ public class BettingManager : MonoBehaviour
             casinoMoneyText.text = ("$" + casinoMoney.ToString());
             winCriteriaText.text = "$" + (casinoMoney + playerArray[GameManager.Instance.allyPlayerPosition].playerMoney) + " / $" + winCriteria;
         }
+
+        playerNameText[GameManager.Instance.allyPlayerPosition].color = Color.green;
     }
 
     public void TriggerBetting()

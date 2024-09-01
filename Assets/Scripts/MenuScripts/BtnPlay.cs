@@ -12,9 +12,14 @@ public class BtnPlay : MonoBehaviour
     public GameObject creditButton;
     public event Action playBtnOn;
 
+    public Slider BgmSlider;
+    public Slider EffectSlider;
+
+
     void Start()
     {
-        AudioManager.GetOrCreate().SetBGMVolume(0.7f);
+        AudioManager.GetOrCreate().SetBGMVolume(0.7f * PlayerPrefs.GetFloat("PlayerBgm"));
+        AudioManager.GetOrCreate().SetEffectVolume(PlayerPrefs.GetFloat("PlayerEffect"));
         AudioManager.GetOrCreate().PlayBGM(BGM);
         newGameButton.SetActive(false);
         loadGameButton.SetActive(false);
@@ -29,6 +34,15 @@ public class BtnPlay : MonoBehaviour
         loadGameButton.SetActive(false);
     }
 
+    public void UpdateBgmSlider()
+    {
+        PlayerPrefs.SetFloat("PlayerBgm" , BgmSlider.value);
+        AudioManager.GetOrCreate().SetBGMVolume(0.7f * PlayerPrefs.GetFloat("PlayerBgm"));
+    }
+    public void UpdateEffectSlider()
+    {
+        PlayerPrefs.SetFloat("PlayerEffect", EffectSlider.value);
+    }
     public void onPlayBtnClicked()
     {
         newGameButton.SetActive(true);

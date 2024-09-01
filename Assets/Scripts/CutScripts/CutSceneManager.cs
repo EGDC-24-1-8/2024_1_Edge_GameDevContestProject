@@ -22,7 +22,7 @@ public class CutSceneManager : MonoBehaviour
 
     void Start()
     {
-        AudioManager.GetOrCreate().SetBGMVolume(0.1f);
+        AudioManager.GetOrCreate().SetBGMVolume(0.1f * PlayerPrefs.GetFloat("PlayerBgm"));
         AudioManager.GetOrCreate().PlayBGM(BGM);
         currentIndex = PlayerPrefs.GetInt("CutSceneBegin");
         nextButton.onClick.AddListener(ShowNext);

@@ -781,7 +781,7 @@ public class GameManager : MonoBehaviour
             isFade = true;
             Fade.Out(2.5f, () =>
             {
-                SceneManager.LoadScene("Game Scene");
+                SceneManager.LoadScene("MainMenuScene");
                 Debug.Log("∞‘¿” ≥°!");
             });
         }
