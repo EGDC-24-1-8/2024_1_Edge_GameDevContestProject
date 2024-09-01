@@ -156,8 +156,9 @@ public class GameManager : MonoBehaviour
         InitPlayer();
         InitCardFace();
         CardDeck = InitDeck();
-        AudioManager.GetOrCreate().SetBGMVolume(0.1f);
+        AudioManager.GetOrCreate().SetBGMVolume(0.7f * PlayerPrefs.GetFloat("BGMVolume"));
         AudioManager.GetOrCreate().PlayBGM(BGM);
+        AudioManager.GetOrCreate().SetEffectVolume(PlayerPrefs.GetFloat("EffectVolume"));
 
         //PlayerPrefs.SetInt("Day", 2); //QA¿ë
         if (PlayerPrefs.HasKey("Day"))
@@ -504,7 +505,6 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
-        AudioManager.GetOrCreate().SetEffectVolume(1);
         AudioManager.GetOrCreate().PlayEffectSound(NormalDealingSound);
         CardDeck.Remove(CardDeck[0]);
         dealTimeCur = Time.time;
@@ -555,7 +555,6 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(cheatCoroutine[dealOrder]);
                 break;
         }
-        AudioManager.GetOrCreate().SetEffectVolume(1);
         AudioManager.GetOrCreate().PlayEffectSound(SecondDealingSound);
         CardDeck.RemoveAt(1);
         dealTimeCur = Time.time;
@@ -602,7 +601,6 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(cheatCoroutine[dealOrder]);
                 break;
         }
-        AudioManager.GetOrCreate().SetEffectVolume(1);
         AudioManager.GetOrCreate().PlayEffectSound(BottomDealingSound);
         CardDeck.RemoveAt(CardDeck.Count - 1);
         dealTimeCur = Time.time;

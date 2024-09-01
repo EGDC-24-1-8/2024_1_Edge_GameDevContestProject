@@ -233,7 +233,7 @@ public class AudioManager : MonoBehaviour
     /// <param name="clip">È¿°úÀ½</param>
     public void PlayEffectSound(AudioClip clip)
     {
-        effectSource.PlayOneShot(clip, EffectVolume * PlayerPrefs.GetFloat("PlayerEffect"));
+        effectSource.PlayOneShot(clip);
     }
 
     /// <summary>
