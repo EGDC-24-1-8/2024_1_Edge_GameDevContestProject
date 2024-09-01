@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Slider suspicionBar;
     [SerializeField] private float suspicionLevelMax = 100f;
     [SerializeField] private float suspicionLevelCur = 0f;
-    [SerializeField] private GameObject[] Player;
+    [SerializeField] public GameObject[] Player;
     [SerializeField] private List<PlayerData> enemyPlayerDataSet = null;
     [SerializeField] private List<PlayerData> allyPlayerDataSet = null;
     [SerializeField] private List<PlayerData> tempEnemyPlayerDataSet = null;
@@ -155,7 +155,9 @@ public class GameManager : MonoBehaviour
         CardDeck = InitDeck();
         AudioManager.GetOrCreate().SetBGMVolume(0.1f);
         AudioManager.GetOrCreate().PlayBGM(BGM);
-        if(PlayerPrefs.HasKey("Day"))
+
+        //PlayerPrefs.SetInt("Day", 2); //QA용
+        if (PlayerPrefs.HasKey("Day"))
             gameDay = PlayerPrefs.GetInt("Day");
         else
             gameDay = 1;
@@ -326,6 +328,8 @@ public class GameManager : MonoBehaviour
         tempEnemyPlayerDataSet.AddRange(enemyPlayerDataSet);
         for (int i = 0; i < 4; i++)
         {
+            //playerArray[i].GetComponentInChildren<Transform>().localScale.Set(1, 1, 1);
+            //playerArray[i].GetComponentInChildren<GameObject>().SetActive(true);
             if (i == allyPlayerPosition)
             {
                 playerArray[i].isAlly = true;
@@ -638,6 +642,7 @@ public class GameManager : MonoBehaviour
         {
             if (betMan.isFold[i])
                 continue;
+            playerSumText[i].gameObject.SetActive(true);
             playerCard0Face[i].GetComponent<SpriteRenderer>().sprite = cardFace[playerCard0[i]];
             playerCard1Face[i].GetComponent<SpriteRenderer>().sprite = cardFace[playerCard1[i]];
             playerCard2Face[i].GetComponent<SpriteRenderer>().sprite = cardFace[playerCard2[i]];
@@ -656,6 +661,7 @@ public class GameManager : MonoBehaviour
         foldPlayerCnt = 0;
         for (int i = 0; i < 4; i++)
         {
+            playerSumText[i].gameObject.SetActive(false);
             playerCard0Text[i].text = " - ";
             playerCard1Text[i].text = " - ";
             playerCard2Text[i].text = " - ";
@@ -721,13 +727,13 @@ public class GameManager : MonoBehaviour
                         PlayerPrefs.SetInt("Day", PlayerPrefs.GetInt("Day") + 1);
                         if (PlayerPrefs.GetInt("Day") == 2)
                         {
-                            PlayerPrefs.SetInt("CutSceneBegin", 9);
-                            PlayerPrefs.SetInt("CutSceneEnd", 12);
+                            PlayerPrefs.SetInt("CutSceneBegin", 12);
+                            PlayerPrefs.SetInt("CutSceneEnd", 16);
                         }
                         if (PlayerPrefs.GetInt("Day") == 3)
                         {
-                            PlayerPrefs.SetInt("CutSceneBegin", 13);
-                            PlayerPrefs.SetInt("CutSceneEnd", 16);
+                            PlayerPrefs.SetInt("CutSceneBegin", 17);
+                            PlayerPrefs.SetInt("CutSceneEnd", 21);
                         }
                         SceneManager.LoadScene("CutScene");
                     });
@@ -735,17 +741,10 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                Debug.Log(PlayerPrefs.GetInt("Day") + "일차 패배, 메뉴로");
                 DialogManager.Instance.TriggerNextSentence_HighPriority(allyPlayerPosition, DialogManager.TextType.dayLose);
                 yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
-                if (!isFade)
-                {
-                    isFade = true;
-                    Fade.Out(2.5f, () =>
-                    {
-                        Debug.Log("2일차 패배, 즉시 재도전");
-                        SceneManager.LoadScene("Game Scene");
-                    });
-                }
+                GameOver();
             }
         }
         else
@@ -782,7 +781,7 @@ public class GameManager : MonoBehaviour
             isFade = true;
             Fade.Out(2.5f, () =>
             {
-                SceneManager.LoadScene("Game Scene");
+                SceneManager.LoadScene("MainMenuScene");
                 Debug.Log("게임 끝!");
             });
         }

@@ -200,7 +200,11 @@ public class DialogManager : MonoBehaviour
             DialogText.text = DialogString;
             yield return new WaitForSeconds(delay);
         }
+        if(type == TextType.detected)
+            GameManager.Instance.Player[playerIdx].transform.GetChild(0).gameObject.SetActive(false);
         isDialogHighPriority = false;
+
+
     }
 
     public IEnumerator NextSentence_MiddlePriority(int playerIdx, TextType type)

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BtnLoadGame : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class BtnLoadGame : MonoBehaviour
 
     void onLoadGameButtonClicked()
     {
+        SceneManager.LoadScene("CutScene");
         Debug.Log("LoadGameButton is Clicked");
     }
 }

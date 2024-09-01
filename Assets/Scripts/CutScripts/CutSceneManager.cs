@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class CutSceneManager : MonoBehaviour
 {
+    [SerializeField] private AudioClip BGM;
     [Header("Cutscene Elements")]
     public Image displayImage;
     public Text displayText;
@@ -21,6 +22,8 @@ public class CutSceneManager : MonoBehaviour
 
     void Start()
     {
+        AudioManager.GetOrCreate().SetBGMVolume(0.1f);
+        AudioManager.GetOrCreate().PlayBGM(BGM);
         currentIndex = PlayerPrefs.GetInt("CutSceneBegin");
         nextButton.onClick.AddListener(ShowNext);
         UpdateCutscene();
@@ -39,6 +42,7 @@ public class CutSceneManager : MonoBehaviour
         if (currentIndex == images.Length - 1)
         {
             //게임 클리어
+            SceneManager.LoadScene("MainMenuScene");
         }
         else if (currentIndex < PlayerPrefs.GetInt("CutSceneEnd"))
         {

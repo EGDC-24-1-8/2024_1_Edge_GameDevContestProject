@@ -2413,6 +2413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0fbc303d829c754d9e33d609b7e9e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BGM: {fileID: 8300000, guid: bd8f50c029deed042a01d0c9ed6eb1cd, type: 3}
   playButton: {fileID: 938435401}
   newGameButton: {fileID: 92963897}
   loadGameButton: {fileID: 1692441200}

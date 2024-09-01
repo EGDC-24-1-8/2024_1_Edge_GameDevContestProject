@@ -4,6 +4,7 @@ using System;
 
 public class BtnPlay : MonoBehaviour
 {
+    [SerializeField] private AudioClip BGM;
     public Button playButton;
     public GameObject newGameButton;
     public GameObject loadGameButton;
@@ -13,6 +14,8 @@ public class BtnPlay : MonoBehaviour
 
     void Start()
     {
+        AudioManager.GetOrCreate().SetBGMVolume(0.1f);
+        AudioManager.GetOrCreate().PlayBGM(BGM);
         newGameButton.SetActive(false);
         loadGameButton.SetActive(false);
         playButton.onClick.AddListener(onPlayBtnClicked);

@@ -17,7 +17,7 @@ public class BtnNewGame : MonoBehaviour
     {
         PlayerPrefs.SetInt("Day", 1);
         PlayerPrefs.SetInt("CutSceneBegin", 0);
-        PlayerPrefs.SetInt("CutSceneEnd", 8);
+        PlayerPrefs.SetInt("CutSceneEnd", 11);
         SceneManager.LoadScene("CutScene");
         Debug.Log("NewGameButton is Clicked");
     }

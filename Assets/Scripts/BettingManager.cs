@@ -51,8 +51,8 @@ public class BettingManager : MonoBehaviour
     [SerializeField] public int casinoMoney = 0; //판돈
     [SerializeField] private int winCriteria = 0;
 
-    [SerializeField] private int middleBetSoundCriteria = 10;
-    [SerializeField] private int bigBetSoundCriteria = 20; //이 이상으로 베팅하면 베팅 사운드가 달라짐
+    [SerializeField] private int middleBetSoundCriteria = 30;
+    [SerializeField] private int bigBetSoundCriteria = 50; //이 이상으로 베팅하면 베팅 사운드가 달라짐
 
     [Header("In Game Data")]
     [SerializeField] private AudioClip SmallBetSound;
@@ -76,6 +76,7 @@ public class BettingManager : MonoBehaviour
         playerArray = GameManager.Instance.playerArray;
         playerCardSum = GameManager.Instance.playerCardSum;
         roundBet = defaultBet;
+        winCriteria = playerArray[GameManager.Instance.allyPlayerPosition].playerMoney + PlayerPrefs.GetInt("Day") * 100;
     }
 
     //베팅 페이즈 전반 관리
@@ -114,12 +115,12 @@ public class BettingManager : MonoBehaviour
         for (int i = 0; i < playerArray.Length; i++)
         {
             playerNameText[i].text = playerArray[i].playerName;
-            playerSeedText[i].text = playerArray[i].playerMoney.ToString();
-            playerBetText[i].text = playerArray[i].playerBettingMoney.ToString();
+            playerSeedText[i].text = ("Seed : $" + playerArray[i].playerMoney.ToString());
+            playerBetText[i].text = ("$" + playerArray[i].playerBettingMoney.ToString());
             playerFoldText[i].text = isFold[i] ? "FOLD" : "IN";
-            potText.text = pot.ToString();
-            casinoMoneyText.text = casinoMoney.ToString();
-            winCriteriaText.text = (casinoMoney + playerArray[GameManager.Instance.allyPlayerPosition].playerMoney) + " / " + winCriteria;
+            potText.text = ("$" + pot.ToString());
+            casinoMoneyText.text = ("$" + casinoMoney.ToString());
+            winCriteriaText.text = "$" + (casinoMoney + playerArray[GameManager.Instance.allyPlayerPosition].playerMoney) + " / $" + winCriteria;
         }
     }
 
@@ -161,7 +162,6 @@ public class BettingManager : MonoBehaviour
             }
             UpdatePotSprite(playerArray[i].playerMoney, coinObjectArray[i]);
             UpdatePotSprite(pot, potObject);
-            playerSeedText[i].text = playerArray[i].playerMoney.ToString();
             yield return StartCoroutine(DialogManager.Instance.WaitForMiddleDialog());
         }
         yield return new WaitForSeconds(1);
@@ -249,6 +249,11 @@ public class BettingManager : MonoBehaviour
         betState = BetState.call;
         if (playerArray[playerIdx].playerBettingMoney == maxBet)
         {
+            int temp = roundBet;
+            if (roundBet > playerArray[playerIdx].playerMoney) //돈 없어서 콜 못 하면
+            {
+                roundBet = playerArray[playerIdx].playerMoney;
+            }
             if (roundBet >= bigBetSoundCriteria)
             {
                 BigBet(playerIdx);
@@ -265,10 +270,19 @@ public class BettingManager : MonoBehaviour
             playerArray[playerIdx].playerMoney -= roundBet;
             pot += roundBet;
             maxBet += roundBet;
+            if(roundBet == playerArray[playerIdx].playerMoney) //라운드벳 다시 맞추기
+            {
+                roundBet = temp;
+            }
             endOrder = playerIdx;
         }
         else
         {
+            int temp = maxBet;
+            if (maxBet - playerArray[playerIdx].playerBettingMoney > playerArray[playerIdx].playerMoney) //돈 없어서 콜 못 하면
+            {
+                maxBet = playerArray[playerIdx].playerMoney + playerArray[playerIdx].playerBettingMoney;
+            }
             if (maxBet - playerArray[playerIdx].playerBettingMoney >= bigBetSoundCriteria)
             {
                 BigBet(playerIdx);
@@ -286,12 +300,21 @@ public class BettingManager : MonoBehaviour
             playerArray[playerIdx].playerBettingMoney = maxBet;
             playerArray[playerIdx].playerMoney -= maxBet;
             pot += maxBet;
+            if (maxBet == playerArray[playerIdx].playerMoney + playerArray[playerIdx].playerBettingMoney) 
+            {
+                maxBet = temp;
+            }
         }
         UpdateUIText();
     }
 
     public void raise(int playerIdx)
     {
+        if (roundBet * 2 > playerArray[playerIdx].playerMoney)
+        {
+            call(playerIdx);
+            return;
+        }
         betState = BetState.raise;
         roundBet *= 2;
         endOrder = playerIdx;
