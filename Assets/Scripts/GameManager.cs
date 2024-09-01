@@ -722,7 +722,7 @@ public class GameManager : MonoBehaviour
         gameTurn++;
         ResetDealtCard();
         betMan.ResetBet();
-        if(gameTurn > 2 || IngamePlayerCnt < 2)
+        if (gameTurn > 2 || IngamePlayerCnt < 2)
         {
             if (betMan.DayResult())
             {
@@ -758,7 +758,19 @@ public class GameManager : MonoBehaviour
             }
         }
         else
+        {
+            for (int i = 0; i < playerArray.Length; i++)
+            {
+                if (betMan.eliminationCriteria >= playerArray[i].playerMoney && !betMan.isEliminated[i])
+                {
+                    EliminatePlayer(i, NO_MONEY_ELIMINATED);
+                    DialogManager.Instance.TriggerNextSentence_HighPriority(i, DialogManager.TextType.busted);
+                    yield return StartCoroutine(DialogManager.Instance.WaitForHighDialog());
+                    yield return new WaitForSeconds(1f);
+                }
+            }
             SetStateStart();
+        }
     }
     #endregion
 
@@ -769,11 +781,9 @@ public class GameManager : MonoBehaviour
         {
             case NO_MONEY_ELIMINATED:
                 betMan.EliminatePlayer(idx, type);
-                DialogManager.Instance.TriggerNextSentence_HighPriority(idx, DialogManager.TextType.busted);
                 break;
             case DETECTED_CHEAT_ELIMINATED:
                 betMan.EliminatePlayer(idx, type);
-                DialogManager.Instance.TriggerNextSentence_HighPriority(idx, DialogManager.TextType.detected);
                 break;
             default:
                 Debug.Log("-");

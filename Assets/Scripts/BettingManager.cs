@@ -46,7 +46,7 @@ public class BettingManager : MonoBehaviour
 
     [SerializeField] private int pot = 0; //판돈
     [SerializeField] private int prize = 0; //라운드 상금
-    [SerializeField] private int eliminationCriteria = 0; //소유금이 여기까지 줄어들면 해당 플레이어가 테이블을 떠남
+    [SerializeField] public int eliminationCriteria = 0; //소유금이 여기까지 줄어들면 해당 플레이어가 테이블을 떠남
 
     [SerializeField] public int casinoMoney = 0; //판돈
     [SerializeField] private int winCriteria = 0;
@@ -522,13 +522,6 @@ public class BettingManager : MonoBehaviour
         AudioManager.GetOrCreate().SetEffectVolume(1f);
         AudioManager.GetOrCreate().PlayEffectSound(PrizeSound);
         UpdateUIText();
-        for (int i = 0; i < playerArray.Length; i++)
-        {
-            if (eliminationCriteria > playerArray[i].playerMoney && !isEliminated[i])
-            {
-                GameManager.Instance.EliminatePlayer(i, GameManager.NO_MONEY_ELIMINATED);
-            }
-        }
     }
 
     #endregion
