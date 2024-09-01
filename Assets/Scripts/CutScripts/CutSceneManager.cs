@@ -12,6 +12,7 @@ public class CutSceneManager : MonoBehaviour
     public Text displayText;
     public Button nextButton;
 
+    [SerializeField] private Texture2D normal_cursor;
     [Header("Cutscene Content")]
     public Sprite[] images;       //이미지 배열
     [TextArea(3, 10)]
@@ -27,6 +28,8 @@ public class CutSceneManager : MonoBehaviour
         currentIndex = PlayerPrefs.GetInt("CutSceneBegin");
         nextButton.onClick.AddListener(ShowNext);
         UpdateCutscene();
+
+        Cursor.SetCursor(normal_cursor, new Vector2(20, 0), CursorMode.Auto);
     }
 
     void Update()

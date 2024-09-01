@@ -16,6 +16,7 @@ public class BtnPlay : MonoBehaviour
     public Slider EffectSlider;
 
 
+    [SerializeField] private Texture2D normal_cursor;
     void Start()
     {
         AudioManager.GetOrCreate().SetBGMVolume(0.7f * PlayerPrefs.GetFloat("PlayerBgm"));
@@ -26,6 +27,9 @@ public class BtnPlay : MonoBehaviour
         playButton.onClick.AddListener(onPlayBtnClicked);
         optionButton.GetComponent<BtnOption>().optionButtonOn += BtnHidden;
         creditButton.GetComponent<BtnCredit>().creditButtonOn += BtnHidden;
+
+        Cursor.SetCursor(normal_cursor, new Vector2(20, 0), CursorMode.Auto);
+
     }
 
     void BtnHidden()
@@ -51,5 +55,11 @@ public class BtnPlay : MonoBehaviour
         playBtnOn?.Invoke();
         //optionButton.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
         //creditButton.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+    }
+
+
+    public void ExitBtnClicked()
+    {
+
     }
 }

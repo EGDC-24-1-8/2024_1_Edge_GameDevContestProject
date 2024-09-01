@@ -191,7 +191,6 @@ public class DialogManager : MonoBehaviour
         {
             if (TextData[now_Sentence][temp] != ' ')
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
                 AudioManager.GetOrCreate().PlayEffectSound(DialogSound);
             }
             DialogString += TextData[now_Sentence][temp];
@@ -239,7 +238,6 @@ public class DialogManager : MonoBehaviour
         {
             if (TextData[now_Sentence][temp] != ' ')
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
                 AudioManager.GetOrCreate().PlayEffectSound(DialogSound);
             }
             DialogString += TextData[now_Sentence][temp];
@@ -284,7 +282,6 @@ public class DialogManager : MonoBehaviour
         {
             if (TextData[now_Sentence][temp] != ' ')
             {
-                AudioManager.GetOrCreate().SetEffectVolume(0.3f);
                 AudioManager.GetOrCreate().PlayEffectSound(DialogSound);
             }
             DialogString += TextData[now_Sentence][temp];

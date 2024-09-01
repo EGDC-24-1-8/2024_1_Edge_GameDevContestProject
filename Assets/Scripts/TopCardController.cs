@@ -15,7 +15,7 @@ public class TopCardController : MonoBehaviour
     private float topCardBottomY;
 
     private Vector3 origin_position; //클릭하는순간 그 카드의 기본위치를 잡은다음, 내가 이제 그 위치에서 특정 값만큼 이동해야만 실행되게끔
-
+    [SerializeField] private AudioClip CardClickSound;
     private void Start()
     {
         SetPosition();
@@ -41,6 +41,8 @@ public class TopCardController : MonoBehaviour
         origin_position = topCard.position;
         Collider2D collider = topCard.GetComponent<Collider2D>();
 
+
+        AudioManager.GetOrCreate().PlayEffectSound(CardClickSound);
         if (mousePos.y >= topCardBottomY && mousePos.y <= topCardTopY)
         {
             isDragging = true;

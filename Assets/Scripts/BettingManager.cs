@@ -377,7 +377,6 @@ public class BettingManager : MonoBehaviour
         GameObject newCoin = Instantiate(instantBetObjectArray[playerIdx], coinSpawnPositionArray[playerIdx]);
         newCoin.SetActive(true);
         newCoin.GetComponent<Animator>().SetTrigger("DoBigBet");
-        AudioManager.GetOrCreate().SetEffectVolume(0.8f);
         AudioManager.GetOrCreate().PlayEffectSound(BigBetSound);
     }
     private void MiddleBet(int playerIdx)
@@ -385,7 +384,6 @@ public class BettingManager : MonoBehaviour
         GameObject newCoin = Instantiate(instantBetObjectArray[playerIdx], coinSpawnPositionArray[playerIdx]);
         newCoin.SetActive(true);
         newCoin.GetComponent<Animator>().SetTrigger("DoMiddleBet");
-        AudioManager.GetOrCreate().SetEffectVolume(0.3f);
         AudioManager.GetOrCreate().PlayEffectSound(MiddleBetSound);
     }
     private void SmallBet(int playerIdx)
@@ -393,7 +391,6 @@ public class BettingManager : MonoBehaviour
         GameObject newCoin = Instantiate(instantBetObjectArray[playerIdx], coinSpawnPositionArray[playerIdx]);
         newCoin.SetActive(true);
         newCoin.GetComponent<Animator>().SetTrigger("DoSmallBet");
-        AudioManager.GetOrCreate().SetEffectVolume(0.3f);
         AudioManager.GetOrCreate().PlayEffectSound(SmallBetSound);
     }
 

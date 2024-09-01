@@ -91,6 +91,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip SecondDealingSound;
     [SerializeField] private AudioClip BottomDealingSound;
     [SerializeField] private AudioClip DetectSound;
+
+    [SerializeField] private AudioClip CodeSound;
     [SerializeField] private Slider suspicionBar;
     [SerializeField] private float suspicionLevelMax = 100f;
     [SerializeField] private float suspicionLevelCur = 0f;
@@ -111,6 +113,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Texture2D detect_cursor;
     [SerializeField] private Texture2D detect_hover_cursor;
 
+    [SerializeField] private GameObject panel_Option;
 
 
     public void ChangeHoverCursor()
@@ -167,6 +170,9 @@ public class GameManager : MonoBehaviour
     {
         IngamePlayerCnt = 4;
         SetStateStart();
+
+        mousePointState = MousePointState.normal;
+        Cursor.SetCursor(normal_cursor, new Vector2(20, 0), CursorMode.Auto);
     }
 
     public void Update()
@@ -175,7 +181,7 @@ public class GameManager : MonoBehaviour
         {
             //AudioManager.GetOrCreate().PlayEffectSound(hoverSound);
             mousePointState = MousePointState.normal;
-            Cursor.SetCursor(normal_cursor, new Vector2(0, 0), CursorMode.Auto);
+            Cursor.SetCursor(normal_cursor, new Vector2(20, 0), CursorMode.Auto);
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
@@ -193,11 +199,14 @@ public class GameManager : MonoBehaviour
             {
                 isPause = false;
                 Time.timeScale = 1;
+                panel_Option.SetActive(false);
             }
             else
             {
                 isPause = true;
                 Time.timeScale = 0;
+
+                panel_Option.SetActive(true);
             }
         }
 
@@ -911,6 +920,8 @@ public class GameManager : MonoBehaviour
             //    CodingAllyToFold();
             //}
             //else //1
+            AudioManager.GetOrCreate().PlayEffectSound(CodeSound);
+
             CodingAllyToRaise();
         }
        
@@ -920,9 +931,8 @@ public class GameManager : MonoBehaviour
             {
                 return;
             }
-            AudioManager.GetOrCreate().SetEffectVolume(1);
             AudioManager.GetOrCreate().PlayEffectSound(DetectSound);
-            AudioManager.GetOrCreate().SetEffectVolume(0.2f);
+            
             if (playerIsDetectable[playerIdx] == true)
             {
                 DialogManager.Instance.TriggerNextSentence_HighPriority(playerIdx, DialogManager.TextType.detected);

@@ -30,7 +30,7 @@ public class SecondCardController : MonoBehaviour
     private Vector3 origin_ArrowPosition;
 
     public event Action<bool> secondCardMoved;
-    
+    [SerializeField] private AudioClip CardClickSound;
 
     private void Start()
     {
@@ -68,6 +68,8 @@ public class SecondCardController : MonoBehaviour
         if (!(GameManager.Instance.mousePointState == GameManager.MousePointState.normal))
             return;
 
+
+        AudioManager.GetOrCreate().PlayEffectSound(CardClickSound);
         //if (DialogSystem.Instance.isDialog)
         //    return;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
