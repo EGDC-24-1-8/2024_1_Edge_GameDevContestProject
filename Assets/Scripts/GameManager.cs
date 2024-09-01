@@ -246,6 +246,7 @@ public class GameManager : MonoBehaviour
         Cursor.SetCursor(normal_cursor, new Vector2(0, 0), CursorMode.Auto);
         for (int i = 0; i < playerArray.Length; i++) //입장 베팅
         {
+            playerSumText[i].gameObject.SetActive(false);
             playerCard0Face[i].GetComponent<SpriteRenderer>().sprite = null;
             playerCard1Face[i].GetComponent<SpriteRenderer>().sprite = null;
             playerCard2Face[i].GetComponent<SpriteRenderer>().sprite = null;

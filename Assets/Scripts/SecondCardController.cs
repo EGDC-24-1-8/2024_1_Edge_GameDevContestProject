@@ -63,6 +63,8 @@ public class SecondCardController : MonoBehaviour
     {
         if (DialogManager.Instance.isDialogHighPriority)
             return;
+        if (GameManager.Instance.gameState != GameManager.GameState.deal)
+            return;
         if (!(GameManager.Instance.mousePointState == GameManager.MousePointState.normal))
             return;
 
