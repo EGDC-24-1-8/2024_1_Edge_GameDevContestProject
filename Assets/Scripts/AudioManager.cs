@@ -2,15 +2,15 @@
 using UnityEngine;
 
 /// <summary>
-/// ¿Àµð¿À¿Í °ü·ÃµÈ µ¿ÀÛµéÀ» ¹Ì¸® ±¸ÇöÇØ³õÀº Å¬·¡½º
+/// jung geun nyoung babo
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
-    public AudioSource bgmSource;                       // ¹è°æÀ½¾Ç Ãâ·Â¿ë ¿Àµð¿À¼Ò½º
-    public AudioSource effectSource;                    // È¿°úÀ½ Ãâ·Â¿ë ¿Àµð¿À¼Ò½º
+    public AudioSource bgmSource;                       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò½ï¿½
+    public AudioSource effectSource;                    // È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò½ï¿½
 
-    private float bgmVolume = 0.5f;                     // ¹è°æÀ½¾Ç º¼·ý
-    public float BGMVolume                              // ¹è°æÀ½¾Ç º¼·ý
+    private float bgmVolume = 0.5f;                     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public float BGMVolume                              // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         get { return bgmVolume; }
         set {
@@ -19,8 +19,8 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private float effectVolume = 0.5f;                  // È¿°úÀ½ º¼·ý
-    public float EffectVolume                           // È¿°úÀ½ º¼·ý
+    private float effectVolume = 0.5f;                  // È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public float EffectVolume                           // È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         get { return effectVolume; }
         set {
@@ -42,7 +42,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¾À¿¡ Á¸ÀçÇÏ´Â SoundManager ¹ÝÈ¯. ¾øÀ» ½Ã »õ·Î »ý¼º
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ SoundManager ï¿½ï¿½È¯. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <returns></returns>
     public static AudioManager GetOrCreate(AudioSource bgmSource = null, AudioSource effectSource = null)
@@ -99,7 +99,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    ///  ÃÊ±â¼³Á¤
+    ///  ï¿½Ê±â¼³ï¿½ï¿½
     /// </summary>
     private void Initialize()
     {
@@ -108,7 +108,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹è°æÀ½¾Ç Å¬¸³ ¼³Á¤
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="clip"></param>
     public void SetBGMClip(AudioClip clip)
@@ -117,7 +117,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹è°æÀ½¾Ç À§Ä¡ Á¶Àý
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="time"></param>
     public void SetBGMTime(float time)
@@ -126,7 +126,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹è°æÀ½¾Ç º¼·ý Á¶Àý
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="volume"></param>
     public void SetBGMVolume(float volume)
@@ -135,10 +135,10 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹è°æÀ½¾Ç Àç»ý
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     /// </summary>
-    /// <param name="clip">¹è°æÀ½¾Ç</param>
-    /// <param name="repeat">¹Ýº¹ ¿©ºÎ</param>
+    /// <param name="clip">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="repeat">ï¿½Ýºï¿½ ï¿½ï¿½ï¿½ï¿½</param>
     public void PlayBGM(bool repeat = true)
     {
         if (bgmSource.clip != null)
@@ -149,10 +149,10 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹è°æÀ½¾Ç Àç»ý
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     /// </summary>
-    /// <param name="clip">¹è°æÀ½¾Ç</param>
-    /// <param name="repeat">¹Ýº¹ ¿©ºÎ</param>
+    /// <param name="clip">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="repeat">ï¿½Ýºï¿½ ï¿½ï¿½ï¿½ï¿½</param>
     public void PlayBGM(AudioClip clip, bool repeat = true)
     {
         bgmSource.clip = clip;
@@ -161,11 +161,11 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹è°æÀ½¾Ç Àç»ý
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     /// </summary>
-    /// <param name="clip">¹è°æÀ½¾Ç</param>
-    /// <param name="volume">º¼·ý</param>z
-    /// <param name="repeat">¹Ýº¹ ¿©ºÎ</param>
+    /// <param name="clip">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="volume">ï¿½ï¿½ï¿½ï¿½</param>z
+    /// <param name="repeat">ï¿½Ýºï¿½ ï¿½ï¿½ï¿½ï¿½</param>
     public void PlayBGM(AudioClip clip, float volume, bool repeat = true)
     {
         BGMVolume = volume;
@@ -176,7 +176,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// BGM ÀÏ½ÃÁ¤Áö
+    /// BGM ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void PauseBGM()
     {
@@ -184,7 +184,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// BGM ÀÏ½ÃÁ¤Áö ÇØÁ¦
+    /// BGM ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void ResumeBGM()
     {
@@ -193,7 +193,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// BGM Á¤Áö
+    /// BGM ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void StopBGM()
     {
@@ -201,7 +201,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// È¿°úÀ½ Å¬¸³ ¼³Á¤
+    /// È¿ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="clip"></param>
     public void SetEffectClip(AudioClip clip)
@@ -210,7 +210,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// È¿°úÀ½ À§Ä¡ Á¶Àý
+    /// È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="time"></param>
     public void SetEffectTime(float time)
@@ -219,7 +219,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// È¿°úÀ½ º¼·ý Á¶Àý
+    /// È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="volume"></param>
     public void SetEffectVolume(float volume)
@@ -228,26 +228,26 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// È¿°úÀ½ Àç»ý
+    /// È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     /// </summary>
-    /// <param name="clip">È¿°úÀ½</param>
+    /// <param name="clip">È¿ï¿½ï¿½ï¿½ï¿½</param>
     public void PlayEffectSound(AudioClip clip)
     {
         effectSource.PlayOneShot(clip);
     }
 
     /// <summary>
-    /// È¿°úÀ½ Àç»ý
+    /// È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     /// </summary>
-    /// <param name="clip">È¿°úÀ½</param>
-    /// <param name="volume">º¼·ý</param>
+    /// <param name="clip">È¿ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="volume">ï¿½ï¿½ï¿½ï¿½</param>
     public void PlayEffectSound(AudioClip clip, float volume)
     {
         effectSource.PlayOneShot(clip, volume);
     }
 
     /// <summary>
-    /// È¿°úÀ½ ÀÏ½ÃÁ¤Áö
+    /// È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void PauseEffect()
     {
@@ -255,7 +255,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// È¿°úÀ½ ÀÏ½ÃÁ¤Áö ÇØÁ¦
+    /// È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ï½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void ResumeEffect()
     {
@@ -264,7 +264,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// È¿°úÀ½ Á¤Áö
+    /// È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void StopEffect()
     {
