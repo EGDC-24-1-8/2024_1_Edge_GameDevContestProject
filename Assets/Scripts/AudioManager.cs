@@ -2,7 +2,11 @@
 using UnityEngine;
 
 /// <summary>
+<<<<<<< Updated upstream
 /// jung geun nyoung babo
+=======
+/// Conflict Check
+>>>>>>> Stashed changes
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
